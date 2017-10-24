@@ -30,6 +30,7 @@ class InstallCommand extends Command
         $this->info('Execute migrate first, migrating...');
         $this->call('migrate');
         $this->call('db:seed', ["--class" => "NgeblogTableSeeder"]);
+        $this->call('vendor:publish', ["--tag" => "ngeblog-assets"]);
         $this->info('Ngeblog Package has been successfully Installed Prend!');
     }
 }
