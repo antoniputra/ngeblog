@@ -1,0 +1,23 @@
+@import "~bulma/bulma";
+@import "~ionicons/scss/ionicons";
+
+.ngeblog-navbar {
+	margin-bottom: 40px;
+	border-bottom: 1px solid #ddd;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.ngeblog-content {
+	min-height: 350px;
+	margin-bottom: 80px;
+}
+
+.ngeblog-sidebar {
+	border-right: 1px solid #e7e7e7;
+}
+
+.ngeblog-footer {
+	padding: 20px 0px 60px 0px;
+	border-top: 1px solid #ddd;
+}
