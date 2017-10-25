@@ -1,8 +1,8 @@
 <?php
 
-namespace Antoniputra\Ngeblog;
+namespace Antoniputra\Ngeblog\Models;
 
-use Antoniputra\Ngeblog\Category;
+use Antoniputra\Ngeblog\Models\Category;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 

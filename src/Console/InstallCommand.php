@@ -2,6 +2,7 @@
 
 namespace Antoniputra\Ngeblog\Console;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class InstallCommand extends Command
@@ -18,7 +19,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Install the Ngeblog package';
+    protected $description = 'Publish Ngeblog package configuration';
 
     /**
      * Execute the console command.
@@ -27,10 +28,17 @@ class InstallCommand extends Command
      */
     public function handle()
     {
-        $this->info('Execute migrate first, migrating...');
+        $this->info('[' . Carbon::now() . '] Ngeblog : execute migration file');
+
+        // call migration command
         $this->call('migrate');
+
+        // call database seeder
         $this->call('db:seed', ["--class" => "NgeblogTableSeeder"]);
+
+        // publish vendor
         $this->call('vendor:publish', ["--tag" => "ngeblog-assets"]);
-        $this->info('Ngeblog Package has been successfully Installed Prend!');
+
+        $this->info('[' . Carbon::now() . '] Ngeblog : package configuration has been successfully Installed');
     }
 }

@@ -20,7 +20,7 @@ class NgeblogController extends BaseController
         }
 
         return view('ngeblog_public::category_show', [
-            'title' => $category['title'],
+            'title'    => $category['title'],
             'category' => $category,
         ]);
     }
@@ -41,7 +41,7 @@ class NgeblogController extends BaseController
 
         return view('ngeblog_public::blog_show', [
             'title' => $blog['title'],
-            'blog' => $blog,
+            'blog'  => $blog,
         ]);
     }
 }

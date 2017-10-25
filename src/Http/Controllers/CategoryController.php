@@ -22,7 +22,7 @@ class CategoryController extends BaseController
     public function index()
     {
         $data = [
-            'title' => 'Category Index',
+            'title'      => 'Category Index',
             'categories' => NgeblogFacade::getLatestCategory(),
         ];
 
@@ -57,7 +57,7 @@ class CategoryController extends BaseController
         NgeblogFacade::createCategory($request->all());
 
         return redirect()->route('ngeblog.category.index')->withMessage([
-            'type' => 'is-success',
+            'type'    => 'is-success',
             'content' => 'Category has been created!',
         ]);
     }
@@ -87,7 +87,7 @@ class CategoryController extends BaseController
         }
 
         $data = [
-            'title' => 'Edit Category: ' . $category['title'],
+            'title'    => 'Edit Category: ' . $category['title'],
             'category' => $category,
         ];
         return view('ngeblog::admin.category.edit', $data);
@@ -109,7 +109,7 @@ class CategoryController extends BaseController
         NgeblogFacade::updateCategory($id, $request->all());
 
         return redirect()->route('ngeblog.category.index')->withMessage([
-            'type' => 'is-success',
+            'type'    => 'is-success',
             'content' => 'Category has been updated!',
         ]);
     }
@@ -124,7 +124,7 @@ class CategoryController extends BaseController
     {
         NgeblogFacade::deleteCategory($id);
         return redirect()->route('ngeblog.category.index')->withMessage([
-            'type' => 'is-success',
+            'type'    => 'is-success',
             'content' => 'Category has been deleted',
         ]);
     }

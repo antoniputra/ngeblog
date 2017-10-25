@@ -37,7 +37,7 @@ class BlogController extends BaseController
     public function create()
     {
         $data = [
-            'title' => 'Create Blog',
+            'title'        => 'Create Blog',
             'cat_dropdown' => NgeblogFacade::getDropdownCategory(),
         ];
 
@@ -59,7 +59,7 @@ class BlogController extends BaseController
         NgeblogFacade::createBlog($request->all());
 
         return redirect()->route('ngeblog.blog.index')->withMessage([
-            'type' => 'is-success',
+            'type'    => 'is-success',
             'content' => 'Blog has been created!',
         ]);
     }
@@ -89,9 +89,9 @@ class BlogController extends BaseController
         }
 
         $data = [
-            'title' => 'Edit Blog: ' . $blog['title'],
+            'title'        => 'Edit Blog: ' . $blog['title'],
             'cat_dropdown' => NgeblogFacade::getDropdownCategory(),
-            'blog' => $blog,
+            'blog'         => $blog,
         ];
         return view('ngeblog::admin.blog.edit', $data);
     }
@@ -112,7 +112,7 @@ class BlogController extends BaseController
         NgeblogFacade::updateBlog($id, $request->all());
 
         return redirect()->route('ngeblog.blog.index')->withMessage([
-            'type' => 'is-success',
+            'type'    => 'is-success',
             'content' => 'Blog has been updated!',
         ]);
     }
@@ -127,7 +127,7 @@ class BlogController extends BaseController
     {
         NgeblogFacade::deleteBlog($id);
         return redirect()->route('ngeblog.blog.index')->withMessage([
-            'type' => 'is-success',
+            'type'    => 'is-success',
             'content' => 'Blog has been deleted!',
         ]);
     }

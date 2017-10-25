@@ -1,8 +1,8 @@
 <?php
 
-namespace Antoniputra\Ngeblog;
+namespace Antoniputra\Ngeblog\Models;
 
-use Antoniputra\Ngeblog\Blog;
+use Antoniputra\Ngeblog\Models\Blog;
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
