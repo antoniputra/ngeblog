@@ -1,7 +1,7 @@
 <?php
 
-use Antoniputra\Ngeblog\Blog;
-use Antoniputra\Ngeblog\Category;
+use Antoniputra\Ngeblog\Models\Blog;
+use Antoniputra\Ngeblog\Models\Category;
 use Illuminate\Database\Seeder;
 
 class NgeblogTableSeeder extends Seeder
@@ -14,7 +14,7 @@ class NgeblogTableSeeder extends Seeder
     public function run()
     {
         $userModel = config('ngeblog.user');
-        $user = app($userModel)->find(1) ?: factory($userModel)->create();
+        $user      = app($userModel)->find(1) ?: factory($userModel)->create();
 
         factory(Category::class, 5)->create([
             'user_id' => $user->id,

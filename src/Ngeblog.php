@@ -2,8 +2,8 @@
 
 namespace Antoniputra\Ngeblog;
 
-use Antoniputra\Ngeblog\Blog;
-use Antoniputra\Ngeblog\Category;
+use Antoniputra\Ngeblog\Models\Blog;
+use Antoniputra\Ngeblog\Models\Category;
 
 class Ngeblog
 {
