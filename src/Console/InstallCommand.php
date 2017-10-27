@@ -42,6 +42,7 @@ class InstallCommand extends Command
 
         $this->call('vendor:publish', ["--tag" => "ngeblog-config"]);
 
-        $this->info('Ngeblog: package configuration has been successfully installed prend!');
+        $this->info('Ngeblog: package configuration has been successfully installed prend!' . PHP_EOL);
+        $this->info('Now you can access your blog panel under uri: ' . str_start(config('ngeblog.admin_prefix'), '/'));
     }
 }
