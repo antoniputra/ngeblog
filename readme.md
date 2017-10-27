@@ -2,7 +2,7 @@
 
 # Ngeblog
 
-It just quickstart to have simple blogging system for your existing laravel application. It will give `Blogs` and `Categories` out of the box. **Ngeblog** also provides a simple admin panel using [Bulma](https://bulma.io/)
+It just quickstart to have simple blogging system for your existing laravel application. It will give you `Blogs` and `Categories` out of the box. **Ngeblog** also provides a simple admin panel using [Bulma](https://bulma.io/).
 
 ### Screenshot
 <p align="center">
@@ -14,7 +14,7 @@ It just quickstart to have simple blogging system for your existing laravel appl
 
 ## Installation
 
-1. `composer require antoniputra/ngeblog dev-master`
+1. `composer require antoniputra/ngeblog`
 
 2. `php artisan ngeblog:install`
 
