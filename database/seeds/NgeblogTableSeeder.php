@@ -14,12 +14,12 @@ class NgeblogTableSeeder extends Seeder
     public function run()
     {
         $userModel = config('ngeblog.user');
-        $user      = app($userModel)->find(1) ?: factory($userModel)->create();
+        $user = app($userModel)->find(1) ?: factory($userModel)->create();
 
         factory(Category::class, 5)->create([
             'user_id' => $user->id,
         ])->each(function ($category) use ($user) {
-            $category->blogs()->saveMany(factory(Blog::class, rand(2, 6))->make([
+            $category->blogs()->saveMany(factory(Blog::class, rand(1, 3))->make([
                 'user_id' => $user->id,
             ]));
         });

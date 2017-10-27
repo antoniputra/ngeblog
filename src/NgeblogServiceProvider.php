@@ -17,6 +17,7 @@ class NgeblogServiceProvider extends ServiceProvider
     public function boot()
     {
         if (config('ngeblog.enabled')) {
+            $this->registerPublishes();
             $this->registerRoutes();
             $this->registerResources();
             $this->registerMacros();
@@ -39,9 +40,7 @@ class NgeblogServiceProvider extends ServiceProvider
 
         $this->app->bind(Ngeblog::class, Ngeblog::class);
 
-        $this->registerPublishes();
         $this->registerCommands();
-
     }
 
     /**
@@ -53,7 +52,7 @@ class NgeblogServiceProvider extends ServiceProvider
     {
         Route::group([
             // 'prefix' => config('ngeblog.admin_prefix'),
-            'namespace'  => 'Antoniputra\Ngeblog\Http\Controllers',
+            'namespace' => 'Antoniputra\Ngeblog\Http\Controllers',
             'middleware' => 'web',
         ], function () {
             $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
@@ -83,9 +82,14 @@ class NgeblogServiceProvider extends ServiceProvider
         ], 'ngeblog-seeds');
 
         $this->publishes([
-            NGEBLOG_PATH . '/public/css'   => public_path('vendor/ngeblog/css'),
+            NGEBLOG_PATH . '/public/css' => public_path('vendor/ngeblog/css'),
             NGEBLOG_PATH . '/public/fonts' => public_path('fonts'),
+            NGEBLOG_PATH . '/public/img' => public_path('vendor/ngeblog/img'),
         ], 'ngeblog-assets');
+
+        $this->publishes([
+            NGEBLOG_PATH . '/config/ngeblog.php' => config_path('ngeblog.php'),
+        ], 'ngeblog-config');
     }
 
     /**

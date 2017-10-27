@@ -12,7 +12,7 @@
 		<nav class="navbar is-transparent ngeblog-navbar" role="navigation" aria-label="main navigation">
 			<div class="navbar-brand">
 				<a class="navbar-item" href="{{ route('blog.index') }}">
-					<img src="http://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
+					<img src="{{ asset('vendor/ngeblog/img/logo.png') }}" alt="Bulma: a modern CSS framework based on Flexbox">
 				</a>
 
 				<button class="button navbar-burger">
