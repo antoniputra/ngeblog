@@ -15,6 +15,6 @@ class Authenticate
      */
     public function handle($request, $next)
     {
-        return Ngeblog::check($request) ? $next($request) : abort(403);
+        return Ngeblog::check($request) ? $next($request) : abort(403, 'Forbidden :-(');
     }
 }

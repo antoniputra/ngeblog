@@ -4,6 +4,7 @@ namespace Antoniputra\Ngeblog;
 
 use Antoniputra\Ngeblog\Models\Blog;
 use Antoniputra\Ngeblog\Models\Category;
+use Closure;
 
 class Ngeblog
 {
@@ -22,7 +23,9 @@ class Ngeblog
      */
     public static function check($request)
     {
-        return true;
+        return (static::$authUsing ?: function () {
+            return app()->environment('local');
+        })($request);
     }
 
     /**
