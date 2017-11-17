@@ -17,6 +17,7 @@ class NgeblogServiceProvider extends ServiceProvider
     public function boot()
     {
         if (config('ngeblog.enabled')) {
+            $this->loadMigrationsFrom(NGEBLOG_PATH . '/migrations/');
             $this->registerPublishes();
             $this->registerRoutes();
             $this->registerResources();
@@ -34,9 +35,7 @@ class NgeblogServiceProvider extends ServiceProvider
             __DIR__ . '/../config/ngeblog.php', 'ngeblog'
         );
 
-        $this->loadMigrationsFrom(NGEBLOG_PATH . '/database/migrations/');
-
-        app(EloquentFactory::class)->load(NGEBLOG_PATH . '/database');
+        app(EloquentFactory::class)->load(NGEBLOG_PATH . '/factories');
 
         $this->app->bind(Ngeblog::class, Ngeblog::class);
 
@@ -78,7 +77,7 @@ class NgeblogServiceProvider extends ServiceProvider
     protected function registerPublishes()
     {
         $this->publishes([
-            NGEBLOG_PATH . '/database/seeds' => base_path('database/seeds'),
+            NGEBLOG_PATH . '/seeds' => base_path('database/seeds'),
         ], 'ngeblog-seeds');
 
         $this->publishes([
