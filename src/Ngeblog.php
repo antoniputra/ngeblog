@@ -24,7 +24,7 @@ class Ngeblog
     public static function check($request)
     {
         return (static::$authUsing ?: function () {
-            return app()->environment('local');
+            return app()->environment('local') || app()->environment('testing');
         })($request);
     }
 

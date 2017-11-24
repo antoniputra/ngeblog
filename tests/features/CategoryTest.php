@@ -7,8 +7,10 @@ use Antoniputra\Ngeblog\Tests\FeatureTestCase;
 class CategoryTest extends FeatureTestCase
 {
     /** @test */
-    public function it_can()
+    public function user_can_view_a_category()
     {
-        $this->assertTrue(true);
+        $this->get(route('ngeblog.category.index'))
+        	->assertStatus(200)
+        	->assertSee('Category Index');
     }
 }
