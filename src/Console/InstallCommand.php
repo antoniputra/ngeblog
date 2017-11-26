@@ -18,7 +18,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Publish Ngeblog package configuration';
+    protected $description = 'Install Ngeblog package configuration';
 
     /**
      * Execute the console command.
@@ -32,15 +32,16 @@ class InstallCommand extends Command
         // call migration command
         $this->call('migrate');
 
+        // publish any publishable file
+        $this->call('vendor:publish', ["--tag" => "ngeblog-config"]);
+        $this->call('vendor:publish', ["--tag" => "ngeblog-seeds"]);
+        $this->call('vendor:publish', ["--tag" => "ngeblog-assets"]);
+
         // call database seeder
         if ($this->confirm('Do you wish to generate dummy data?')) {
             $this->info('Ngeblog: Generating dummy data prend...' . PHP_EOL);
             $this->call('db:seed', ["--class" => "NgeblogTableSeeder"]);
         }
-
-        $this->call('vendor:publish', ["--tag" => "ngeblog-assets"]);
-
-        $this->call('vendor:publish', ["--tag" => "ngeblog-config"]);
 
         $this->info('Ngeblog: package configuration has been successfully installed prend!' . PHP_EOL);
         $this->info('Now you can access your blog panel under uri: ' . str_start(config('ngeblog.admin_prefix'), '/'));

@@ -14,7 +14,7 @@ class NgeblogTableSeeder extends Seeder
     public function run()
     {
         $userModel = config('ngeblog.user');
-        $user = app($userModel)->find(1) ?: factory($userModel)->create();
+        $user = app($userModel)->find(1) ?: $this->_createUser();
 
         factory(Category::class, 5)->create([
             'user_id' => $user->id,
@@ -23,5 +23,16 @@ class NgeblogTableSeeder extends Seeder
                 'user_id' => $user->id,
             ]));
         });
+    }
+
+    protected function _createUser()
+    {
+        $userModel = app(config('ngeblog.user'));
+        $userModel->name = 'Ngeblog';
+        $userModel->email = 'ngeblog@example.com';
+        $userModel->password = bcrypt('secret');
+        $userModel->remember_token = str_random(10);
+        $userModel->save();
+        return $userModel;
     }
 }

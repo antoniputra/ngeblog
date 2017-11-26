@@ -2,27 +2,28 @@
 
 namespace Antoniputra\Ngeblog\Tests;
 
-use Orchestra\Testbench\TestCase;
+use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
-class FeatureTestCase extends TestCase
+class TestCase extends OrchestraTestCase
 {
-	public function setUp()
-	{
-		parent::setUp();
+    public function setUp()
+    {
+        parent::setUp();
+        $this->_installCommand();
+    }
 
-		$this->_installCommand();
-	}
-
-	protected function getEnvironmentSetUp($app)
-	{
-		// Setup default database to use sqlite :memory:
+    protected function getEnvironmentSetUp($app)
+    {
+        // Setup default database to use sqlite :memory:
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
-	}
+
+        // $app['config']->set();
+    }
 
     protected function getPackageProviders($app)
     {
@@ -42,6 +43,8 @@ class FeatureTestCase extends TestCase
 
     protected function _installCommand()
     {
-    	$this->artisan('migrate');
+        $this->artisan('migrate');
+        $this->loadLaravelMigrations([]);
+        $this->seed('NgeblogTableSeeder');
     }
 }
