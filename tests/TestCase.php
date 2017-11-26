@@ -9,7 +9,8 @@ class TestCase extends OrchestraTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->_installCommand();
+        $this->loadLaravelMigrations(['--database' => 'testing']);
+        $this->artisan('ngeblog:install', ['--with-dummy' => true]);
     }
 
     protected function getEnvironmentSetUp($app)
@@ -39,12 +40,5 @@ class TestCase extends OrchestraTestCase
             'Ngeblog' => \Antoniputra\Ngeblog\Facade::class,
             'Form' => \Collective\Html\FormFacade::class,
         ];
-    }
-
-    protected function _installCommand()
-    {
-        $this->artisan('migrate');
-        $this->loadLaravelMigrations([]);
-        $this->seed('NgeblogTableSeeder');
     }
 }

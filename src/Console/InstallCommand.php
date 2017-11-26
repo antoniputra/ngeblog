@@ -2,6 +2,7 @@
 
 namespace Antoniputra\Ngeblog\Console;
 
+use Antoniputra\Ngeblog\NgeblogServiceProvider;
 use Illuminate\Console\Command;
 
 class InstallCommand extends Command
@@ -11,7 +12,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'ngeblog:install';
+    protected $signature = 'ngeblog:install {--with-dummy : Install with dummy data.}';
 
     /**
      * The console command description.
@@ -19,6 +20,13 @@ class InstallCommand extends Command
      * @var string
      */
     protected $description = 'Install Ngeblog package configuration';
+
+    /**
+     * The seeder path for ngeblog
+     *
+     * @var string
+     */
+    protected $seedersPath = __DIR__ . '/../../seeds/';
 
     /**
      * Execute the console command.
@@ -29,21 +37,47 @@ class InstallCommand extends Command
     {
         $this->info('Ngeblog: Installation Wizard started...' . PHP_EOL);
 
+        // publish any publishable file
+        $this->call('vendor:publish', ['--provider' => NgeblogServiceProvider::class]);
+
         // call migration command
+        $this->info('Migrating the database tables into your application');
         $this->call('migrate');
 
-        // publish any publishable file
-        $this->call('vendor:publish', ["--tag" => "ngeblog-config"]);
-        $this->call('vendor:publish', ["--tag" => "ngeblog-seeds"]);
-        $this->call('vendor:publish', ["--tag" => "ngeblog-assets"]);
-
         // call database seeder
-        if ($this->confirm('Do you wish to generate dummy data?')) {
-            $this->info('Ngeblog: Generating dummy data prend...' . PHP_EOL);
-            $this->call('db:seed', ["--class" => "NgeblogTableSeeder"]);
+        if ($this->option('with-dummy')) {
+            $this->_generateDummy();
+        } elseif ($this->confirm('Do you wish to generate dummy data?')) {
+            $this->_generateDummy();
         }
 
         $this->info('Ngeblog: package configuration has been successfully installed prend!' . PHP_EOL);
-        $this->info('Now you can access your blog panel under uri: ' . str_start(config('ngeblog.admin_prefix'), '/'));
+        $this->info('Now you can access your Ngeblog panel at: ' . url('/') . str_start(config('ngeblog.admin_prefix'), '/'));
+    }
+
+    /**
+     * Prevent error about seeder class not found
+     *
+     * @param  string $class
+     * @return void
+     */
+    protected function seed($class)
+    {
+        if (!class_exists($class)) {
+            require_once $this->seedersPath . $class . '.php';
+        }
+
+        with(new $class())->run();
+    }
+
+    /**
+     * Generate dummy data
+     *
+     * @return void
+     */
+    protected function _generateDummy()
+    {
+        $this->info('Ngeblog: Generating dummy data prend...' . PHP_EOL);
+        $this->seed('NgeblogTableSeeder');
     }
 }

@@ -19,7 +19,9 @@
     },
     "require-dev": {
         "mockery/mockery": "0.9.*",
-        "orchestra/testbench": "^3.5",
+        "orchestra/testbench": "~3.5",
+        "orchestra/database": "~3.5",
+        "orchestra/testbench-browser-kit": "~3.5",
         "phpunit/phpunit": "~6.0"
     },
     "autoload": {
