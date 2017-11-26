@@ -2,6 +2,7 @@
 
 namespace Antoniputra\Ngeblog\Tests;
 
+use Antoniputra\Ngeblog\Tests\Models\User;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 class TestCase extends OrchestraTestCase
@@ -11,6 +12,9 @@ class TestCase extends OrchestraTestCase
         parent::setUp();
         $this->loadLaravelMigrations(['--database' => 'testing']);
         $this->artisan('ngeblog:install', ['--with-dummy' => true]);
+
+        $this->app->make('Illuminate\Contracts\Http\Kernel')->pushMiddleware('Illuminate\Session\Middleware\StartSession');
+        $this->app->make('Illuminate\Contracts\Http\Kernel')->pushMiddleware('Illuminate\View\Middleware\ShareErrorsFromSession');
     }
 
     protected function getEnvironmentSetUp($app)
@@ -23,7 +27,7 @@ class TestCase extends OrchestraTestCase
             'prefix' => '',
         ]);
 
-        // $app['config']->set();
+        $app['config']->set('ngeblog.user', User::class);
     }
 
     protected function getPackageProviders($app)

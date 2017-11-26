@@ -14,6 +14,11 @@ class Blog extends Model
 
     protected $fillable = ['category_id', 'title', 'slug', 'content'];
 
+    public function user()
+    {
+        return $this->belongsTo(config('ngeblog.user'));
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);
