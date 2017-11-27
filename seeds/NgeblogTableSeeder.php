@@ -16,7 +16,7 @@ class NgeblogTableSeeder extends Seeder
         $userModel = config('ngeblog.user');
         $user = app($userModel)->find(1) ?: $this->_createUser();
 
-        factory(Category::class, 5)->create([
+        factory(Category::class, 3)->create([
             'user_id' => $user->id,
         ])->each(function ($category) use ($user) {
             $category->blogs()->saveMany(factory(Blog::class, rand(1, 3))->make([
