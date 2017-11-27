@@ -4,6 +4,7 @@ namespace Antoniputra\Ngeblog\Console;
 
 use Antoniputra\Ngeblog\NgeblogServiceProvider;
 use Illuminate\Console\Command;
+use Symfony\Component\Process\Process;
 
 class InstallCommand extends Command
 {
@@ -44,6 +45,12 @@ class InstallCommand extends Command
         $this->info('Migrating the database tables into your application');
         $this->call('migrate');
 
+        // dump any file
+        $this->info('Dumping the autoloaded files and reloading all new files');
+        $composer = $this->_findComposer();
+        $process = new Process($composer . ' dump-autoload');
+        $process->setWorkingDirectory(base_path())->run();
+
         // call database seeder
         if ($this->option('with-dummy')) {
             $this->_generateDummy();
@@ -61,7 +68,7 @@ class InstallCommand extends Command
      * @param  string $class
      * @return void
      */
-    protected function seed($class)
+    protected function _seed($class)
     {
         if (!class_exists($class)) {
             require_once $this->seedersPath . $class . '.php';
@@ -78,6 +85,20 @@ class InstallCommand extends Command
     protected function _generateDummy()
     {
         $this->info('Ngeblog: Generating dummy data prend...' . PHP_EOL);
-        $this->seed('NgeblogTableSeeder');
+        $this->_seed('NgeblogTableSeeder');
+    }
+
+    /**
+     * Get the composer command for the environment.
+     *
+     * @return string
+     */
+    protected function _findComposer()
+    {
+        if (file_exists(getcwd() . '/composer.phar')) {
+            return '"' . PHP_BINARY . '" ' . getcwd() . '/composer.phar';
+        }
+
+        return 'composer';
     }
 }

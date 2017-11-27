@@ -2,7 +2,7 @@
 
 namespace Antoniputra\Ngeblog\Tests;
 
-use Antoniputra\Ngeblog\Tests\Models\User;
+use Antoniputra\Ngeblog\Models\User;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 class TestCase extends OrchestraTestCase

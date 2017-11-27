@@ -1,6 +1,6 @@
 <?php
 
-namespace Antoniputra\Ngeblog\Tests\Models;
+namespace Antoniputra\Ngeblog\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
