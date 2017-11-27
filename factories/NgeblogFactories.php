@@ -5,7 +5,7 @@ use Antoniputra\Ngeblog\Models\Category;
 use Faker\Generator as Faker;
 
 $factory->define(Category::class, function (Faker $faker) {
-    $title = $faker->words(rand(1, 3), true);
+    $title = $faker->words(rand(2, 4), true);
     return [
         'title' => $title,
         'slug' => str_slug($title),

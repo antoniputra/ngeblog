@@ -56,7 +56,8 @@ class Ngeblog
 
     public function getDropdownCategory($value = 'id', $display = 'title')
     {
-        return Category::orderBy('title', 'asc')->get()->pluck($display, $value);
+        $cats = Category::orderBy('title', 'asc')->get()->pluck($display, $value)->toArray();
+        return array_merge([0 => '<< select category >>'], $cats);
     }
 
     public function findCategory($category_id)

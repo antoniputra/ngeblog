@@ -1,9 +1,7 @@
-{{ csrf_field() }}
-
 <div class="field">
 	<label class="label">Title</label>
 	<div class="control">
-		<input name="title" class="input" type="text" value="{{ old('title', array_get(@$blog, 'title')) }}" placeholder="Text input">
+		{!! Form::text('title', null, ['class' => 'input']) !!}
 	</div>
 </div>
 
@@ -11,15 +9,7 @@
 	<label class="label">Category</label>
 	<div class="control">
 		<div class="select is-fullwidth">
-			<select name="category_id">
-				<option>Select Category</option>
-				@foreach ($cat_dropdown as $value => $display)
-					<option
-						value="{{ $value }}"
-						@if($value == old('category_id', array_get(@$blog, 'category_id'))) selected @endif
-						>{{ $display }}</option>
-				@endforeach
-			</select>
+			{!! Form::select('category_id', $cat_dropdown, null, []) !!}
 		</div>
 	</div>
 </div>
@@ -27,7 +17,7 @@
 <div class="field">
 	<label class="label">Content</label>
 	<div class="control">
-		<textarea name="content" class="textarea" rows="10" placeholder="Textarea">{{ old('content', array_get(@$blog, 'content')) }}</textarea>
+		{!! Form::textarea('content', null, ['class' => 'textarea', 'rows' => 4]) !!}
 	</div>
 </div>
 

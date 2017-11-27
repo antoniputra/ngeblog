@@ -2,13 +2,13 @@
 
 @section('content')
 
-	<form class="form-horizontal" method="POST" action="{{ route('ngeblog.category.update', $category['id']) }}">
+	{!! Form::model($category, ['url' => route('ngeblog.category.update', $category['id']), 'class' => 'form-horizontal']) !!}
 		<div class="columns">
 			<div class="column is-two-thirds">
 				{!! method_field('PUT') !!}
 				@include('ngeblog::admin.category._form')
 			</div>
 		</div>
-	</form>
+	{!! Form::close() !!}
 
 @stop

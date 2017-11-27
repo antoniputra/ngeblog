@@ -2,12 +2,12 @@
 
 @section('content')
 
-	<form class="form-horizontal" method="POST" action="{{ route('ngeblog.category.store') }}">
+	{!! Form::open(['url' => route('ngeblog.category.store'), 'class' => 'form-horizontal']) !!}
 		<div class="columns">
 			<div class="column is-two-thirds">
 				@include('ngeblog::admin.category._form')
 			</div>
 		</div>
-	</form>
+	{!! Form::close() !!}
 
 @stop
