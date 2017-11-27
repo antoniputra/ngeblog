@@ -3,16 +3,26 @@
 namespace Antoniputra\Ngeblog\Tests\Features;
 
 use Antoniputra\Ngeblog\Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class CommonTest extends TestCase
 {
+    use DatabaseMigrations;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->installCommand();
+    }
+
     /** @test */
     public function anonymous_can_visit_admin_page()
     {
         // $tables = \DB::select("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;");
         // dd($tables);
         $this->get(route('ngeblog.dashboard'))
-            ->assertStatus(200);
+            ->assertResponseStatus(200);
     }
 
     /** @test */
@@ -24,6 +34,6 @@ class CommonTest extends TestCase
         });
 
         $this->get(route('ngeblog.dashboard'))
-            ->assertStatus(403);
+            ->assertResponseStatus(403);
     }
 }

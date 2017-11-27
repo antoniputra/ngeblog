@@ -22,7 +22,8 @@
         "orchestra/testbench": "~3.5",
         "orchestra/database": "~3.5",
         "orchestra/testbench-browser-kit": "~3.5",
-        "phpunit/phpunit": "~6.0"
+        "phpunit/phpunit": "~6.0",
+        "laravel/browser-kit-testing": "^2.0"
     },
     "autoload": {
         "psr-4": {

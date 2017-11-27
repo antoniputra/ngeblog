@@ -42,11 +42,11 @@ class InstallCommand extends Command
         $this->call('vendor:publish', ['--provider' => NgeblogServiceProvider::class]);
 
         // call migration command
-        $this->info('Migrating the database tables into your application');
+        $this->info(PHP_EOL . 'Migrating the database tables into your application...');
         $this->call('migrate');
 
         // dump any file
-        $this->info('Dumping the autoloaded files and reloading all new files');
+        $this->info(PHP_EOL . 'Dumping the autoloaded files and reloading all new files...');
         $composer = $this->_findComposer();
         $process = new Process($composer . ' dump-autoload');
         $process->setWorkingDirectory(base_path())->run();
