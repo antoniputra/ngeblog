@@ -27,7 +27,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $seedersPath = __DIR__ . '/../../seeds/';
+    protected $seedersPath = __DIR__ . '/../../publishable/database/seeds/';
 
     /**
      * Execute the console command.
