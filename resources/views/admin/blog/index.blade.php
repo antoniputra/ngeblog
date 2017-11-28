@@ -23,7 +23,7 @@
 					<th style="width: 5%;">No</th>
 					<th style="width: 50%;">Title</th>
 					<th>Category</th>
-					<th>Action</th>
+					<th style="width: 20%;">Action</th>
 				</tr>
 			</thead>
 			<tbody>

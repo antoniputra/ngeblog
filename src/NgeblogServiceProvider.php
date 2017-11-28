@@ -9,6 +9,8 @@ use Illuminate\Support\ServiceProvider;
 
 class NgeblogServiceProvider extends ServiceProvider
 {
+    protected $publishablePath = __DIR__ . '/../publishable';
+
     /**
      * Bootstrap any application services.
      *
@@ -17,7 +19,7 @@ class NgeblogServiceProvider extends ServiceProvider
     public function boot()
     {
         if (config('ngeblog.enabled')) {
-            $this->loadMigrationsFrom(NGEBLOG_PATH . '/migrations/');
+            $this->loadMigrationsFrom($this->publishablePath . '/database/migrations/');
             $this->registerPublishes();
             $this->registerRoutes();
             $this->registerResources();
@@ -32,10 +34,10 @@ class NgeblogServiceProvider extends ServiceProvider
         }
 
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/ngeblog.php', 'ngeblog'
+            $this->publishablePath . '/config/ngeblog.php', 'ngeblog'
         );
 
-        app(EloquentFactory::class)->load(NGEBLOG_PATH . '/factories');
+        app(EloquentFactory::class)->load($this->publishablePath . '/database/factories');
 
         $this->app->bind(Ngeblog::class, Ngeblog::class);
 
@@ -77,17 +79,18 @@ class NgeblogServiceProvider extends ServiceProvider
     protected function registerPublishes()
     {
         $this->publishes([
-            NGEBLOG_PATH . '/seeds' => base_path('database/seeds'),
+            $this->publishablePath . '/database/seeds' => base_path('database/seeds'),
         ], 'ngeblog-seeds');
 
         $this->publishes([
-            NGEBLOG_PATH . '/public/css' => public_path('vendor/ngeblog/css'),
-            NGEBLOG_PATH . '/public/fonts' => public_path('fonts'),
-            NGEBLOG_PATH . '/public/img' => public_path('vendor/ngeblog/img'),
+            // $this->publishablePath . '/assets/css' => public_path('vendor/ngeblog/css'),
+            // $this->publishablePath . '/assets/fonts' => public_path('fonts'),
+            // $this->publishablePath . '/assets/img' => public_path('vendor/ngeblog/img'),
+            $this->publishablePath . '/assets' => public_path('vendor/ngeblog'),
         ], 'ngeblog-assets');
 
         $this->publishes([
-            NGEBLOG_PATH . '/config/ngeblog.php' => config_path('ngeblog.php'),
+            $this->publishablePath . '/config/ngeblog.php' => config_path('ngeblog.php'),
         ], 'ngeblog-config');
     }
 
