@@ -40,14 +40,13 @@
 								<span class="icon"><i class="ion-edit"></i></span>
 								<span>Edit</span>
 							</a>
-							{!! \Form::link('<span>Delete</span>', 'DELETE',
-								route('ngeblog.blog.destroy', $b['id']),
-								[
-									'class' => 'button is-danger is-small',
-									'icon' => '<span class="icon"><i class="ion-ios-trash-outline"></i></span>',
-								],
-								'Are you sure?'
-							) !!}
+							<a href="{{ route('ngeblog.blog.destroy', $b['id']) }}"
+							class="button is-danger is-small"
+							data-method="delete"
+							data-confirm="Are you sure prend?">
+								<span class="icon"><i class="ion-ios-trash-outline"></i></span>
+								<span>Delete</span>
+							</a>
 						</td>
 					</tr>
 				@endforeach
