@@ -4,6 +4,7 @@ namespace Antoniputra\Ngeblog;
 
 use Antoniputra\Ngeblog\Models\Blog;
 use Antoniputra\Ngeblog\Models\Category;
+use Closure;
 
 class Ngeblog
 {
@@ -22,7 +23,9 @@ class Ngeblog
      */
     public static function check($request)
     {
-        return true;
+        return (static::$authUsing ?: function () {
+            return app()->environment('local') || app()->environment('testing');
+        })($request);
     }
 
     /**
@@ -53,7 +56,8 @@ class Ngeblog
 
     public function getDropdownCategory($value = 'id', $display = 'title')
     {
-        return Category::orderBy('title', 'asc')->get()->pluck($display, $value);
+        $cats = Category::orderBy('title', 'asc')->get()->pluck($display, $value)->toArray();
+        return array_merge([0 => '<< select category >>'], $cats);
     }
 
     public function findCategory($category_id)

@@ -11,6 +11,11 @@ class Category extends Model
 
     protected $fillable = ['title', 'slug', 'description'];
 
+    public function user()
+    {
+        return $this->belongsTo(config('ngeblog.user'));
+    }
+
     public function blogs()
     {
         return $this->hasMany(Blog::class);

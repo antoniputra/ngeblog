@@ -1,16 +1,14 @@
-{{ csrf_field() }}
-
 <div class="field">
 	<label class="label">Title</label>
 	<div class="control">
-		<input name="title" class="input" type="text" value="{{ old('title', array_get(@$category, 'title')) }}" placeholder="Text input">
+		{!! Form::text('title', null, ['class' => 'input']) !!}
 	</div>
 </div>
 
 <div class="field">
 	<label class="label">Description</label>
 	<div class="control">
-		<textarea name="description" class="textarea" placeholder="Textarea">{{ old('description', array_get(@$category, 'description')) }}</textarea>
+		{!! Form::textarea('description', null, ['class' => 'textarea', 'rows' => 4]) !!}
 	</div>
 </div>
 

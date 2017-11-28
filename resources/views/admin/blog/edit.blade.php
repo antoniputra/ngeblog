@@ -2,13 +2,13 @@
 
 @section('content')
 
-	<form class="form-horizontal" method="POST" action="{{ route('ngeblog.blog.update', $blog['id']) }}">
+	{!! Form::model($blog, ['url' => route('ngeblog.blog.update', $blog['id']), 'class' => 'form-horizontal']) !!}
 		<div class="columns">
 			<div class="column is-three-quarters">
 				{{ method_field('PUT') }}
 				@include('ngeblog::admin.blog._form')
 			</div>
 		</div>
-	</form>
+	{!! Form::close() !!}
 
 @stop
