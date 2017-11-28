@@ -19,7 +19,7 @@ class NgeblogTableSeeder extends Seeder
         factory(Category::class, 3)->create([
             'user_id' => $user->id,
         ])->each(function ($category) use ($user) {
-            $category->blogs()->saveMany(factory(Blog::class, rand(1, 3))->make([
+            $category->blogs()->saveMany(factory(Blog::class, 2)->make([
                 'user_id' => $user->id,
             ]));
         });

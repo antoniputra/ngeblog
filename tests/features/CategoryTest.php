@@ -59,11 +59,18 @@ class CategoryTest extends TestCase
     public function user_can_delete_a_category()
     {
         $this->visit(route('ngeblog.category.index'))
-            ->assertResponseStatus(200)
-            ->see(route('ngeblog.category.destroy', 1))
-            ->press('Delete')
+            ->see(route('ngeblog.category.destroy', 1));
+
+        $this->post(route('ngeblog.category.destroy', 1), [
+            '_token' => csrf_token(),
+            '_method' => 'DELETE',
+        ])
+            ->assertResponseStatus(302)
             ->notSeeInDatabase('ngeblog_categories', [
                 'id' => 1,
             ]);
+
+        $this->visit(route('ngeblog.category.index'))
+            ->dontSee(route('ngeblog.category.destroy', 1));
     }
 }

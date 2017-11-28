@@ -58,4 +58,20 @@ class BlogTest extends TestCase
                 'content' => 'Updated content',
             ]);
     }
+
+    /** @test */
+    public function user_can_delete_a_blog()
+    {
+        $this->visit(route('ngeblog.blog.index'))
+            ->see(route('ngeblog.blog.destroy', 1));
+
+        $this->post(route('ngeblog.blog.destroy', 1), [
+            '_token' => csrf_token(),
+            '_method' => 'DELETE',
+        ])
+            ->assertResponseStatus(302);
+
+        $this->visit(route('ngeblog.blog.index'))
+            ->dontSee(route('ngeblog.blog.destroy', 1));
+    }
 }
