@@ -19,6 +19,8 @@ class CreateNgeblogBlogsTable extends Migration
             $table->integer('user_id')->index()->unsigned();
             $table->string('title');
             $table->string('slug')->unique();
+            $table->string('editor_type')->default('markdown');
+            $table->string('status')->default('publish');
             $table->text('content');
             $table->timestamps();
             $table->softDeletes();

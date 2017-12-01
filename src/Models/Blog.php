@@ -12,7 +12,7 @@ class Blog extends Model
 
     protected $table = 'ngeblog_blogs';
 
-    protected $fillable = ['category_id', 'title', 'slug', 'content'];
+    protected $fillable = ['category_id', 'title', 'slug', 'content', 'status', 'editor_type'];
 
     public function user()
     {

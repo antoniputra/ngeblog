@@ -4,7 +4,7 @@
 
 	{!! Form::open(['url' => route('ngeblog.blog.store'), 'class' => 'form-horizontal']) !!}
 		<div class="columns">
-			<div class="column is-three-quarters">
+			<div class="column">
 				@include('ngeblog::admin.blog._form')
 			</div>
 		</div>

@@ -8,9 +8,11 @@
 
 	<title>Ngeblog @yield('title', isset($title) ? ' - '. $title : '')</title>
 	<link rel="stylesheet" type="text/css" href="{{ asset('/vendor/ngeblog/css/app.css') }}">
+
+	@yield('styles')
 </head>
 <body>
-	<div class="container">
+	<div id="app" class="container">
 		<nav class="navbar is-transparent ngeblog-navbar" role="navigation" aria-label="main navigation">
 			<div class="navbar-brand">
 				<a class="navbar-item" href="http://bulma.io">
@@ -62,5 +64,7 @@
 	</div>
 
 	<script src="{{ asset('vendor/ngeblog/js/app.js') }}"></script>
+	@yield('scripts')
+
 </body>
 </html>

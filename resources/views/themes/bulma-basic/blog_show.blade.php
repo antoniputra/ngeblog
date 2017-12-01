@@ -12,7 +12,7 @@
 		</header>
 		<div class="card-content">
 			<div class="content">
-				{{ $blog['content'] }}
+				{!! $blog['content'] !!}
 				<hr>
 				<small>{{ $blog['created_at']->toFormattedDateString() }}</small>
 			</div>

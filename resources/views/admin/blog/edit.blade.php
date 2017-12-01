@@ -4,7 +4,7 @@
 
 	{!! Form::model($blog, ['url' => route('ngeblog.blog.update', $blog['id']), 'class' => 'form-horizontal']) !!}
 		<div class="columns">
-			<div class="column is-three-quarters">
+			<div class="column">
 				{{ method_field('PUT') }}
 				@include('ngeblog::admin.blog._form')
 			</div>

@@ -1,4 +1,4 @@
-<p align="center"><a href="https://github.com/antoniputra/ngeblog" target="_blank"><img src="https://raw.githubusercontent.com/antoniputra/ngeblog/master/public/img/logo.png" width="300px"></a></p>
+<p align="center"><a href="https://github.com/antoniputra/ngeblog" target="_blank"><img src="https://raw.githubusercontent.com/antoniputra/ngeblog/master/publishable/assets/img/logo.png" width="300px"></a></p>
 
 <p align="center">
 	<a href="https://travis-ci.org/antoniputra/ngeblog"><img src="https://travis-ci.org/antoniputra/ngeblog.svg?branch=master" alt="Build Status"></a>
@@ -14,7 +14,7 @@ It just quickstart to have simple blogging system for your existing laravel appl
 ### Screenshot
 <p align="center">
 	<a href="https://raw.githubusercontent.com/antoniputra/ngeblog/master/public/img/screenshot.png" target="_blank">
-		<img src="https://raw.githubusercontent.com/antoniputra/ngeblog/master/public/img/screenshot.png" alt="Ngeblog Screenshot">
+		<img src="https://raw.githubusercontent.com/antoniputra/ngeblog/master/publishable/assets/img/screenshot.png" alt="Ngeblog Screenshot">
 	</a>
 </p>
 

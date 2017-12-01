@@ -8,7 +8,7 @@
     </header>
     <div class="card-content">
         <div class="content">
-            {{ substr($blog['content'], 0, 200) }}
+            {!! substr($blog['content'], 0, 200) !!}
             <hr>
             <div class="level">
                 <div class="level-left">

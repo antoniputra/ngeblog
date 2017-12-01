@@ -1,6 +1,12 @@
 @import "~bulma/bulma";
 @import "~ionicons/scss/ionicons";
 
+// normalize
+h1, h2, h3, h4, h5, h6 {
+	font-size: 2em;
+	font-weight: bold;
+}
+
 .ngeblog-navbar {
 	margin-bottom: 40px;
 	border-bottom: 1px solid #ddd;
