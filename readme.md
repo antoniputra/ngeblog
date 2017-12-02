@@ -28,6 +28,21 @@ It just quickstart to have simple blogging system for your existing laravel appl
 3. You done!
 
 
+#### Protect the admin panel
+
+Once this package already installed correctly, by default it will provide admin panel at `/ngeblog` with no protection. You can add your own protection like below:
+
+```php
+// routes/web.php
+
+Ngeblog::auth(function ($request) {
+    // your protection logic...
+
+    return auth()->check();
+});
+```
+
+
 ## Credits
 
 - Thanks to [@arryanggaputra](https://github.com/arryanggaputra) for the _nice looking logo_.
