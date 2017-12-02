@@ -5,6 +5,7 @@ namespace Antoniputra\Ngeblog\Http\Controllers;
 use Antoniputra\Ngeblog\Facade as NgeblogFacade;
 use Antoniputra\Ngeblog\Http\Controllers\BaseController;
 use Antoniputra\Ngeblog\Http\Middleware\Authenticate;
+use Antoniputra\Ngeblog\Repositories\BlogRepository;
 use Illuminate\Http\Request;
 
 class BlogController extends BaseController
@@ -14,9 +15,10 @@ class BlogController extends BaseController
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(BlogRepository $repo)
     {
         $this->middleware(Authenticate::class);
+        $this->repo = $repo;
     }
 
     /**
@@ -41,7 +43,7 @@ class BlogController extends BaseController
     {
         $data = [
             'title' => 'Blog Index',
-            'blogs' => NgeblogFacade::getLatestBlog(),
+            'blogs' => $this->repo->getPaginateLatest(10),
         ];
 
         return view('ngeblog::admin.blog.index', $data);
@@ -74,7 +76,7 @@ class BlogController extends BaseController
             'title' => 'required',
         ]);
 
-        NgeblogFacade::createBlog($request->all());
+        $this->repo->baseCreate($request->all());
 
         return redirect()->route('ngeblog.blog.index')->withMessage([
             'type' => 'is-success',
@@ -101,7 +103,7 @@ class BlogController extends BaseController
      */
     public function edit($id)
     {
-        $blog = NgeblogFacade::findBlog($id);
+        $blog = $this->repo->getDetail($id);
         if (!$blog) {
             abort(404);
         }
@@ -127,7 +129,7 @@ class BlogController extends BaseController
             'title' => 'required',
         ]);
 
-        NgeblogFacade::updateBlog($id, $request->all());
+        $this->repo->baseUpdate($id, $request->all());
 
         return redirect()->route('ngeblog.blog.index')->withMessage([
             'type' => 'is-success',
@@ -143,7 +145,7 @@ class BlogController extends BaseController
      */
     public function destroy($id)
     {
-        NgeblogFacade::deleteBlog($id);
+        $this->repo->baseDelete($id);
         return redirect()->route('ngeblog.blog.index')->withMessage([
             'type' => 'is-success',
             'content' => 'Blog has been deleted!',

@@ -2,16 +2,17 @@
 
 namespace Antoniputra\Ngeblog\Http\Controllers;
 
-use Antoniputra\Ngeblog\Facade as NgeblogFacade;
 use Antoniputra\Ngeblog\Http\Controllers\BaseController;
 use Antoniputra\Ngeblog\Http\Middleware\Authenticate;
+use Antoniputra\Ngeblog\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
 
 class CategoryController extends BaseController
 {
-    public function __construct()
+    public function __construct(CategoryRepository $repo)
     {
         $this->middleware(Authenticate::class);
+        $this->repo = $repo;
     }
 
     /**
@@ -23,7 +24,7 @@ class CategoryController extends BaseController
     {
         $data = [
             'title' => 'Category Index',
-            'categories' => NgeblogFacade::getLatestCategory(),
+            'categories' => $this->repo->getPaginateLatest(10),
         ];
 
         return view('ngeblog::admin.category.index', $data);
@@ -54,7 +55,7 @@ class CategoryController extends BaseController
             'title' => 'required',
         ]);
 
-        NgeblogFacade::createCategory($request->all());
+        $this->repo->baseCreate($request->all());
 
         return redirect()->route('ngeblog.category.index')->withMessage([
             'type' => 'is-success',
@@ -81,7 +82,7 @@ class CategoryController extends BaseController
      */
     public function edit($id)
     {
-        $category = NgeblogFacade::findCategory($id);
+        $category = $this->repo->getDetail($id);
         if (!$category) {
             abort(404);
         }
@@ -106,7 +107,7 @@ class CategoryController extends BaseController
             'title' => 'required',
         ]);
 
-        NgeblogFacade::updateCategory($id, $request->all());
+        $this->repo->baseUpdate($id, $request->all());
 
         return redirect()->route('ngeblog.category.index')->withMessage([
             'type' => 'is-success',
@@ -122,7 +123,7 @@ class CategoryController extends BaseController
      */
     public function destroy($id)
     {
-        NgeblogFacade::deleteCategory($id);
+        $this->repo->baseDelete($id);
         return redirect()->route('ngeblog.category.index')->withMessage([
             'type' => 'is-success',
             'content' => 'Category has been deleted',

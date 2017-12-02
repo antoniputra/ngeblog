@@ -10,4 +10,6 @@ use Illuminate\Routing\Controller as LaravelController;
 class BaseController extends LaravelController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    protected $repo;
 }
