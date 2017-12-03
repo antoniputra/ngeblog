@@ -26,9 +26,6 @@ Route::group(['prefix' => config('ngeblog.admin_prefix')], function () {
 });
 
 Route::group(['prefix' => config('ngeblog.public_prefix')], function () {
-    Route::get('/category', 'NgeblogController@categoryIndex')->name('category.index');
-    Route::get('/category/{category}', 'NgeblogController@categoryShow')->name('category.show');
-
-    Route::get('/', 'NgeblogController@blogIndex')->name('blog.index');
-    Route::get('/{blog}', 'NgeblogController@blogShow')->name('blog.show');
+    Route::get('/', 'FrontController@blogIndex')->name('nb.index');
+    Route::get('/{blog}', 'FrontController@blogShow')->name('nb.blog.show');
 });

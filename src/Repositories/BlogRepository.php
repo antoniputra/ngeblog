@@ -11,11 +11,12 @@ class BlogRepository extends BaseRepository
         $this->model = $model;
     }
 
-    public function getPaginateLatest($limit = 10)
+    public function getPaginateLatest($limit = 10, $isSimple = false)
     {
-        return $this->model->with('category')
-            ->orderBy('created_at', 'desc')
-            ->paginate($limit);
+        $blog = $this->model->with('category')
+            ->orderBy('created_at', 'desc');
+
+        return $isSimple ? $blog->simplePaginate($limit) : $blog->paginate($limit);
     }
 
     public function getPaginateLatestByCategory($category_id, $limit = 10)
@@ -29,6 +30,11 @@ class BlogRepository extends BaseRepository
     public function getDetail($id)
     {
         return $this->model->with('category')->find($id);
+    }
+
+    public function getDetailBySlug($slug)
+    {
+        return $this->model->with('category')->where('slug', $slug)->first();
     }
 
     protected function _baseProcess($model, array $data)

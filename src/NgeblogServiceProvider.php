@@ -68,7 +68,7 @@ class NgeblogServiceProvider extends ServiceProvider
     protected function registerResources()
     {
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'ngeblog');
-        $this->loadViewsFrom(__DIR__ . '/../resources/views/themes/bulma-basic', 'ngeblog_public');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views/themes', 'ngeblog_themes');
     }
 
     /**

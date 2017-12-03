@@ -4,6 +4,8 @@ namespace Antoniputra\Ngeblog;
 
 use Antoniputra\Ngeblog\Models\Blog;
 use Antoniputra\Ngeblog\Models\Category;
+use Antoniputra\Ngeblog\Repositories\BlogRepository;
+use Antoniputra\Ngeblog\Repositories\CategoryRepository;
 use Closure;
 
 class Ngeblog
@@ -41,17 +43,29 @@ class Ngeblog
         return new static;
     }
 
+    /**
+     * Get category Repository
+     *
+     * @return \Antoniputra\Ngeblog\Repositories\CategoryRepository
+     */
+    public function category()
+    {
+        return app(CategoryRepository::class);
+    }
+
+    /**
+     * Get blog Repository
+     *
+     * @return \Antoniputra\Ngeblog\Repositories\BlogRepository
+     */
+    public function blog()
+    {
+        return app(BlogRepository::class);
+    }
+
     public function totalCategory()
     {
         return Category::count();
-    }
-
-    public function getLatestCategory($limit = 10)
-    {
-        return Category::with('blogs')
-            ->withCount('blogs')
-            ->orderBy('created_at', 'desc')
-            ->paginate($limit);
     }
 
     public function getDropdownCategory($value = 'id', $display = 'title')
