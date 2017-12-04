@@ -13,7 +13,7 @@ class BlogRepository extends BaseRepository
 
     public function getPaginateLatest($limit = 10, $isSimple = false)
     {
-        $blog = $this->model->with('category')
+        $blog = $this->model->filterable()->with('category')
             ->orderBy('created_at', 'desc');
 
         return $isSimple ? $blog->simplePaginate($limit) : $blog->paginate($limit);

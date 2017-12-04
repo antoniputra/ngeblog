@@ -1,6 +1,11 @@
 @extends('ngeblog::admin.layout')
 
 @section('button-title')
+	{!! Form::open(['method' => 'GET']) !!}
+		{!! Form::text('keyword', null, ['class' => 'input', 'placeholder' => 'search title, or category', 'style' => 'width: 200px;']) !!}
+		<button type="submit" class="button is-info">Search</button>
+	{!! Form::close() !!}
+	&nbsp;&nbsp;&nbsp;
 	<a href="{{ route('ngeblog.blog.create') }}" class="button is-primary">
 		<span class="icon">
 			<i class="ion-plus"></i>

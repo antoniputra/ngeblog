@@ -23,4 +23,19 @@ class Blog extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function scopeFilterable($query)
+    {
+        $q = $query;
+        $q = $q->select(['ngeblog_blogs.*', 'ngeblog_categories.title as category_title'])->join('ngeblog_categories', 'ngeblog_blogs.category_id', '=', 'ngeblog_categories.id');
+
+        if ($keyword = request('keyword')) {
+            $q = $q->where(function ($w) use ($keyword) {
+                $w->where('ngeblog_blogs.title', 'LIKE', "%$keyword%")
+                    ->orWhere('ngeblog_categories.title', 'LIKE', "%$keyword%");
+            });
+        }
+
+        return $q;
+    }
 }

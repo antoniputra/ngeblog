@@ -23,7 +23,6 @@ class NgeblogServiceProvider extends ServiceProvider
             $this->registerPublishes();
             $this->registerRoutes();
             $this->registerResources();
-            $this->registerMacros();
         }
     }
 
@@ -106,50 +105,5 @@ class NgeblogServiceProvider extends ServiceProvider
                 Console\InstallCommand::class,
             ]);
         }
-    }
-
-    /**
-     * Register any macro
-     *
-     * @return void
-     */
-    protected function registerMacros()
-    {
-        /**
-         * @param $text string
-         * @param $method string (http verb)
-         * @param $action string (is your route/url)
-         * @param $attr string (is your attributes like : class, id, etc...)
-         * @param $confirm_message string (need confirmation, before firing action ?)
-         **/
-        \Form::macro('link', function ($text, $method, $action, $attr = array(), $confirm_message = null) {
-            // attribute for form
-            $formAttr = array('method' => $method, 'url' => $action, 'style' => 'display:inline-block;');
-            // append onSubmit
-            if ($confirm_message) {
-                $formAttr = array_merge($formAttr, array('onsubmit' => 'return confirm("' . $confirm_message . '");'));
-            }
-
-            $output = \Form::open($formAttr);
-            $output .= '<button type="submit"';
-
-            // give attributes
-            if (!empty($attr) and is_array($attr)) {
-                foreach ($attr as $key => $value) {
-                    if ($key != 'icon') {
-                        $output .= ' ' . $key . '="' . $value . '" ';
-                    }
-                }
-            }
-            $output .= '>';
-            if (isset($attr['icon'])) {
-                $output .= $attr['icon'];
-            }
-
-            $output .= $text . '</button>';
-            $output .= \Form::close();
-
-            return $output;
-        });
     }
 }
