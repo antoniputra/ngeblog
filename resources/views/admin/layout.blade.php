@@ -18,13 +18,10 @@
 				<a class="navbar-item" href="http://bulma.io">
 					<img src="{{ asset('vendor/ngeblog/img/logo.png') }}" alt="Bulma: a modern CSS framework based on Flexbox">
 				</a>
-
-				<button class="button navbar-burger">
-					<span></span>
-					<span></span>
-					<span></span>
-				</button>
 			</div>
+			<a href="{{ route('nb.index') }}" target="_blank" class="navbar-item">
+				<small>Visit Blogs &raquo;</small>
+			</a>
 		</nav>
 
 		<div class="ngeblog-content">
