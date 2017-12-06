@@ -23,11 +23,6 @@ if (token) {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
-
-require('./link-method.js')
-
-
-
 // Object.defineProperty(Vue.prototype, '$lodash', { value: lodash });
 
 window.Vue = require('vue');
@@ -37,3 +32,6 @@ Vue.component('markdown', require('./components/Markdown.vue'));
 const app = new Vue({
     el: '#app'
 });
+
+
+require('./link-method.js')
