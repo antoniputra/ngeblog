@@ -7,5 +7,8 @@ mix
     .sass('resources/assets/scss/site.scss', 'publishable/assets/css')
     .js('resources/assets/js/app.js', 'publishable/assets/js')
     .copy('publishable/assets', '../../../public/vendor/ngeblog')
+    .options({
+      processCssUrls: false
+    })
     .sourceMaps()
     .version();
