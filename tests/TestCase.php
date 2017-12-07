@@ -15,6 +15,9 @@ class TestCase extends OrchestraTestCase
 
         $this->app->make('Illuminate\Contracts\Http\Kernel')->pushMiddleware('Illuminate\Session\Middleware\StartSession');
         $this->app->make('Illuminate\Contracts\Http\Kernel')->pushMiddleware('Illuminate\View\Middleware\ShareErrorsFromSession');
+
+        // For faster test when using bcrypt() for user password
+        \Hash::setRounds(5);
     }
 
     protected function getEnvironmentSetUp($app)
