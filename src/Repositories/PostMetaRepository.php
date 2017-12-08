@@ -32,8 +32,22 @@ class PostMetaRepository extends BaseRepository
 
     public function saveConfiguration(array $data = [])
     {
-        $fields = array_merge([$data], $this->loadConfig() ?? []);
-        $this->createConfig($fields);
+        $configs = array_merge([$data], $this->loadConfig() ?? []);
+        $this->createConfig($configs);
+    }
+
+    public function updateConfiguration($id, array $data = [])
+    {
+        $configs      = $this->loadConfig();
+        $configs[$id] = $data;
+        $this->createConfig($configs);
+    }
+
+    public function deleteConfiguration(int $index)
+    {
+        $configs = $this->loadConfig();
+        unset($configs[$index]);
+        $this->createConfig($configs);
     }
 
     protected function createConfig(array $configs = [])

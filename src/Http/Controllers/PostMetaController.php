@@ -94,16 +94,19 @@ class PostMetaController extends BaseController
      */
     public function edit($id)
     {
-        $category = $this->repo->getDetail($id);
-        if (!$category) {
+        $configuration = $this->repo->getConfiguration()[$id];
+        if (!$configuration) {
             abort(404);
         }
 
         $data = [
-            'title'    => 'Edit Category: ' . $category['title'],
-            'category' => $category,
+            'title'         => 'Edit Post Meta: ' . $configuration['meta_key'],
+            'id'            => $id,
+            'configuration' => $configuration,
+            'type_field'    => $this->repo->getPostMetaFieldType(),
+            'cat_dropdown'  => NgeblogFacade::getDropdownCategory(),
         ];
-        return view('ngeblog::admin.category.edit', $data);
+        return view('ngeblog::admin.postmeta.edit', $data);
     }
 
     /**
@@ -116,14 +119,21 @@ class PostMetaController extends BaseController
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'title' => 'required',
+            'meta_key'   => 'required',
+            'meta_field' => 'required',
         ]);
 
-        $this->repo->baseUpdate($id, $request->all());
+        // get category
+        $category = $this->category->getDetail($request->get('category_id'), false);
 
-        return redirect()->route('ngeblog.category.index')->withMessage([
+        // add category name to request
+        $request->request->add(['category_title' => $category->title ?? '']);
+
+        $this->repo->updateConfiguration($id, $request->except(['_token', '_method']));
+
+        return redirect()->route('ngeblog.postmeta.index')->withMessage([
             'type'    => 'is-success',
-            'content' => 'Category has been updated!',
+            'content' => 'Post Meta Configuration has been updated!',
         ]);
     }
 
@@ -135,10 +145,10 @@ class PostMetaController extends BaseController
      */
     public function destroy($id)
     {
-        $this->repo->baseDelete($id);
-        return redirect()->route('ngeblog.category.index')->withMessage([
+        $this->repo->deleteConfiguration($id);
+        return redirect()->route('ngeblog.postmeta.index')->withMessage([
             'type'    => 'is-success',
-            'content' => 'Category has been deleted',
+            'content' => 'Post Meta Configuration has been deleted',
         ]);
     }
 }

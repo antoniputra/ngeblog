@@ -2,11 +2,11 @@
 
 @section('content')
 
-	{!! Form::model($category, ['url' => route('ngeblog.category.update', $category['id']), 'class' => 'form-horizontal']) !!}
+	{!! Form::model($configuration, ['url' => route('ngeblog.postmeta.update', $id), 'class' => 'form-horizontal']) !!}
 		<div class="columns">
 			<div class="column is-two-thirds">
 				{!! method_field('PUT') !!}
-				@include('ngeblog::admin.category._form')
+				@include('ngeblog::admin.postmeta._form')
 			</div>
 		</div>
 	{!! Form::close() !!}

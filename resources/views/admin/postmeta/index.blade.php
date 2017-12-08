@@ -33,8 +33,8 @@
 					<tr>
 						<td>{{ $config['meta_key'] }}</td>
 						<td>{{ $config['meta_field'] }}</td>
-						<td>{{ ($config['category_id'] == 0)?'-' : $config['category_id'] }}</td>
-						<td>{{ ($config['category_id'] == 0)?'-' : $config['category_title'] }}</td>
+						<td>{{ ($config['category_id'] == 0) ? '-' : $config['category_id'] }}</td>
+						<td>{{ ($config['category_id'] == 0) ? '-' : $config['category_title'] }}</td>
 						<td>
 							<a href="{{ route('ngeblog.postmeta.edit', $key) }}" class="button is-small">
 								<span class="icon"><i class="ion-edit"></i></span>
@@ -42,7 +42,7 @@
 							</a>
 							<a href="{{ route('ngeblog.postmeta.destroy', $key) }}"
 							class="button is-danger is-small"
-							data-method="delete"
+							data-method="DELETE"
 							data-confirm="Are you sure prend?">
 								<span class="icon"><i class="ion-ios-trash-outline"></i></span>
 								<span>Delete</span>
