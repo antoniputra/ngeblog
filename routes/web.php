@@ -23,6 +23,15 @@ Route::group(['prefix' => config('ngeblog.admin_prefix')], function () {
         'update'  => 'ngeblog.blog.update',
         'destroy' => 'ngeblog.blog.destroy',
     ]]);
+
+    Route::resource('/post-meta', 'PostMetaController', ['names' => [
+        'index'   => 'ngeblog.postmeta.index',
+        'create'  => 'ngeblog.postmeta.create',
+        'store'   => 'ngeblog.postmeta.store',
+        'edit'    => 'ngeblog.postmeta.edit',
+        'update'  => 'ngeblog.postmeta.update',
+        'destroy' => 'ngeblog.postmeta.destroy',
+    ]]);
 });
 
 Route::group(['prefix' => config('ngeblog.public_prefix')], function () {
