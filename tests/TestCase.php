@@ -25,9 +25,9 @@ class TestCase extends OrchestraTestCase
         // Setup default database to use sqlite :memory:
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
-            'driver' => 'sqlite',
+            'driver'   => 'sqlite',
             'database' => ':memory:',
-            'prefix' => '',
+            'prefix'   => '',
         ]);
 
         $app['config']->set('ngeblog.user', User::class);
@@ -45,7 +45,7 @@ class TestCase extends OrchestraTestCase
     {
         return [
             'Ngeblog' => \Antoniputra\Ngeblog\Facade::class,
-            'Form' => \Collective\Html\FormFacade::class,
+            'Form'    => \Collective\Html\FormFacade::class,
         ];
     }
 

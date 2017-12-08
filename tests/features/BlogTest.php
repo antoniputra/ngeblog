@@ -36,9 +36,9 @@ class BlogTest extends TestCase
             ->type('Awesome content', 'content')
             ->press('Submit')
             ->seeInDatabase('ngeblog_blogs', [
-                'title' => 'Awesome name',
+                'title'       => 'Awesome name',
                 'category_id' => 1,
-                'content' => 'Awesome content',
+                'content'     => 'Awesome content',
             ]);
     }
 
@@ -53,9 +53,9 @@ class BlogTest extends TestCase
             ->type('Updated content', 'content')
             ->press('Submit')
             ->seeInDatabase('ngeblog_blogs', [
-                'title' => 'Updated name',
+                'title'       => 'Updated name',
                 'category_id' => 2,
-                'content' => 'Updated content',
+                'content'     => 'Updated content',
             ]);
     }
 
@@ -66,7 +66,7 @@ class BlogTest extends TestCase
             ->see(route('ngeblog.blog.destroy', 1));
 
         $this->post(route('ngeblog.blog.destroy', 1), [
-            '_token' => csrf_token(),
+            '_token'  => csrf_token(),
             '_method' => 'DELETE',
         ])
             ->assertResponseStatus(302);
