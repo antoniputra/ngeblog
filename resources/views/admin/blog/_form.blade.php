@@ -65,6 +65,15 @@
 	</div>
 </div>
 
+@if (sizeof($post_meta) > 0)
+	<div class="field">
+		<label class="label">Post Meta</label>
+		<div class="control">
+			@include('ngeblog::admin.postmeta._field', ['post_meta' => $post_meta])
+		</div>
+	</div>
+@endif
+
 {{-- <div class="field">
 	<label class="label">Content</label>
 	<div class="control">

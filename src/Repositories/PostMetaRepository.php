@@ -30,6 +30,14 @@ class PostMetaRepository extends BaseRepository
         return $this->loadConfig();
     }
 
+    public function findByCategoryId(int $categoryId)
+    {
+        $configs = array_filter($this->loadConfig(), function ($item) use ($categoryId) {
+            return ($item['category_id'] == $categoryId) || ($item['category_id'] == 0);
+        });
+        return $configs;
+    }
+
     public function saveConfiguration(array $data = [])
     {
         $configs = array_merge([$data], $this->loadConfig() ?? []);
