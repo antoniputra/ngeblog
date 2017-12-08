@@ -34,7 +34,7 @@ class CategoryTest extends TestCase
             ->type('Awesome Description', 'description')
             ->press('Submit')
             ->seeInDatabase('ngeblog_categories', [
-                'title' => 'Awesome Name',
+                'title'       => 'Awesome Name',
                 'description' => 'Awesome Description',
             ]);
     }
@@ -50,7 +50,7 @@ class CategoryTest extends TestCase
             ->type('Update Description', 'description')
             ->press('Submit')
             ->seeInDatabase('ngeblog_categories', [
-                'title' => 'Update Name',
+                'title'       => 'Update Name',
                 'description' => 'Update Description',
             ]);
     }
@@ -62,7 +62,7 @@ class CategoryTest extends TestCase
             ->see(route('ngeblog.category.destroy', 1));
 
         $this->post(route('ngeblog.category.destroy', 1), [
-            '_token' => csrf_token(),
+            '_token'  => csrf_token(),
             '_method' => 'DELETE',
         ])
             ->assertResponseStatus(302)
