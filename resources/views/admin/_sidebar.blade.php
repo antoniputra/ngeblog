@@ -24,6 +24,13 @@
 			</span>
 			Blog
 		</a></li>
+		<li><a href="{{ route('ngeblog.postmeta.index') }}"
+			@if(str_contains(Route::currentRouteName(), '.blog')) class="is-active" @endif>
+			<span class="icon is-medium">
+				<i class="ion-gear-b"></i>
+			</span>
+			Post Meta
+		</a></li>
 		{{-- <li><a href="#">
 			<span class="icon is-medium">
 				<i class="ion-ios-alarm-outline"></i>
