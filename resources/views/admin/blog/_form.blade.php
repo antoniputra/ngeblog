@@ -65,7 +65,7 @@
 	</div>
 </div>
 
-@if (sizeof($post_meta) > 0)
+@if (isset($post_meta) && sizeof($post_meta) > 0)
 	<div class="field">
 		<label class="label">Post Meta</label>
 		<div class="control">
