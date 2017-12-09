@@ -7,6 +7,8 @@
 					@include('ngeblog::admin.postmeta.components.textarea', ['name' => $meta['meta_key'], 'value'=> null])
 				@elseif($meta['meta_field'] == 'date')
 					@include('ngeblog::admin.postmeta.components.date', ['name' => $meta['meta_key'], 'value'=> null])
+				@elseif($meta['meta_field'] == 'number')
+					@include('ngeblog::admin.postmeta.components.number', ['name' => $meta['meta_key'], 'value'=> null])
 				@endif
 			</td>
 		</tr>
