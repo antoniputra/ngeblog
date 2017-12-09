@@ -18,6 +18,9 @@ class TestCase extends OrchestraTestCase
 
         // For faster test when using bcrypt() for user password
         \Hash::setRounds(5);
+
+        $this->installCommand();
+        $this->refreshPostMetaConfiguration();
     }
 
     protected function getEnvironmentSetUp($app)
@@ -58,5 +61,23 @@ class TestCase extends OrchestraTestCase
     {
         $this->loadLaravelMigrations(['--database' => 'testing']);
         $this->artisan('ngeblog:install', ['--with-dummy' => true]);
+    }
+
+    protected function refreshPostMetaConfiguration()
+    {
+        $postMeta = new \Antoniputra\Ngeblog\Repositories\PostMetaRepository;
+        $postMeta->destroyConfiguration();
+    }
+
+    protected function createPostMetaConfiguration()
+    {
+        $this->visit(route('ngeblog.postmeta.create'))
+            ->assertResponseStatus(200)
+            ->type('first_meta_key', 'meta_key')
+            ->select(1, 'category_id')
+            ->select('date', 'meta_field')
+            ->press('Submit')
+            ->followRedirects()
+            ->see('first_meta_key');
     }
 }
