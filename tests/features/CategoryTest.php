@@ -9,13 +9,6 @@ class CategoryTest extends TestCase
 {
     use DatabaseMigrations;
 
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->installCommand();
-    }
-
     /** @test */
     public function user_can_see_list_of_all_category_and_create_link()
     {

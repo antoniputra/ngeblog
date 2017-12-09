@@ -9,12 +9,6 @@ use Antoniputra\Ngeblog\Tests\TestCase;
 
 class BlogTest extends TestCase
 {
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->installCommand();
-    }
 
     /** @test */
     public function a_blog_belongs_to_a_category()

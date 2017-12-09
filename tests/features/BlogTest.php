@@ -9,13 +9,6 @@ class BlogTest extends TestCase
 {
     use DatabaseMigrations;
 
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->installCommand();
-    }
-
     /** @test */
     public function user_can_list_of_all_blogs()
     {
@@ -69,9 +62,8 @@ class BlogTest extends TestCase
             '_token'  => csrf_token(),
             '_method' => 'DELETE',
         ])
-            ->assertResponseStatus(302);
-
-        $this->visit(route('ngeblog.blog.index'))
-            ->dontSee(route('ngeblog.blog.destroy', 1));
+            ->assertResponseStatus(302)
+            ->followRedirects()
+            ->dontSee(route('ngeblog.blog.destroy', 1) . '/edit'); // add /edit link
     }
 }

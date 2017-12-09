@@ -9,13 +9,6 @@ class CommonTest extends TestCase
 {
     use DatabaseMigrations;
 
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->installCommand();
-    }
-
     /** @test */
     public function anonymous_can_visit_admin_page()
     {
