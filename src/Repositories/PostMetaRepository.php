@@ -2,14 +2,13 @@
 
 namespace Antoniputra\Ngeblog\Repositories;
 
-use Antoniputra\Ngeblog\Models\Category;
 use Illuminate\Support\Facades\Storage;
 
 class PostMetaRepository extends BaseRepository
 {
-    public function __construct(Category $model)
+
+    public function __construct()
     {
-        $this->model    = $model;
         $this->fileName = 'ngeblog/post_meta.json';
     }
 
@@ -32,7 +31,7 @@ class PostMetaRepository extends BaseRepository
 
     public function findByCategoryId(int $categoryId)
     {
-        $configs = array_filter($this->loadConfig(), function ($item) use ($categoryId) {
+        $configs = array_filter($this->getConfiguration(), function ($item) use ($categoryId) {
             return ($item['category_id'] == $categoryId) || ($item['category_id'] == 0);
         });
         return $configs;
@@ -40,22 +39,27 @@ class PostMetaRepository extends BaseRepository
 
     public function saveConfiguration(array $data = [])
     {
-        $configs = array_merge([$data], $this->loadConfig() ?? []);
+        $configs = array_merge([$data], $this->getConfiguration() ?? []);
         $this->createConfig($configs);
     }
 
     public function updateConfiguration($id, array $data = [])
     {
-        $configs      = $this->loadConfig();
+        $configs      = $this->getConfiguration();
         $configs[$id] = $data;
         $this->createConfig($configs);
     }
 
     public function deleteConfiguration(int $index)
     {
-        $configs = $this->loadConfig();
+        $configs = $this->getConfiguration();
         unset($configs[$index]);
         $this->createConfig($configs);
+    }
+
+    public function destroyConfiguration()
+    {
+        $this->createConfig();
     }
 
     protected function createConfig(array $configs = [])
