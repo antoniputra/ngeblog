@@ -64,7 +64,10 @@ class PostMetaRepository extends BaseRepository
 
     protected function createConfig(array $configs = [])
     {
-        Storage::put($this->fileName, json_encode($configs));
+        if (app()->environment('testing')) {
+            Storage::fake('local');
+        }
+        Storage::disk('local')->put($this->fileName, json_encode($configs));
     }
 
     protected function loadConfig()

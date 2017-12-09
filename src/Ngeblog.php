@@ -70,8 +70,10 @@ class Ngeblog
 
     public function getDropdownCategory($value = 'id', $display = 'title')
     {
-        $cats = Category::orderBy('title', 'asc')->get()->pluck($display, $value)->toArray();
-        return array_merge([0 => '<< select category >>'], $cats);
+        $cats    = Category::orderBy('title', 'asc')->get()->pluck($display, $value)->toArray();
+        $cats[0] = '<< select category >>';
+        asort($cats);
+        return $cats;
     }
 
     public function totalBlog()
