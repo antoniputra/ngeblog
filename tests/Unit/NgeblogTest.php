@@ -13,8 +13,6 @@ class NgeblogTest extends TestCase
     {
         parent::setUp();
 
-        $this->installCommand();
-
         $this->ngeblog = new Ngeblog;
     }
 
