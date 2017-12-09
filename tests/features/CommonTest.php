@@ -28,5 +28,10 @@ class CommonTest extends TestCase
 
         $this->get(route('ngeblog.dashboard'))
             ->assertResponseStatus(403);
+
+        // setup protection logic
+        \Ngeblog::auth(function ($request) {
+            return true;
+        });
     }
 }
