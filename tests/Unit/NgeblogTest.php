@@ -27,11 +27,10 @@ class NgeblogTest extends TestCase
     /** @test */
     public function it_has_get_dropdown_category_method_that_returns_array_of_categories()
     {
-        $categoryList = Category::orderBy('title', 'asc')->pluck('title', 'id')->toArray();
-
-        $newCategories = array_merge([0 => '<< select category >>'], $categoryList);
-
-        $this->assertEquals($newCategories, $this->ngeblog->getDropdownCategory());
+        $categoryList    = Category::orderBy('title', 'asc')->pluck('title', 'id')->toArray();
+        $categoryList[0] = '<< select category >>';
+        asort($categoryList);
+        $this->assertEquals($categoryList, $this->ngeblog->getDropdownCategory());
     }
 
     /** @test */
