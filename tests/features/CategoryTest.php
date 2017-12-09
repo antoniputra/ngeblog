@@ -9,13 +9,6 @@ class CategoryTest extends TestCase
 {
     use DatabaseMigrations;
 
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->installCommand();
-    }
-
     /** @test */
     public function user_can_see_list_of_all_category_and_create_link()
     {
@@ -34,7 +27,7 @@ class CategoryTest extends TestCase
             ->type('Awesome Description', 'description')
             ->press('Submit')
             ->seeInDatabase('ngeblog_categories', [
-                'title' => 'Awesome Name',
+                'title'       => 'Awesome Name',
                 'description' => 'Awesome Description',
             ]);
     }
@@ -50,7 +43,7 @@ class CategoryTest extends TestCase
             ->type('Update Description', 'description')
             ->press('Submit')
             ->seeInDatabase('ngeblog_categories', [
-                'title' => 'Update Name',
+                'title'       => 'Update Name',
                 'description' => 'Update Description',
             ]);
     }
@@ -62,7 +55,7 @@ class CategoryTest extends TestCase
             ->see(route('ngeblog.category.destroy', 1));
 
         $this->post(route('ngeblog.category.destroy', 1), [
-            '_token' => csrf_token(),
+            '_token'  => csrf_token(),
             '_method' => 'DELETE',
         ])
             ->assertResponseStatus(302)

@@ -10,12 +10,6 @@ use Illuminate\Support\Collection;
 
 class CategoryTest extends TestCase
 {
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->installCommand();
-    }
 
     /** @test */
     public function a_category_belongs_to_a_user()
