@@ -65,7 +65,7 @@ class TestCase extends OrchestraTestCase
 
     protected function refreshPostMetaConfiguration()
     {
-        $postMeta = new \Antoniputra\Ngeblog\Repositories\PostMetaRepository;
+        $postMeta = app(\Antoniputra\Ngeblog\Repositories\PostMetaRepository::class);
         $postMeta->destroyConfiguration();
     }
 

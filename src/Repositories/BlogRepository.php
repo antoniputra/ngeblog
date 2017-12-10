@@ -29,7 +29,7 @@ class BlogRepository extends BaseRepository
 
     public function getDetail($id)
     {
-        return $this->model->with('category')->find($id);
+        return $this->model->with(['category', 'postmeta'])->find($id);
     }
 
     public function getDetailBySlug($slug)

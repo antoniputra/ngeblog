@@ -2,22 +2,25 @@
 
 namespace Antoniputra\Ngeblog\Repositories;
 
+use Antoniputra\Ngeblog\Models\PostMeta;
 use Illuminate\Support\Facades\Storage;
 
 class PostMetaRepository extends BaseRepository
 {
 
-    public function __construct()
+    public function __construct(PostMeta $model)
     {
         $this->fileName = 'ngeblog/post_meta.json';
+        $this->model    = $model;
     }
 
     public function getPostMetaFieldType()
     {
         return [
-            'number' => 'Number Field',
-            'text'   => 'Textarea Field',
-            'date'   => 'Date Field',
+            'number'   => 'Number Field',
+            'textarea' => 'Textarea Field',
+            'text'     => 'Textinput Field',
+            'date'     => 'Date Field',
         ];
     }
 
@@ -27,6 +30,41 @@ class PostMetaRepository extends BaseRepository
             $this->createConfig();
         }
         return $this->loadConfig();
+    }
+
+    public function saveBlogPostMeta(int $blogId, $postMeta)
+    {
+        if ($postMeta == null) {
+            return;
+        }
+
+        $postMetaConfigurations = $this->getConfiguration();
+        /**
+         * Delete previous post_meta data
+         */
+        $this->model->where('blog_id', $blogId)->delete();
+
+        $postMetaData = [];
+
+        foreach ($postMeta as $key => $value) {
+
+            $index = array_search($key, array_column($postMetaConfigurations, 'meta_key'));
+
+            $item = [
+                'blog_id'    => $blogId,
+                'meta_key'   => $key,
+                'meta_value' => $value,
+                'meta_field' => $postMetaConfigurations[$index]['meta_field'],
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ];
+            $postMetaData[] = $item;
+        }
+
+        /**
+         * create multiple post_meta data
+         */
+        $this->model->insert($postMetaData);
     }
 
     public function findByCategoryId(int $categoryId)

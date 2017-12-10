@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => config('ngeblog.admin_prefix')], function () {
-
     Route::get('/', 'BlogController@dashboard')->name('ngeblog.dashboard');
 
     Route::resource('/category', 'CategoryController', ['names' => [
@@ -24,6 +23,7 @@ Route::group(['prefix' => config('ngeblog.admin_prefix')], function () {
         'destroy' => 'ngeblog.blog.destroy',
     ]]);
 
+    Route::get('/post-meta/field', 'PostMetaController@getPostMetaField')->name('ngeblog.postmeta.field');
     Route::resource('/post-meta', 'PostMetaController', ['names' => [
         'index'   => 'ngeblog.postmeta.index',
         'create'  => 'ngeblog.postmeta.create',

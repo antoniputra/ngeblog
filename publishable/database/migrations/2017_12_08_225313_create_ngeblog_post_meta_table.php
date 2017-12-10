@@ -17,7 +17,8 @@ class CreateNgeblogPostMetaTable extends Migration
             $table->increments('id');
             $table->integer('blog_id')->index()->unsigned();
             $table->string('meta_key');
-            $table->longText('meta_value');
+            $table->string('meta_field');
+            $table->longText('meta_value')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
