@@ -36,7 +36,7 @@
 	<label class="label">Category</label>
 	<div class="control">
 		<div class="select is-fullwidth">
-			{!! Form::select('category_id', $cat_dropdown, null, []) !!}
+			{!! Form::select('category_id', $cat_dropdown, null, ['dropdown-ajax'=>'true', 'dropdown-ajax-output-id'=>'post-meta-field', 'dropdown-ajax-url'=>route('ngeblog.postmeta.field')]) !!}
 		</div>
 	</div>
 </div>
@@ -65,14 +65,12 @@
 	</div>
 </div>
 
-@if (isset($post_meta) && sizeof($post_meta) > 0)
-	<div class="field">
-		<label class="label">Post Meta</label>
-		<div class="control">
-			@include('ngeblog::admin.postmeta._field', ['post_meta' => $post_meta])
-		</div>
-	</div>
-@endif
+<div id="post-meta-field">
+	@if (isset($post_meta) && sizeof($post_meta) > 0)
+		@include('ngeblog::admin.postmeta._field', ['post_meta' => $post_meta])
+	@endif
+</div>
+
 
 {{-- <div class="field">
 	<label class="label">Content</label>

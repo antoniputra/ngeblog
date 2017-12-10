@@ -1,1 +1,1 @@
-{!! Form::number($name, $value, ['class' => 'input']) !!}
+{!! Form::number('post_meta['.$name.']', $value, ['class' => 'input']) !!}
