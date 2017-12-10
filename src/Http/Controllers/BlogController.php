@@ -78,7 +78,8 @@ class BlogController extends BaseController
             'title' => 'required',
         ]);
 
-        $this->repo->baseCreate($request->all());
+        $blog = $this->repo->baseCreate($request->all());
+        $this->postMeta->saveBlogPostMeta($blog->id, $request->get('post_meta'));
 
         return redirect()->route('ngeblog.blog.index')->withMessage([
             'type'    => 'is-success',
@@ -112,7 +113,7 @@ class BlogController extends BaseController
         $data = [
             'title'        => 'Edit Blog: ' . $blog['title'],
             'cat_dropdown' => NgeblogFacade::getDropdownCategory(),
-            'post_meta'    => $this->postMeta->findByCategoryId($blog->category_id),
+            'post_meta'    => (sizeof($blog->postmeta) > 0) ? $blog->postmeta : $this->postMeta->findByCategoryId($blog->category_id),
             'blog'         => $blog,
         ];
         return view('ngeblog::admin.blog.edit', $data);
@@ -132,6 +133,7 @@ class BlogController extends BaseController
         ]);
 
         $this->repo->baseUpdate($id, $request->all());
+        $this->postMeta->saveBlogPostMeta($id, $request->get('post_meta'));
 
         return redirect()->route('ngeblog.blog.index')->withMessage([
             'type'    => 'is-success',
