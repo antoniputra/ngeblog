@@ -151,4 +151,16 @@ class PostMetaController extends BaseController
             'content' => 'Post Meta Configuration has been deleted',
         ]);
     }
+
+    /**
+     * Get postmeta field by category_id
+     */
+    public function getPostMetaField(Request $request)
+    {
+        $data = [
+            'post_meta' => $this->repo->findByCategoryId($request->get('category_id', 0)),
+        ];
+        return view('ngeblog::admin.postmeta._field', $data);
+
+    }
 }
