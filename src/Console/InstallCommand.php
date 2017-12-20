@@ -41,6 +41,9 @@ class InstallCommand extends Command
         // publish any publishable file
         $this->call('vendor:publish', ['--provider' => NgeblogServiceProvider::class]);
 
+        // especially on seeder we want to forced publish
+        $this->call('vendor:publish', ['--tag' => 'ngeblog-seeds', '--force' => true]);
+
         // call migration command
         $this->info(PHP_EOL . 'Migrating the database tables into your application...');
         $this->call('migrate');

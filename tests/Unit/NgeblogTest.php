@@ -13,8 +13,6 @@ class NgeblogTest extends TestCase
     {
         parent::setUp();
 
-        $this->installCommand();
-
         $this->ngeblog = new Ngeblog;
     }
 
@@ -29,19 +27,18 @@ class NgeblogTest extends TestCase
     /** @test */
     public function it_has_get_dropdown_category_method_that_returns_array_of_categories()
     {
-        $categoryList = Category::orderBy('title', 'asc')->pluck('title', 'id')->toArray();
-
-        $newCategories = array_merge([0 => '<< select category >>'], $categoryList);
-
-        $this->assertEquals($newCategories, $this->ngeblog->getDropdownCategory());
+        $categoryList    = Category::orderBy('title', 'asc')->pluck('title', 'id')->toArray();
+        $categoryList[0] = '<< select category >>';
+        asort($categoryList);
+        $this->assertEquals($categoryList, $this->ngeblog->getDropdownCategory());
     }
 
     /** @test */
     public function it_has_total_blog_count()
     {
-        // Total blog is 6, based on command:
+        // Total blog is 4, based on command:
         // php artisan ngeblog:install --with-dummy
-        $this->assertEquals(6, $this->ngeblog->totalBlog());
+        $this->assertEquals(4, $this->ngeblog->totalBlog());
     }
 
     /** @test */

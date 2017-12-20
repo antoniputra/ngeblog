@@ -9,13 +9,6 @@ class BlogTest extends TestCase
 {
     use DatabaseMigrations;
 
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->installCommand();
-    }
-
     /** @test */
     public function user_can_list_of_all_blogs()
     {
@@ -36,9 +29,9 @@ class BlogTest extends TestCase
             ->type('Awesome content', 'content')
             ->press('Submit')
             ->seeInDatabase('ngeblog_blogs', [
-                'title' => 'Awesome name',
+                'title'       => 'Awesome name',
                 'category_id' => 1,
-                'content' => 'Awesome content',
+                'content'     => 'Awesome content',
             ]);
     }
 
@@ -53,9 +46,9 @@ class BlogTest extends TestCase
             ->type('Updated content', 'content')
             ->press('Submit')
             ->seeInDatabase('ngeblog_blogs', [
-                'title' => 'Updated name',
+                'title'       => 'Updated name',
                 'category_id' => 2,
-                'content' => 'Updated content',
+                'content'     => 'Updated content',
             ]);
     }
 
@@ -66,12 +59,11 @@ class BlogTest extends TestCase
             ->see(route('ngeblog.blog.destroy', 1));
 
         $this->post(route('ngeblog.blog.destroy', 1), [
-            '_token' => csrf_token(),
+            '_token'  => csrf_token(),
             '_method' => 'DELETE',
         ])
-            ->assertResponseStatus(302);
-
-        $this->visit(route('ngeblog.blog.index'))
-            ->dontSee(route('ngeblog.blog.destroy', 1));
+            ->assertResponseStatus(302)
+            ->followRedirects()
+            ->dontSee(route('ngeblog.blog.destroy', 1) . '/edit'); // add /edit link
     }
 }

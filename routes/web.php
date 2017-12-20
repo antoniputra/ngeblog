@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => config('ngeblog.admin_prefix')], function () {
-
     Route::get('/', 'BlogController@dashboard')->name('ngeblog.dashboard');
 
     Route::resource('/category', 'CategoryController', ['names' => [
@@ -22,6 +21,16 @@ Route::group(['prefix' => config('ngeblog.admin_prefix')], function () {
         'edit' => 'ngeblog.blog.edit',
         'update' => 'ngeblog.blog.update',
         'destroy' => 'ngeblog.blog.destroy',
+    ]]);
+
+    Route::get('metas/json', 'MetaController@getJson')->name('ngeblog.meta.getJson');
+    Route::resource('metas', 'MetaController', ['names' => [
+        'index' => 'ngeblog.meta.index',
+        'create' => 'ngeblog.meta.create',
+        'store' => 'ngeblog.meta.store',
+        'edit' => 'ngeblog.meta.edit',
+        'update' => 'ngeblog.meta.update',
+        'destroy' => 'ngeblog.meta.destroy',
     ]]);
 });
 

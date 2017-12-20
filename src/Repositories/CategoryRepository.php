@@ -19,14 +19,17 @@ class CategoryRepository extends BaseRepository
             ->paginate($limit);
     }
 
-    public function getDetail($id)
+    public function getDetail($id, $showBlog = true)
     {
-        return $this->model->with('blogs')
-            ->withCount('blogs')
+        $model = $this->model;
+        if ($showBlog) {
+            $model->with('blogs');
+        }
+        return $model->withCount('blogs')
             ->find($id);
     }
 
-    protected function _baseProcess($model, array $data)
+    protected function _baseProcess($model, array $data, $isEdit = false)
     {
         $model->fill($data);
         $model->user_id = optional(auth()->user())->id ?: 0;

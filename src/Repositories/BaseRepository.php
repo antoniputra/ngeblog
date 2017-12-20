@@ -66,7 +66,7 @@ abstract class BaseRepository
             return false;
         }
 
-        return $this->_baseProcess($row, $data);
+        return $this->_baseProcess($row, $data, true);
     }
 
     /**
@@ -81,7 +81,7 @@ abstract class BaseRepository
         return $model->delete();
     }
 
-    protected function _baseProcess($model, array $data)
+    protected function _baseProcess($model, array $data, $isEdit = false)
     {
         $model->fill($data);
         $model->save();

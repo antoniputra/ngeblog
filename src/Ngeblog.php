@@ -68,10 +68,12 @@ class Ngeblog
         return Category::count();
     }
 
-    public function getDropdownCategory($value = 'id', $display = 'title')
+    public function getDropdownCategory($value = 'id', $display = 'title', $placeholder = null)
     {
         $cats = Category::orderBy('title', 'asc')->get()->pluck($display, $value)->toArray();
-        return array_merge([0 => '<< select category >>'], $cats);
+        $cats[0] = $placeholder ?: '<< select category >>';
+        asort($cats);
+        return $cats;
     }
 
     public function totalBlog()

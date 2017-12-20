@@ -9,13 +9,6 @@ class CommonTest extends TestCase
 {
     use DatabaseMigrations;
 
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->installCommand();
-    }
-
     /** @test */
     public function anonymous_can_visit_admin_page()
     {
@@ -35,5 +28,10 @@ class CommonTest extends TestCase
 
         $this->get(route('ngeblog.dashboard'))
             ->assertResponseStatus(403);
+
+        // setup protection logic
+        \Ngeblog::auth(function ($request) {
+            return true;
+        });
     }
 }

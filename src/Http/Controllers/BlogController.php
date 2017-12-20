@@ -76,7 +76,7 @@ class BlogController extends BaseController
             'title' => 'required',
         ]);
 
-        $this->repo->baseCreate($request->all());
+        $blog = $this->repo->baseCreate($request->all());
 
         return redirect()->route('ngeblog.blog.index')->withMessage([
             'type' => 'is-success',
@@ -104,10 +104,10 @@ class BlogController extends BaseController
     public function edit($id)
     {
         $blog = $this->repo->getDetail($id);
+        // return $blog;
         if (!$blog) {
             abort(404);
         }
-
         $data = [
             'title' => 'Edit Blog: ' . $blog['title'],
             'cat_dropdown' => NgeblogFacade::getDropdownCategory(),
