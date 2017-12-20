@@ -22,15 +22,27 @@ if (token) {
   );
 }
 
-// Object.defineProperty(Vue.prototype, '$lodash', { value: lodash });
-
 window.Vue = require("vue");
 
+Object.defineProperty(Vue.prototype, '_', { value: require('lodash') });
+
 Vue.component("markdown", require("./components/Markdown.vue"));
+Vue.component("blog-meta", require("./components/BlogMeta.vue"));
 
 const app = new Vue({
-  el: "#app"
+  el: "#app",
+  data () {
+    return {
+      category_id: 0,
+    }
+  },
+  methods: {
+    categoryChangeForMeta() {
+      // trigger fetchMeta method on BlogMeta component
+      this.$refs.blogMeta.fetchMeta()
+    }
+  }
 });
 
 require("./link-method");
-require("./dropdown-ajax");
+// require("./dropdown-ajax");

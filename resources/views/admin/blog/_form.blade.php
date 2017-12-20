@@ -36,7 +36,8 @@
 	<label class="label">Category</label>
 	<div class="control">
 		<div class="select is-fullwidth">
-			{!! Form::select('category_id', $cat_dropdown, null, ['dropdown-ajax'=>'true', 'dropdown-ajax-output-id'=>'post-meta-field', 'dropdown-ajax-url'=>route('ngeblog.postmeta.field')]) !!}
+			<meta name="category_id" content="{{ @$blog['category_id'] ?: 0 }}">
+			{!! Form::select('category_id', $cat_dropdown, null, ['v-model' => 'category_id', '@change' => 'categoryChangeForMeta']) !!}
 		</div>
 	</div>
 </div>
@@ -45,7 +46,7 @@
 	<label class="label">Status</label>
 	<div class="control">
 		<label class="radio">
-			{!! Form::radio('status', 'publish', null) !!}
+			{!! Form::radio('status', 'publish', @$blog['status'] ?: true) !!}
 			Publish
 		</label>
 		<label class="radio">
@@ -65,12 +66,11 @@
 	</div>
 </div>
 
-<div id="post-meta-field">
-	@if (isset($post_meta) && sizeof($post_meta) > 0)
-		@include('ngeblog::admin.postmeta._field', ['post_meta' => $post_meta])
-	@endif
-</div>
-
+<blog-meta ref="blogMeta"
+	value="{{ @$blog['blogmetas'] }}"
+	current-category-id="{{ @$blog['category_id'] }}"
+	url-meta-create="{{ route('ngeblog.meta.create') }}"
+	url-meta-api="{{ route('ngeblog.meta.getJson') }}"></blog-meta>
 
 {{-- <div class="field">
 	<label class="label">Content</label>

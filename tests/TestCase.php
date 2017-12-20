@@ -20,7 +20,6 @@ class TestCase extends OrchestraTestCase
         \Hash::setRounds(5);
 
         $this->installCommand();
-        $this->refreshPostMetaConfiguration();
     }
 
     protected function getEnvironmentSetUp($app)
@@ -28,9 +27,9 @@ class TestCase extends OrchestraTestCase
         // Setup default database to use sqlite :memory:
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
 
         $app['config']->set('ngeblog.user', User::class);
@@ -48,7 +47,7 @@ class TestCase extends OrchestraTestCase
     {
         return [
             'Ngeblog' => \Antoniputra\Ngeblog\Facade::class,
-            'Form'    => \Collective\Html\FormFacade::class,
+            'Form' => \Collective\Html\FormFacade::class,
         ];
     }
 
@@ -61,23 +60,5 @@ class TestCase extends OrchestraTestCase
     {
         $this->loadLaravelMigrations(['--database' => 'testing']);
         $this->artisan('ngeblog:install', ['--with-dummy' => true]);
-    }
-
-    protected function refreshPostMetaConfiguration()
-    {
-        $postMeta = app(\Antoniputra\Ngeblog\Repositories\PostMetaRepository::class);
-        $postMeta->destroyConfiguration();
-    }
-
-    protected function createPostMetaConfiguration()
-    {
-        $this->visit(route('ngeblog.postmeta.create'))
-            ->assertResponseStatus(200)
-            ->type('first_meta_key', 'meta_key')
-            ->select(1, 'category_id')
-            ->select('date', 'meta_field')
-            ->press('Submit')
-            ->followRedirects()
-            ->see('first_meta_key');
     }
 }

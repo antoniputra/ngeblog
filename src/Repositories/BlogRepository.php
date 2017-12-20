@@ -29,7 +29,7 @@ class BlogRepository extends BaseRepository
 
     public function getDetail($id)
     {
-        return $this->model->with(['category', 'postmeta'])->find($id);
+        return $this->model->with(['category', 'blogmetas'])->find($id);
     }
 
     public function getDetailBySlug($slug)
@@ -37,16 +37,44 @@ class BlogRepository extends BaseRepository
         return $this->model->with('category')->where('slug', $slug)->first();
     }
 
-    protected function _baseProcess($model, array $data)
+    protected function _baseProcess($model, array $data, $isEdit = false)
     {
-        $model->fill($data);
-        $model->user_id = optional(auth()->user())->id ?: 0;
+        return \DB::transaction(function () use ($model, $data, $isEdit) {
+            $model->fill($data);
+            $model->user_id = optional(auth()->user())->id ?: 0;
 
-        if (empty($data['slug'])) {
-            $model->slug = str_slug($data['title']);
+            if (empty($data['slug'])) {
+                $model->slug = str_slug($data['title']);
+            }
+
+            $model->save();
+
+            if (!empty($data['meta_id'])) {
+
+                if ($isEdit) {
+                    $model->blogmetas()->delete();
+                }
+
+                $this->_appendMeta($model, $data);
+            }
+
+            return $model;
+        });
+    }
+
+    protected function _appendMeta($model, array $data)
+    {
+        $result = [];
+        foreach ($data['meta_id'] as $key => $mid) {
+            array_push($result, [
+                'order' => $key,
+                'meta_id' => $data['meta_id'][$key],
+                'meta_field' => $data['meta_field'][$key],
+                'meta_key' => $data['meta_key'][$key],
+                'meta_value' => $data['meta_value'][$key],
+            ]);
         }
-
-        $model->save();
-        return $model;
+        // dd($result);
+        $model->blogmetas()->createMany($result);
     }
 }

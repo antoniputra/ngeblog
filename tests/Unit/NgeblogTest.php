@@ -36,9 +36,9 @@ class NgeblogTest extends TestCase
     /** @test */
     public function it_has_total_blog_count()
     {
-        // Total blog is 6, based on command:
+        // Total blog is 4, based on command:
         // php artisan ngeblog:install --with-dummy
-        $this->assertEquals(6, $this->ngeblog->totalBlog());
+        $this->assertEquals(4, $this->ngeblog->totalBlog());
     }
 
     /** @test */

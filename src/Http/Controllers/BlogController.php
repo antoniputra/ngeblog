@@ -6,7 +6,6 @@ use Antoniputra\Ngeblog\Facade as NgeblogFacade;
 use Antoniputra\Ngeblog\Http\Controllers\BaseController;
 use Antoniputra\Ngeblog\Http\Middleware\Authenticate;
 use Antoniputra\Ngeblog\Repositories\BlogRepository;
-use Antoniputra\Ngeblog\Repositories\PostMetaRepository;
 use Illuminate\Http\Request;
 
 class BlogController extends BaseController
@@ -16,11 +15,10 @@ class BlogController extends BaseController
      *
      * @return void
      */
-    public function __construct(BlogRepository $repo, PostMetaRepository $postMeta)
+    public function __construct(BlogRepository $repo)
     {
         $this->middleware(Authenticate::class);
-        $this->repo     = $repo;
-        $this->postMeta = $postMeta;
+        $this->repo = $repo;
     }
 
     /**
@@ -59,7 +57,7 @@ class BlogController extends BaseController
     public function create()
     {
         $data = [
-            'title'        => 'Create Blog',
+            'title' => 'Create Blog',
             'cat_dropdown' => NgeblogFacade::getDropdownCategory(),
         ];
 
@@ -79,10 +77,9 @@ class BlogController extends BaseController
         ]);
 
         $blog = $this->repo->baseCreate($request->all());
-        $this->postMeta->saveBlogPostMeta($blog->id, $request->get('post_meta'));
 
         return redirect()->route('ngeblog.blog.index')->withMessage([
-            'type'    => 'is-success',
+            'type' => 'is-success',
             'content' => 'Blog has been created!',
         ]);
     }
@@ -107,14 +104,14 @@ class BlogController extends BaseController
     public function edit($id)
     {
         $blog = $this->repo->getDetail($id);
+        // return $blog;
         if (!$blog) {
             abort(404);
         }
         $data = [
-            'title'        => 'Edit Blog: ' . $blog['title'],
+            'title' => 'Edit Blog: ' . $blog['title'],
             'cat_dropdown' => NgeblogFacade::getDropdownCategory(),
-            'post_meta'    => (sizeof($blog->postmeta) > 0) ? $blog->postmeta : $this->postMeta->findByCategoryId($blog->category_id),
-            'blog'         => $blog,
+            'blog' => $blog,
         ];
         return view('ngeblog::admin.blog.edit', $data);
     }
@@ -133,10 +130,9 @@ class BlogController extends BaseController
         ]);
 
         $this->repo->baseUpdate($id, $request->all());
-        $this->postMeta->saveBlogPostMeta($id, $request->get('post_meta'));
 
         return redirect()->route('ngeblog.blog.index')->withMessage([
-            'type'    => 'is-success',
+            'type' => 'is-success',
             'content' => 'Blog has been updated!',
         ]);
     }
@@ -151,7 +147,7 @@ class BlogController extends BaseController
     {
         $this->repo->baseDelete($id);
         return redirect()->route('ngeblog.blog.index')->withMessage([
-            'type'    => 'is-success',
+            'type' => 'is-success',
             'content' => 'Blog has been deleted!',
         ]);
     }

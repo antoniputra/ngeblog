@@ -29,7 +29,7 @@ class CategoryRepository extends BaseRepository
             ->find($id);
     }
 
-    protected function _baseProcess($model, array $data)
+    protected function _baseProcess($model, array $data, $isEdit = false)
     {
         $model->fill($data);
         $model->user_id = optional(auth()->user())->id ?: 0;

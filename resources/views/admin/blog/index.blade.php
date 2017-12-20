@@ -28,6 +28,7 @@
 					<th style="width: 5%;">No</th>
 					<th style="width: 50%;">Title</th>
 					<th>Category</th>
+					<th>Status</th>
 					<th style="width: 20%;">Action</th>
 				</tr>
 			</thead>
@@ -40,6 +41,13 @@
 						<td>{{ $no++ }}</td>
 						<td>{{ $b['title'] }}</td>
 						<td>{{ $b['category']['title'] }}</td>
+						<td>
+							@if ($b['status'] == 'publish')
+								<span class="tag is-primary">published</span>
+							@else
+								<span class="tag is-dark">{{ $b['status'] }}</span>
+							@endif
+						</td>
 						<td>
 							<a href="{{ route('ngeblog.blog.edit', $b['id']) }}" class="button is-small">
 								<span class="icon"><i class="ion-edit"></i></span>

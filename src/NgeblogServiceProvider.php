@@ -82,9 +82,6 @@ class NgeblogServiceProvider extends ServiceProvider
         ], 'ngeblog-seeds');
 
         $this->publishes([
-            // $this->publishablePath . '/assets/css' => public_path('vendor/ngeblog/css'),
-            // $this->publishablePath . '/assets/fonts' => public_path('fonts'),
-            // $this->publishablePath . '/assets/img' => public_path('vendor/ngeblog/img'),
             $this->publishablePath . '/assets' => public_path('vendor/ngeblog'),
         ], 'ngeblog-assets');
 

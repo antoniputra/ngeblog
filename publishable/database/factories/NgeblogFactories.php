@@ -19,5 +19,6 @@ $factory->define(Blog::class, function (Faker $faker) {
         'title' => $title,
         'slug' => str_slug($title),
         'content' => $faker->paragraph(5),
+        'editor_type' => 'quill',
     ];
 });

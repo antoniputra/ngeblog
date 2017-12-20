@@ -2,8 +2,8 @@
 
 namespace Antoniputra\Ngeblog\Models;
 
+use Antoniputra\Ngeblog\Models\BlogMeta;
 use Antoniputra\Ngeblog\Models\Category;
-use Antoniputra\Ngeblog\Models\PostMeta;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -25,9 +25,9 @@ class Blog extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function postmeta()
+    public function blogmetas()
     {
-        return $this->hasMany(PostMeta::class);
+        return $this->hasMany(BlogMeta::class);
     }
 
     public function scopeFilterable($query)
