@@ -17,6 +17,9 @@ workbench:
     commands: false
     components: false
     views: false
-  build: []
+  build:
+    - create-sqlite-db
+    - db:wipe
+    - migrate:refresh
   assets: []
   sync: []
