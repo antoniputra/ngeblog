@@ -21,5 +21,6 @@ workbench:
     - create-sqlite-db
     - db:wipe
     - migrate:refresh
+    - db:seed
   assets: []
   sync: []

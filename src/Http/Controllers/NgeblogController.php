@@ -6,13 +6,11 @@ use Illuminate\Routing\Controller;
 
 class NgeblogController extends Controller
 {
-    public function index()
+    public function __invoke()
     {
-        return view('index');
-    }
-
-    public function blogs()
-    {
-        return view('ngeblog::blogs');
+        return view('ngeblog::ngeblog', [
+            'title' => 'Ngeblog',
+            'ngeblogBasePath' => config('ngeblog.path'),
+        ]);
     }
 }

@@ -19,7 +19,7 @@ final class NgeblogServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->bootPublishable();
-        $this->bootPublicRoutes();
+        $this->bootRoutes();
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'ngeblog');
     }
@@ -28,7 +28,15 @@ final class NgeblogServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/../config/ngeblog.php' => config_path('ngeblog.php'),
-        ]);
+        ], 'ngeblog-config');
+
+        $this->publishes([
+            __DIR__.'/../dist' => public_path('vendor/ngeblog'),
+        ], 'ngeblog-assets');
+
+        $this->publishesMigrations([
+            __DIR__.'/../database/migrations' => database_path('migrations'),
+        ], 'ngeblog-migrations');
     }
 
     /**
@@ -36,7 +44,7 @@ final class NgeblogServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function bootPublicRoutes()
+    protected function bootRoutes()
     {
         if ($this->app instanceof CachesRoutes && $this->app->routesAreCached()) {
             return;

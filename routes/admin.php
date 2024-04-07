@@ -3,8 +3,17 @@
 use AntoniPutra\Ngeblog\Http\Controllers\NgeblogController;
 use Illuminate\Support\Facades\Route;
 
-Route::controller(NgeblogController::class)
-    ->name('ngeblog.')
-    ->group(function () {
-        Route::get('/', 'blogs')->name('blogs');
-    });
+Route::get('resolve-css', function () {
+    $content = file_get_contents(__DIR__ .'/../dist/ngeblog.css');
+    return response($content)
+        ->header('Content-Type', 'text/css');
+});
+
+Route::get('resolve-js', function () {
+    $content = file_get_contents(__DIR__ .'/../dist/ngeblog.js');
+    return response($content)
+        ->header('Content-Type', 'text/javascript');
+});
+
+// Catch-all Route...
+Route::get('/{view?}', NgeblogController::class)->where('view', '(.*)')->name('ngeblog.index');
