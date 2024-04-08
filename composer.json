@@ -1,12 +1,30 @@
 {
     "name": "antoniputra/ngeblog",
     "description": "Quickstart Blogging for your brand-new or existing Laravel App.",
+    "keywords": ["laravel", "blog", "vue", "spa"],
     "type": "library",
+    "homepage": "https://github.com/antoniputra/ngeblog",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/antoniputra/ngeblog/issues",
+        "source": "https://github.com/antoniputra/ngeblog"
+    },
+    "authors": [
+        {
+            "name": "antoniputra",
+            "email": "akiddcode@gmail.com"
+        }
+    ],
     "require": {
         "php": "^8.2",
-        "illuminate/support": "^11.2"
+        "illuminate/support": "^11.0"
     },
-    "license": "MIT",
+    "require-dev": {
+        "laravel/pint": "^1.15",
+        "orchestra/testbench": "^9.0",
+        "pestphp/pest": "^2.34",
+        "phpstan/phpstan": "^1.10"
+    },
     "autoload": {
         "psr-4": {
             "AntoniPutra\\Ngeblog\\": "src/"
@@ -20,28 +38,25 @@
             "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
         }
     },
-    "authors": [
-        {
-            "name": "antoniputra",
-            "email": "akiddcode@gmail.com"
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AntoniPutra\\Ngeblog\\NgeblogServiceProvider"
+            ],
+            "aliases": {
+                "Ngeblog": "AntoniPutra\\Ngeblog\\Facades\\Ngeblog"
+            }
         }
-    ],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
+    },
     "config": {
         "sort-packages": true,
-        "preferred-install": "dist",
         "optimize-autoloader": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true
         }
     },
-    "require-dev": {
-        "laravel/pint": "^1.15",
-        "orchestra/testbench": "^9.0",
-        "pestphp/pest": "^2.34",
-        "phpstan/phpstan": "^1.10"
-    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "scripts": {
         "post-autoload-dump": [
             "@clear",
