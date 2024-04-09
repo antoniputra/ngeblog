@@ -1,5 +1,6 @@
 providers:
-  # - Workbench\App\Providers\WorkbenchServiceProvider
+  - AntoniPutra\Ngeblog\NgeblogServiceProvider
+  - Workbench\App\Providers\WorkbenchServiceProvider
 
 migrations:
   - workbench/database/migrations

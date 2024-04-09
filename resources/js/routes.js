@@ -5,6 +5,7 @@ import BlogCreate from "@/pages/blogs/Create.vue";
 import TagIndex from "@/pages/tags/Index.vue";
 import TagCreate from "@/pages/tags/Create.vue";
 import NotFound from "./components/NotFound.vue";
+import { resolveBasePathUrl } from "./utils";
 
 const routes = [
     {
@@ -38,15 +39,6 @@ const routes = [
         component: TagCreate,
     },
 ];
-
-const resolveBasePathUrl = () => {
-    let result = window.NgeblogBasePath + "/";
-    if (window.NgeblogBasePath === "" || window.NgeblogBasePath === "/") {
-        result = "/";
-    }
-
-    return result;
-};
 
 const router = createRouter({
     history: createWebHistory(resolveBasePathUrl()),

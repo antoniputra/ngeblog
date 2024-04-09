@@ -1,3 +1,28 @@
+<script setup>
+import Container from "@/components/Container.vue";
+import axios from "axios";
+import { onMounted, reactive } from "vue";
+import { apiBasePath } from "@/utils";
+
+onMounted(() => {
+    document.title = "Blogs - Ngeblog Administration";
+
+    console.log("haii", apiBasePath("posts"));
+    fetchBlogs();
+});
+
+const blogs = reactive({
+    loading: false,
+    values: [],
+});
+
+const fetchBlogs = () => {
+    axios.get(apiBasePath("posts")).then((response) => {
+        console.log("hai", response.data);
+    });
+};
+</script>
+
 <template>
     <div>
         <Container>
@@ -78,7 +103,3 @@
         </Container>
     </div>
 </template>
-
-<script setup>
-import Container from "@/components/Container.vue";
-</script>

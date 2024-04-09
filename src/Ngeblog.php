@@ -2,7 +2,12 @@
 
 namespace AntoniPutra\Ngeblog;
 
-class ngeblog
+class Ngeblog
 {
-    
+    public static function frontendConfigs()
+    {
+        return [
+            'path' => config('ngeblog.path'),
+        ];
+    }
 }

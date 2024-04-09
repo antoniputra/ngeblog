@@ -2,6 +2,7 @@
 
 namespace AntoniPutra\Ngeblog\Http\Controllers;
 
+use AntoniPutra\Ngeblog\ngeblog;
 use Illuminate\Routing\Controller;
 
 class NgeblogController extends Controller
@@ -10,7 +11,7 @@ class NgeblogController extends Controller
     {
         return view('ngeblog::ngeblog', [
             'title' => 'Ngeblog',
-            'ngeblogBasePath' => config('ngeblog.path'),
+            'ngeblogFrontendConfigs' => ngeblog::frontendConfigs(),
         ]);
     }
 }

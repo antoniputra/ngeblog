@@ -1,6 +1,8 @@
 <?php
 
+use AntoniPutra\Ngeblog\Http\Controllers\Api\PostController;
 use AntoniPutra\Ngeblog\Http\Controllers\NgeblogController;
+use AntoniPutra\Ngeblog\Http\Middleware\AjaxMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('resolve-css', function () {
@@ -14,6 +16,20 @@ Route::get('resolve-js', function () {
     return response($content)
         ->header('Content-Type', 'text/javascript');
 })->name('resolve-js');
+
+Route::middleware([AjaxMiddleware::class])
+    ->prefix('api')
+    ->name('api.')
+    ->group(function () {
+
+        Route::controller(PostController::class)
+            ->prefix('posts')
+            ->name('post.')
+            ->group(function () {
+                Route::get('/', 'index');
+            });
+
+    });
 
 // Catch-all Route...
 Route::get('/{view?}', NgeblogController::class)->where('view', '(.*)')->name('ngeblog.index');
