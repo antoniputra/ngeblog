@@ -8,7 +8,7 @@ Route::get('/', function () {
 })->name('landing');
 
 Route::get('/login', function () {
-    auth()->loginUsingId(User::first());
+    auth()->login(User::first());
     return to_route('landing');
 });
 

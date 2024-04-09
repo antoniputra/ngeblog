@@ -18,11 +18,13 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->boolean('is_visible')->default(false);
             $table->enum('editor_type', ['markdown', 'richtext'])->default('markdown');
+            $table->string('cover_image_path')->nullable();
             $table->timestamp('first_published_at')->nullable();
-            $table->timestamp('publish_schedule_at')->nullable();
+            $table->timestamp('schedule_publish_at')->nullable();
             $table->text('description')->nullable();
             $table->longText('content');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

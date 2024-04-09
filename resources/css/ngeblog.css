@@ -6,6 +6,10 @@
     display: none;
 }
 
+.router-link-active {
+    @apply bg-teal-200;
+}
+
 .prend {
     background-color: red;
 }

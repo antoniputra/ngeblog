@@ -1,27 +1,41 @@
 import { createRouter, createWebHistory } from "vue-router";
-
-import Dashboard from "./pages/Dashboard.vue";
-import Index from "./pages/blogs/Index.vue";
-import Create from "./pages/blogs/Create.vue";
+import Dashboard from "@/pages/Dashboard.vue";
+import BlogIndex from "@/pages/blogs/Index.vue";
+import BlogCreate from "@/pages/blogs/Create.vue";
+import TagIndex from "@/pages/tags/Index.vue";
+import TagCreate from "@/pages/tags/Create.vue";
+import NotFound from "./components/NotFound.vue";
 
 const routes = [
+    {
+        path: "/:pathMatch(.*)*",
+        name: "NotFound",
+        component: NotFound,
+    },
     {
         path: "/",
         name: "dashboard",
         component: Dashboard,
-        // component: () => import("./pages/Dashboard.vue"),
     },
     {
         path: "/blogs",
         name: "blog-index",
-        component: Index,
-        // component: () => import("./pages/blogs/Index.vue"),
+        component: BlogIndex,
     },
     {
         path: "/blogs/create",
         name: "blog-create",
-        component: Create,
-        // component: () => import("./pages/blogs/Create.vue"),
+        component: BlogCreate,
+    },
+    {
+        path: "/tags",
+        name: "tag-index",
+        component: TagIndex,
+    },
+    {
+        path: "/tags/create",
+        name: "tag-create",
+        component: TagCreate,
     },
 ];
 
@@ -35,7 +49,6 @@ const resolveBasePathUrl = () => {
 };
 
 const router = createRouter({
-    // history: createMemoryHistory("/ngeblog"),
     history: createWebHistory(resolveBasePathUrl()),
     routes,
 });

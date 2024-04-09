@@ -2,6 +2,11 @@ import vue from "@vitejs/plugin-vue";
 
 /** @type {import('vite').UserConfig} */
 export default {
+    resolve: {
+        alias: {
+            "@": "/resources/js",
+        },
+    },
     plugins: [
         vue({
             template: {
