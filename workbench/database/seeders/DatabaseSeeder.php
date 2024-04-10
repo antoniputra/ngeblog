@@ -1,7 +1,9 @@
 <?php
 
 use AntoniPutra\Ngeblog\Models\Post;
+use AntoniPutra\Ngeblog\Models\Tag;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 use Workbench\App\Models\User;
 
 class DatabaseSeeder extends Seeder
@@ -17,8 +19,29 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
 
-        Post::factory(20)->create([
-            'author_id' => $user->id,
-        ]);
+        for ($i=0; $i < 20; $i++) {
+            $title = fake()->words(rand(2, 4), true);
+            Tag::create([
+                'title' => $title,
+                'slug' => Str::slug($title),
+                'is_visible' => true,
+                'description' => fake()->paragraph(),
+            ]);
+        }
+
+        for ($i=0; $i < 20; $i++) { 
+            $title = fake()->sentence();
+            $post = Post::create([
+                'author_id' => $user->id,
+                'title' => $title,
+                'slug' => Str::slug($title),
+                'is_visible' => fake()->boolean(60),
+                'editor_type' => fake()->randomElement([Post::EDITOR_TYPE_MARKDOWN, Post::EDITOR_TYPE_RICHTEXT]),
+                'description' => fake()->paragraph(),
+                'content' => fake()->paragraphs(rand(3, 6), true),
+            ]);
+
+            $post->tags()->attach(Tag::query()->inRandomOrder()->take(rand(2,4))->get());
+        }
     }
 }

@@ -45,4 +45,15 @@ return [
         AdminAuthorization::class
     ],
     
+    /*
+    |--------------------------------------------------------------------------
+    | Ngeblog Filesystem Disk
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify the default filesystem disk that should be used
+    | by the Ngeblog to handle Blog Image.
+    |
+    */
+
+    'disk' => env('NGEBLOG_DISK', 'public'),
 ];

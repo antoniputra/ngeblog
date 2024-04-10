@@ -17,7 +17,7 @@
     </script>
     <script type="module" src="{{ route('resolve-js') }}"></script>
 </head>
-<body class="font-sans antialiased">
+<body class="font-sans antialiased scroll-smooth">
     <div id="ngeblog-app"></div>
 </body>
 </html>

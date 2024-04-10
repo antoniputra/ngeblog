@@ -30,10 +30,6 @@ final class NgeblogServiceProvider extends ServiceProvider
             __DIR__.'/../config/ngeblog.php' => config_path('ngeblog.php'),
         ], 'ngeblog-config');
 
-        $this->publishes([
-            __DIR__.'/../dist' => public_path('vendor/ngeblog'),
-        ], 'ngeblog-assets');
-
         $this->publishesMigrations([
             __DIR__.'/../database/migrations' => database_path('migrations'),
         ], 'ngeblog-migrations');
