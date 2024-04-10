@@ -21,8 +21,8 @@ const navigation = [
     },
     {
         icon: null,
-        label: "Blogs",
-        to: { name: "blog-index" },
+        label: "Posts",
+        to: { name: "post-index" },
     },
     {
         icon: null,

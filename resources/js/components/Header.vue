@@ -79,7 +79,7 @@
                         >
                             <li>
                                 <router-link
-                                    :to="{ name: 'blog-create' }"
+                                    :to="{ name: 'post-create' }"
                                     class="hover:bg-teal-100 focus:bg-teal-100"
                                 >
                                     New Blog
@@ -102,6 +102,5 @@
 </template>
 
 <script setup>
-import Container from "./Container.vue";
 import MenuList from "./MenuList.vue";
 </script>

@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Dashboard from "@/pages/Dashboard.vue";
-import BlogIndex from "@/pages/blogs/Index.vue";
-import BlogCreate from "@/pages/blogs/Create.vue";
+import BlogIndex from "@/pages/posts/Index.vue";
+import BlogCreate from "@/pages/posts/Create.vue";
 import TagIndex from "@/pages/tags/Index.vue";
 import TagCreate from "@/pages/tags/Create.vue";
 import NotFound from "./components/NotFound.vue";
@@ -20,12 +20,12 @@ const routes = [
     },
     {
         path: "/blogs",
-        name: "blog-index",
+        name: "post-index",
         component: BlogIndex,
     },
     {
-        path: "/blogs/create",
-        name: "blog-create",
+        path: "/posts/create",
+        name: "post-create",
         component: BlogCreate,
     },
     {
