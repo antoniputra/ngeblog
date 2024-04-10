@@ -17,6 +17,8 @@ class Post extends Model
     
     const EDITOR_TYPE_RICHTEXT = 'richtext';
 
+    protected $table = 'ngeblog_posts';
+
     protected $guarded = [];
 
     public function author(): BelongsTo
@@ -26,7 +28,7 @@ class Post extends Model
 
     public function tags(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class);
+        return $this->belongsToMany(Tag::class, 'ngeblog_post_tag')->using(PostTag::class);
     }
 
     protected function parsedContent(): Attribute

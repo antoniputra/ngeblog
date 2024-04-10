@@ -16,6 +16,7 @@ class PostController extends Controller
                 'author_id',
                 'title',
                 'slug',
+                'is_visible',
                 'first_published_at',
                 'schedule_publish_at',
                 'created_at',

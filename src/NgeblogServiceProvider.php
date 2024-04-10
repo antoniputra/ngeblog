@@ -30,9 +30,17 @@ final class NgeblogServiceProvider extends ServiceProvider
             __DIR__.'/../config/ngeblog.php' => config_path('ngeblog.php'),
         ], 'ngeblog-config');
 
-        $this->publishesMigrations([
-            __DIR__.'/../database/migrations' => database_path('migrations'),
-        ], 'ngeblog-migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
+        // $this->publishesMigrations([
+        //     __DIR__.'/../database/migrations' => database_path('migrations'),
+        // ], 'ngeblog-migrations');
+
+        // $this->publishes([
+        //     __DIR__.'/../database/migrations/001_create_post_tag_table.php' => database_path('migrations'),
+        //     __DIR__.'/../database/migrations/002_create_posts_table.php' => database_path('migrations'),
+        //     __DIR__.'/../database/migrations/003_create_tags_table.php' => database_path('migrations'),
+        // ], 'ngeblog-migrations');
     }
 
     /**

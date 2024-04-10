@@ -10,10 +10,12 @@ class Tag extends Model
 {
     use HasFactory;
 
+    protected $table = 'ngeblog_tags';
+
     protected $guarded = [];
 
     public function posts(): BelongsToMany
     {
-        return $this->belongsToMany(Post::class);
+        return $this->belongsToMany(Post::class, 'ngeblog_post_tag')->using(PostTag::class);
     }
 }

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('ngeblog_posts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('author_id')->nullable();
             $table->string('title');
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('ngeblog_posts');
     }
 };

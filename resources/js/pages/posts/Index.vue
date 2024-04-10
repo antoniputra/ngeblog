@@ -3,7 +3,7 @@ import Container from "@/components/Container.vue";
 import Pagination from "@/components/Pagination.vue";
 import axios from "axios";
 import { onMounted, reactive } from "vue";
-import { apiBasePath } from "@/utils";
+import { apiBasePath, formatDate } from "@/utils";
 
 onMounted(() => {
     document.title = "Posts - Ngeblog Administration";
@@ -52,7 +52,7 @@ const posts = reactive({
                     <thead class="text-base">
                         <tr>
                             <th class="min-w-80">Title</th>
-                            <th>Tags</th>
+                            <th>Last Updated</th>
                             <th>Visibility</th>
                             <th>Actions</th>
                         </tr>
@@ -89,23 +89,86 @@ const posts = reactive({
                                             </div>
                                         </div>
                                         <div>
-                                            <div class="font-bold">
+                                            <router-link
+                                                :to="{
+                                                    name: 'post-edit',
+                                                    params: { id: row.id },
+                                                }"
+                                                class="block font-semibold pb-2 tracking-wide underline underline-offset-2 hover:underline-offset-4 duration-100"
+                                            >
                                                 {{ row.title }}
-                                            </div>
-                                            <div class="text-sm opacity-50">
-                                                United States
+                                            </router-link>
+                                            <div
+                                                class="flex items-center gap-2 flex-wrap"
+                                            >
+                                                <div
+                                                    v-for="tag in row.tags"
+                                                    type="button"
+                                                    class="badge"
+                                                >
+                                                    {{ tag.title }}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </td>
-                                <td>
-                                    Zemlak, Daniel and Leannon
-                                    <br />
-                                    <span class="badge badge-ghost badge-sm">
-                                        Desktop Support Technician
-                                    </span>
+                                <td class="text-sm">
+                                    <div
+                                        class="dropdown dropdown-hover dropdown-top"
+                                    >
+                                        <div tabindex="0">
+                                            {{
+                                                formatDate(row.updated_at, {
+                                                    withTime: true,
+                                                })
+                                            }}
+                                        </div>
+                                        <ul
+                                            tabindex="0"
+                                            class="dropdown-content z-10 p-2 shadow bg-base-100 rounded text-xs space-y-2"
+                                        >
+                                            <li v-if="row.first_published_at">
+                                                <p class="font-medium">
+                                                    Published at:
+                                                </p>
+                                                <p>
+                                                    {{
+                                                        formatDate(
+                                                            row.first_published_at,
+                                                            {
+                                                                withTime: true,
+                                                            }
+                                                        )
+                                                    }}
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p class="font-medium">
+                                                    Created at:
+                                                </p>
+                                                <p>
+                                                    {{
+                                                        formatDate(
+                                                            row.created_at,
+                                                            {
+                                                                withTime: true,
+                                                            }
+                                                        )
+                                                    }}
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </td>
-                                <td>Purple</td>
+                                <td>
+                                    <label class="label cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            class="toggle"
+                                            :checked="row.is_visible"
+                                        />
+                                    </label>
+                                </td>
                                 <th class="flex gap-2">
                                     <button class="btn btn-outline btn-sm">
                                         Edit
@@ -123,7 +186,7 @@ const posts = reactive({
                         <tr>
                             <!-- <th></th> -->
                             <th>Title</th>
-                            <th>Tags</th>
+                            <th>Last Updated</th>
                             <th>Visbility</th>
                             <th>Actions</th>
                         </tr>
