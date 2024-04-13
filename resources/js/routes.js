@@ -4,9 +4,9 @@ import PostIndex from "@/pages/posts/Index.vue";
 import PostCreate from "@/pages/posts/Create.vue";
 import PostEdit from "@/pages/posts/Edit.vue";
 import TagIndex from "@/pages/tags/Index.vue";
-import TagCreate from "@/pages/tags/Create.vue";
+import TagForm from "@/pages/tags/Form.vue";
 import NotFound from "./components/NotFound.vue";
-import { resolveBasePathUrl } from "./utils";
+import { resolveRouterBasePath } from "./utils";
 
 const routes = [
     {
@@ -21,33 +21,38 @@ const routes = [
     },
     {
         path: "/blogs",
-        name: "post-index",
+        name: "posts-index",
         component: PostIndex,
     },
     {
         path: "/posts/create",
-        name: "post-create",
+        name: "posts-create",
         component: PostCreate,
     },
     {
         path: "/posts/:id/edit",
-        name: "post-edit",
+        name: "posts-edit",
         component: PostEdit,
     },
     {
         path: "/tags",
-        name: "tag-index",
+        name: "tags-index",
         component: TagIndex,
     },
     {
         path: "/tags/create",
-        name: "tag-create",
-        component: TagCreate,
+        name: "tags-create",
+        component: TagForm,
+    },
+    {
+        path: "/tags/:id/edit",
+        name: "tags-edit",
+        component: TagForm,
     },
 ];
 
 const router = createRouter({
-    history: createWebHistory(resolveBasePathUrl()),
+    history: createWebHistory(resolveRouterBasePath()),
     routes,
 });
 

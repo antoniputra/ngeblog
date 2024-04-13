@@ -11,7 +11,7 @@ class NgeblogController extends Controller
     {
         return view('ngeblog::ngeblog', [
             'title' => 'Ngeblog',
-            'ngeblogFrontendConfigs' => ngeblog::frontendConfigs(),
+            'ngeblogFrontendConfig' => ngeblog::frontendConfig(),
         ]);
     }
 }

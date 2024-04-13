@@ -1,6 +1,6 @@
 <template>
-    <div class="bg-teal-50 border-b border-teal-100 mb-8">
-        <div class="max-w-7xl mx-auto">
+    <div class="mb-8 border-b border-teal-100 bg-teal-50">
+        <div class="mx-auto max-w-7xl">
             <div class="navbar py-0">
                 <div class="navbar-start">
                     <div class="dropdown">
@@ -27,13 +27,13 @@
 
                         <MenuList
                             tabindex="0"
-                            class="menu menu-sm dropdown-content mt-3 z-10 p-2 shadow bg-base-100 rounded-box w-60"
+                            class="menu dropdown-content menu-sm z-10 mt-3 w-60 rounded-box bg-base-100 p-2 shadow"
                         />
                     </div>
 
                     <router-link
                         :to="{ name: 'dashboard' }"
-                        class="btn btn-ghost text-xl !bg-transparent"
+                        class="btn btn-ghost !bg-transparent text-xl"
                     >
                         <img
                             src="https://raw.githubusercontent.com/antoniputra/ngeblog/master/publishable/assets/img/logo.png"
@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="navbar-center hidden lg:flex">
-                    <MenuList class="menu menu-horizontal px-1 gap-1" />
+                    <MenuList class="menu menu-horizontal gap-1 px-1" />
                 </div>
 
                 <div class="navbar-end">
@@ -51,7 +51,7 @@
                         <div
                             tabindex="0"
                             role="button"
-                            class="flex items-center hover:bg-teal-100 text-base md:text-lg gap-1 py-1 px-3 rounded-lg font-semibold tracking-wide"
+                            class="flex items-center gap-1 rounded-lg px-3 py-1 text-base font-semibold tracking-wide hover:bg-teal-100 md:text-lg"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +61,7 @@
                                 stroke-width="2"
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
-                                class="w-5 h-5"
+                                class="h-5 w-5"
                             >
                                 <path
                                     stroke="none"
@@ -75,19 +75,19 @@
                         </div>
                         <ul
                             tabindex="0"
-                            class="dropdown-content z-10 menu p-2 shadow bg-base-100 rounded-box w-52 text-lg"
+                            class="menu dropdown-content z-10 w-52 rounded-box bg-base-100 p-2 text-lg shadow"
                         >
                             <li>
                                 <router-link
-                                    :to="{ name: 'post-create' }"
+                                    :to="{ name: 'posts-create' }"
                                     class="hover:bg-teal-100 focus:bg-teal-100"
                                 >
-                                    New Blog
+                                    New Post
                                 </router-link>
                             </li>
                             <li>
                                 <router-link
-                                    :to="{ name: 'tag-create' }"
+                                    :to="{ name: 'tags-create' }"
                                     class="hover:bg-teal-100 focus:bg-teal-100"
                                 >
                                     New Tag

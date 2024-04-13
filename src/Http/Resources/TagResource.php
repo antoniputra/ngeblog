@@ -16,7 +16,6 @@ class TagResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'author_id' => $this->author_id,
             'title' => $this->title,
             'slug' => $this->slug,
             'is_visible' => $this->is_visible,
@@ -25,6 +24,7 @@ class TagResource extends JsonResource
             'updated_at' => $this->updated_at,
             
             'posts' => $this->whenLoaded('posts'),
+            'posts_count' => $this->whenCounted('posts'),
         ];
     }
 }

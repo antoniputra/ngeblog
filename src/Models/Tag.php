@@ -14,8 +14,24 @@ class Tag extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'is_visible' => 'boolean',
+    ];
+
     public function posts(): BelongsToMany
     {
         return $this->belongsToMany(Post::class, 'ngeblog_post_tag')->using(PostTag::class);
+    }
+
+    public function toggleVisibility()
+    {
+        if (! $this->exists) {
+            return;
+        }
+
+        $this->is_visible = ! $this->is_visible;
+        $this->save();
+
+        return $this;
     }
 }

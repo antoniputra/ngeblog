@@ -13,7 +13,7 @@
 
     <link rel="stylesheet" href="{{ route('resolve-css') }}">
     <script>
-        window.Ngeblog = @json($ngeblogFrontendConfigs);
+        window.Ngeblog = @json($ngeblogFrontendConfig);
     </script>
     <script type="module" src="{{ route('resolve-js') }}"></script>
 </head>

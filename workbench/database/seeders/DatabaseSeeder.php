@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
             Tag::create([
                 'title' => $title,
                 'slug' => Str::slug($title),
-                'is_visible' => true,
+                'is_visible' => fake()->boolean(70),
                 'description' => fake()->paragraph(),
             ]);
         }

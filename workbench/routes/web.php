@@ -9,7 +9,7 @@ Route::get('/', function () {
 
 Route::get('/login', function () {
     auth()->login(User::first());
-    return to_route('landing');
+    return redirect()->to(config('ngeblog.path'));
 });
 
 Route::get('/logout', function () {

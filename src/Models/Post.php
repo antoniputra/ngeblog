@@ -21,6 +21,10 @@ class Post extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'is_visible' => 'boolean',
+    ];
+
     public function author(): BelongsTo
     {
         return $this->belongsTo('App\\Models\\User', 'author_id');
@@ -29,6 +33,18 @@ class Post extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'ngeblog_post_tag')->using(PostTag::class);
+    }
+
+    public function toggleVisibility()
+    {
+        if (! $this->exists) {
+            return;
+        }
+
+        $this->is_visible = ! $this->is_visible;
+        $this->save();
+
+        return $this;
     }
 
     protected function parsedContent(): Attribute

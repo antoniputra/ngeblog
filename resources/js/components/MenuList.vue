@@ -22,12 +22,12 @@ const navigation = [
     {
         icon: null,
         label: "Posts",
-        to: { name: "post-index" },
+        to: { name: "posts-index" },
     },
     {
         icon: null,
         label: "Tags",
-        to: { name: "tag-index" },
+        to: { name: "tags-index" },
     },
 ];
 </script>

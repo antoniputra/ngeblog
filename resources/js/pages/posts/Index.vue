@@ -1,33 +1,15 @@
 <script setup>
 import Container from "@/components/Container.vue";
 import Pagination from "@/components/Pagination.vue";
-import axios from "axios";
-import { onMounted, reactive } from "vue";
+import { onMounted } from "vue";
 import { apiBasePath, formatDate } from "@/utils";
+import { useLoadData } from "@/composables/loadData";
+
+const posts = useLoadData(apiBasePath("posts"));
 
 onMounted(() => {
     document.title = "Posts - Ngeblog Administration";
-    posts.fetchRecords();
-});
-
-const posts = reactive({
-    loading: false,
-    records: null,
-    fetchRecords(url = null) {
-        const self = this;
-        self.loading = true;
-
-        url = url || apiBasePath("posts");
-
-        axios
-            .get(url)
-            .then((response) => {
-                self.records = response.data;
-            })
-            .finally(() => {
-                self.loading = false;
-            });
-    },
+    posts.fetchData();
 });
 </script>
 
@@ -43,7 +25,7 @@ const posts = reactive({
                         v-if="posts.loading"
                         class="loading loading-bars loading-md"
                     ></span>
-                    <span v-else v-text="`(${posts.records?.meta?.total})`" />
+                    <span v-else v-text="`(${posts.data?.meta?.total})`" />
                 </h1>
             </div>
 
@@ -68,17 +50,17 @@ const posts = reactive({
                             </td>
                         </tr>
 
-                        <tr v-else-if="!posts.records?.data?.length">
+                        <tr v-else-if="!posts.data?.data?.length">
                             <td colspan="100%">
                                 <div>No Data</div>
                             </td>
                         </tr>
 
                         <template v-else>
-                            <tr v-for="row in posts.records?.data">
+                            <tr v-for="row in posts.data?.data">
                                 <td>
                                     <div class="flex items-center gap-3">
-                                        <div class="avatar">
+                                        <!-- <div class="avatar">
                                             <div
                                                 class="mask mask-squircle w-12 h-12"
                                             >
@@ -87,19 +69,19 @@ const posts = reactive({
                                                     alt="Avatar Tailwind CSS Component"
                                                 />
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div>
                                             <router-link
                                                 :to="{
-                                                    name: 'post-edit',
+                                                    name: 'posts-edit',
                                                     params: { id: row.id },
                                                 }"
-                                                class="block font-semibold pb-2 tracking-wide underline underline-offset-2 hover:underline-offset-4 duration-100"
+                                                class="block pb-2 font-semibold tracking-wide underline underline-offset-2 duration-100 hover:underline-offset-4"
                                             >
                                                 {{ row.title }}
                                             </router-link>
                                             <div
-                                                class="flex items-center gap-2 flex-wrap"
+                                                class="flex flex-wrap items-center gap-2"
                                             >
                                                 <div
                                                     v-for="tag in row.tags"
@@ -114,7 +96,7 @@ const posts = reactive({
                                 </td>
                                 <td class="text-sm">
                                     <div
-                                        class="dropdown dropdown-hover dropdown-top"
+                                        class="dropdown dropdown-top dropdown-hover"
                                     >
                                         <div tabindex="0">
                                             {{
@@ -125,7 +107,7 @@ const posts = reactive({
                                         </div>
                                         <ul
                                             tabindex="0"
-                                            class="dropdown-content z-10 p-2 shadow bg-base-100 rounded text-xs space-y-2"
+                                            class="dropdown-content z-10 space-y-2 rounded bg-base-100 p-2 text-xs shadow"
                                         >
                                             <li v-if="row.first_published_at">
                                                 <p class="font-medium">
@@ -137,7 +119,7 @@ const posts = reactive({
                                                             row.first_published_at,
                                                             {
                                                                 withTime: true,
-                                                            }
+                                                            },
                                                         )
                                                     }}
                                                 </p>
@@ -152,7 +134,7 @@ const posts = reactive({
                                                             row.created_at,
                                                             {
                                                                 withTime: true,
-                                                            }
+                                                            },
                                                         )
                                                     }}
                                                 </p>
@@ -174,7 +156,7 @@ const posts = reactive({
                                         Edit
                                     </button>
                                     <button
-                                        class="btn btn-outline btn-sm btn-error"
+                                        class="btn btn-outline btn-error btn-sm"
                                     >
                                         Delete
                                     </button>
@@ -194,10 +176,10 @@ const posts = reactive({
                 </table>
             </div>
 
-            <div class="mt-4 py-4 flex justify-center">
+            <div class="mt-4 flex justify-center py-4">
                 <Pagination
-                    :links="posts.records?.meta?.links"
-                    @handle-click="(url) => posts.fetchRecords(url)"
+                    :links="posts.data?.meta?.links"
+                    @handle-click="(url) => posts.fetchData(url)"
                 />
             </div>
         </Container>

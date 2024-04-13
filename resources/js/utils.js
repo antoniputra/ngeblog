@@ -1,13 +1,30 @@
-export const resolveBasePathUrl = () => {
-    let result = window.Ngeblog.path + "/";
-    if (window.Ngeblog.path === "" || window.Ngeblog.path === "/") {
-        result = "/";
+/**
+ * Expected output is string that starts and ends with "/".
+ * e.g: "/whatever/"
+ *
+ * @returns string
+ */
+export const resolveRouterBasePath = () => {
+    let result = window.Ngeblog.path;
+    if (result === "" || result === "/") {
+        return "/ngeblog/";
     }
+
+    if (!result.endsWith("/")) {
+        result = result + "/";
+    }
+    if (!result.startsWith("/")) {
+        result = "/" + result;
+    }
+
     return result;
 };
 
 export const apiBasePath = (path) => {
-    return "/" + resolveBasePathUrl() + "api/" + path;
+    if (!path.startsWith("/")) {
+        path = "/" + path;
+    }
+    return resolveRouterBasePath() + "api" + path;
 };
 
 export const formatDate = (
@@ -17,7 +34,7 @@ export const formatDate = (
         withTime: false,
         withDayName: false,
         locale: "en-US",
-    }
+    },
 ) => {
     const options = {
         year: "numeric",
@@ -47,4 +64,13 @@ export const formatDate = (
     if (typeof theDate === "string") {
         return new Date(theDate).toLocaleString(config.locale, options);
     }
+};
+
+export const slugify = (str, divider = "-") => {
+    return str
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/[\s_-]+/g, divider)
+        .replace(/^-+|-+$/g, "");
 };

@@ -1,6 +1,7 @@
 <?php
 
 use AntoniPutra\Ngeblog\Http\Controllers\Api\PostController;
+use AntoniPutra\Ngeblog\Http\Controllers\Api\TagController;
 use AntoniPutra\Ngeblog\Http\Controllers\NgeblogController;
 use AntoniPutra\Ngeblog\Http\Middleware\AjaxMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -24,9 +25,25 @@ Route::middleware([AjaxMiddleware::class])
 
         Route::controller(PostController::class)
             ->prefix('posts')
-            ->name('post.')
+            ->name('posts.')
             ->group(function () {
-                Route::get('/', 'index');
+                Route::get('/', 'index')->name('index');
+                Route::post('/', 'store')->name('store');
+                Route::get('/{post}', 'show')->name('show');
+                Route::put('/{post}/update', 'update')->name('update');
+                Route::delete('/{post}/destroy', 'destroy')->name('destroy');
+            });
+        
+        Route::controller(TagController::class)
+            ->prefix('tags')
+            ->name('tags.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::post('/', 'store')->name('store');
+                Route::get('/{tag}', 'show')->name('show');
+                Route::put('/{tag}/update', 'update')->name('update');
+                Route::patch('/{tag}/toggle-visibility', 'toggleVisibility')->name('toggleVisibility');
+                Route::delete('/{tag}/destroy', 'destroy')->name('destroy');
             });
 
     });
