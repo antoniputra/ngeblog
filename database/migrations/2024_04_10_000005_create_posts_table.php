@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('cover_image_path')->nullable();
             $table->timestamp('first_published_at')->nullable();
             $table->timestamp('schedule_publish_at')->nullable();
-            $table->text('description')->nullable();
+            $table->text('excerpt')->nullable();
             $table->longText('content');
             $table->timestamps();
             $table->softDeletes();

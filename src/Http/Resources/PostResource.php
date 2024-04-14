@@ -24,7 +24,7 @@ class PostResource extends JsonResource
             'first_published_at' => $this->first_published_at,
             'schedule_publish_at' => $this->schedule_publish_at,
             'editor_type' => $this->whenHas('editor_type'),
-            'description' => $this->whenHas('description'),
+            'excerpt' => $this->whenHas('excerpt'),
             'content' => $this->whenHas('content'),
             'parsed_content' => $this->when(
                 $this->editor_type && $this->content,

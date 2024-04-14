@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Dashboard from "@/pages/Dashboard.vue";
 import PostIndex from "@/pages/posts/Index.vue";
-import PostCreate from "@/pages/posts/Create.vue";
-import PostEdit from "@/pages/posts/Edit.vue";
+import PostForm from "@/pages/posts/Form.vue";
 import TagIndex from "@/pages/tags/Index.vue";
 import TagForm from "@/pages/tags/Form.vue";
 import NotFound from "./components/NotFound.vue";
@@ -20,19 +19,19 @@ const routes = [
         component: Dashboard,
     },
     {
-        path: "/blogs",
+        path: "/posts",
         name: "posts-index",
         component: PostIndex,
     },
     {
         path: "/posts/create",
         name: "posts-create",
-        component: PostCreate,
+        component: PostForm,
     },
     {
         path: "/posts/:id/edit",
         name: "posts-edit",
-        component: PostEdit,
+        component: PostForm,
     },
     {
         path: "/tags",

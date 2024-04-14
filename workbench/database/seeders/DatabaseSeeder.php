@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         for ($i=0; $i < 10; $i++) {
-            $title = fake()->words(rand(1, 3), true);
+            $title = fake()->words(rand(2, 3), true);
             Tag::create([
                 'title' => $title,
                 'slug' => Str::slug($title),
@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
                 'slug' => Str::slug($title),
                 'is_visible' => fake()->boolean(70),
                 'editor_type' => fake()->randomElement([Post::EDITOR_TYPE_MARKDOWN, Post::EDITOR_TYPE_RICHTEXT]),
-                'description' => fake()->paragraph(),
+                'excerpt' => fake()->paragraphs(rand(1, 2), true),
                 'content' => fake()->paragraphs(rand(3, 6), true),
             ]);
 
