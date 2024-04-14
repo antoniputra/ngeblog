@@ -4,8 +4,27 @@ import Pagination from "@/components/Pagination.vue";
 import { onMounted } from "vue";
 import { apiBasePath, formatDate } from "@/utils";
 import { useLoadData } from "@/composables/loadData";
+import { useConfirmable } from "@/composables/confirmable";
+import ModalConfirmation from "@/components/ModalConfirmation.vue";
+import axios from "axios";
 
 const posts = useLoadData(apiBasePath("posts"));
+
+const postRemoving = useConfirmable({
+    setTitle(data) {
+        return `Are you sure to remove Post "${data.title}"?`;
+    },
+    confirm(data, instance) {
+        axios.delete(apiBasePath(`posts/${data.id}/destroy`)).then(() => {
+            posts.fetchData();
+            instance.close();
+        });
+    },
+});
+
+const toggleVisibility = (tag) => {
+    axios.patch(apiBasePath(`posts/${tag.id}/toggle-visibility`));
+};
 
 onMounted(() => {
     document.title = "Posts - Ngeblog Administration";
@@ -26,6 +45,13 @@ onMounted(() => {
                         class="loading loading-bars loading-md"
                     ></span>
                     <span v-else v-text="`(${posts.data?.meta?.total})`" />
+
+                    <router-link
+                        :to="{ name: 'posts-create' }"
+                        class="btn btn-primary btn-sm ml-4"
+                    >
+                        + New Post
+                    </router-link>
                 </h1>
             </div>
 
@@ -148,14 +174,23 @@ onMounted(() => {
                                             type="checkbox"
                                             class="toggle"
                                             :checked="row.is_visible"
+                                            @change="toggleVisibility(row)"
                                         />
                                     </label>
                                 </td>
                                 <th class="flex gap-2">
-                                    <button class="btn btn-outline btn-sm">
+                                    <router-link
+                                        :to="{
+                                            name: 'posts-edit',
+                                            params: { id: row.id },
+                                        }"
+                                        class="btn btn-outline btn-sm"
+                                    >
                                         Edit
-                                    </button>
+                                    </router-link>
                                     <button
+                                        type="button"
+                                        @click="postRemoving.open(row)"
                                         class="btn btn-outline btn-error btn-sm"
                                     >
                                         Delete
@@ -183,5 +218,12 @@ onMounted(() => {
                 />
             </div>
         </Container>
+
+        <ModalConfirmation
+            :show="postRemoving.show"
+            @close="postRemoving.close()"
+            @confirm="postRemoving.triggerConfirm()"
+            v-bind="postRemoving.props"
+        />
     </div>
 </template>

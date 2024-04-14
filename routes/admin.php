@@ -31,6 +31,7 @@ Route::middleware([AjaxMiddleware::class])
                 Route::post('/', 'store')->name('store');
                 Route::get('/{post}', 'show')->name('show');
                 Route::put('/{post}/update', 'update')->name('update');
+                Route::patch('/{post}/toggle-visibility', 'toggleVisibility')->name('toggleVisibility');
                 Route::delete('/{post}/destroy', 'destroy')->name('destroy');
             });
         

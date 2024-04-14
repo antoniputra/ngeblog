@@ -83,7 +83,7 @@ class TagController extends Controller
 
         $tag->fill([
             'title' => $request->get('title'),
-            'slug' => Str::slug($request->get('title')),
+            'slug' => $request->get('slug', str($request->get('title'))->slug()),
             'description' => $request->get('description'),
             'is_visible' => $request->get('is_visible', false),
         ]);

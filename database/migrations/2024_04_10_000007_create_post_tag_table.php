@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('post_id')->constrained('ngeblog_posts')->cascadeOnDelete();
             $table->foreignId('tag_id')->constrained('ngeblog_tags')->cascadeOnDelete();
             $table->timestamps();
+
+            $table->unique(['post_id', 'tag_id']);
         });
     }
 
