@@ -1,24 +1,23 @@
 <script setup>
 import Container from "@/components/Container.vue";
 import SkeletonContent from "@/components/SkeletonContent.vue";
-import { defineAsyncComponent, onMounted, watch } from "vue";
+import { onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import FormControl from "@/components/FormControl.vue";
 import { apiBasePath, slugify } from "@/utils";
 import { useForm } from "laravel-precognition-vue";
 import { useLoadData } from "@/composables/loadData";
-// import TextEditor from "@/components/TextEditor.vue";
-
-// const TextEditor = defineAsyncComponent(
-//     () => import("@/components/TextEditor.vue"),
-// );
+import TextEditor from "@/components/TextEditor.vue";
 
 const route = useRoute();
 const router = useRouter();
 const post = useLoadData();
+const tagsDropdown = useLoadData();
 document.title = "Add new Post - Ngeblog Administration";
 
 onMounted(() => {
+    tagsDropdown.fetchData(apiBasePath(`tags/dropdown`));
+
     if (route.params.id) {
         populateForm();
     }
@@ -29,17 +28,26 @@ const postForm = useForm("post", apiBasePath("posts"), {
     slug: "",
     is_visible: true,
     excerpt: "",
+    content: "",
+    tags: [],
 });
 
 const populateForm = () => {
     post.fetchData(apiBasePath(`posts/${route.params.id}`), (data) => {
         document.title = `Edit Post ${data.title} - Ngeblog Administration`;
 
+        let tagsIds = [];
+        if (data.tags.length > 0) {
+            tagsIds = data.tags.map((t) => t.id);
+        }
+
         postForm.setData({
             title: data.title,
             slug: data.slug,
             is_visible: data.is_visible,
             excerpt: data.excerpt,
+            content: data.content,
+            tags: tagsIds,
         });
     });
 };
@@ -118,7 +126,7 @@ const submit = () => {
             <form
                 v-else
                 @submit.prevent="() => submit()"
-                class="mx-auto flex max-w-xl flex-col gap-4"
+                class="mx-auto flex max-w-5xl flex-col gap-4"
             >
                 <FormControl
                     label="Post Title"
@@ -163,6 +171,23 @@ const submit = () => {
                     </div>
                 </div>
 
+                <FormControl label="Post Tags">
+                    <select
+                        v-if="!tagsDropdown.loading"
+                        v-model="postForm.tags"
+                        placeholder="Select tags"
+                        class="select select-bordered"
+                        style="height: 150px"
+                        multiple
+                    >
+                        <option
+                            v-for="tag in tagsDropdown?.data?.data"
+                            :value="tag.id"
+                            v-text="tag.title"
+                        />
+                    </select>
+                </FormControl>
+
                 <div>
                     <label class="label inline-flex cursor-pointer gap-4">
                         <span class="label-text">Visibility</span>
@@ -185,7 +210,17 @@ const submit = () => {
                     ></textarea>
                 </FormControl>
 
-                <!-- <TextEditor /> -->
+                <FormControl
+                    as="div"
+                    label="Post Content"
+                    :required="true"
+                    :error-message="postForm.errors['content']"
+                >
+                    <TextEditor
+                        :initial-value="postForm.content"
+                        @on-change="(val) => (postForm.content = val)"
+                    />
+                </FormControl>
 
                 <div
                     class="flex items-center justify-between gap-4 border-t py-4"

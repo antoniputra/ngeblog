@@ -1,5 +1,9 @@
 <script setup>
 const props = defineProps({
+    as: {
+        type: String,
+        default: "label",
+    },
     label: String,
     required: Boolean,
     helpMessage: String,
@@ -8,7 +12,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <label class="form-control">
+    <component :is="props.as" class="form-control">
         <div class="label text-sm">
             <span
                 class="label-text font-medium"
@@ -31,5 +35,5 @@ const props = defineProps({
                 {{ props.errorMessage }}
             </span>
         </div>
-    </label>
+    </component>
 </template>

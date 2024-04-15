@@ -6,6 +6,7 @@ use AntoniPutra\Ngeblog\Http\Resources\PostResource;
 use AntoniPutra\Ngeblog\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class PostController extends Controller
@@ -35,20 +36,18 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
-        sleep(2);
+        $post->load('tags');
         return PostResource::make($post)->resolve();
     }
 
     public function store(Request $request)
     {
-        sleep(1);
         $post = $this->createOrUpdate(new Post, $request);
         return PostResource::make($post)->resolve();
     }
     
     public function update(Post $post, Request $request)
     {
-        sleep(1);
         $post = $this->createOrUpdate($post, $request);
         return PostResource::make($post)->resolve();
     }
@@ -61,7 +60,6 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
-        sleep(1);
         return $post->delete();
     }
 
@@ -79,17 +77,33 @@ class PostController extends Controller
                 Rule::unique($post->getTable())
                     ->when($post->id, fn ($rule) => $rule->ignore($post->id))
             ],
-            'description' => ['nullable'],
             'is_visible' => ['boolean'],
+            'excerpt' => ['nullable'],
+            'content' => ['required'],
+            'tags' => ['array'],
         ]);
 
-        $post->fill([
-            'title' => $request->get('title'),
-            'slug' => $request->get('slug', str($request->get('title'))->slug()),
-            'description' => $request->get('description'),
-            'is_visible' => $request->get('is_visible', false),
-        ]);
-        $post->save();
+        try {
+            DB::beginTransaction();
+    
+            $post->fill([
+                'title' => $request->get('title'),
+                'slug' => $request->get('slug', str($request->get('title'))->slug()),
+                'excerpt' => $request->get('excerpt'),
+                'content' => $request->get('content'),
+                'is_visible' => $request->get('is_visible', false),
+            ]);
+            $post->author_id = auth()->user()->id;
+            $post->save();
+    
+            if (! empty($request->get('tags'))) {
+                $post->tags()->sync($request->get('tags'));
+            }
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+        }
 
         return $post;
     }

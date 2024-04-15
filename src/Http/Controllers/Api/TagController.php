@@ -6,11 +6,15 @@ use AntoniPutra\Ngeblog\Http\Resources\TagResource;
 use AntoniPutra\Ngeblog\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class TagController extends Controller
 {
+    public function dropdown()
+    {
+        return TagResource::collection(Tag::query()->latest()->get());
+    }
+
     public function index()
     {
         $result = Tag::query()
@@ -33,20 +37,17 @@ class TagController extends Controller
 
     public function show(Tag $tag)
     {
-        sleep(2);
         return TagResource::make($tag)->resolve();
     }
 
     public function store(Request $request)
     {
-        sleep(1);
         $tag = $this->createOrUpdate(new Tag, $request);
         return TagResource::make($tag)->resolve();
     }
     
     public function update(Tag $tag, Request $request)
     {
-        sleep(1);
         $tag = $this->createOrUpdate($tag, $request);
         return TagResource::make($tag)->resolve();
     }
@@ -59,7 +60,6 @@ class TagController extends Controller
 
     public function destroy(Tag $tag)
     {
-        sleep(1);
         return $tag->delete();
     }
 

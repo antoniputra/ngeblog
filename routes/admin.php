@@ -6,14 +6,14 @@ use AntoniPutra\Ngeblog\Http\Controllers\NgeblogController;
 use AntoniPutra\Ngeblog\Http\Middleware\AjaxMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::get('resolve-css', function () {
-    $content = file_get_contents(__DIR__ .'/../dist/ngeblog.css');
+Route::get('resolve-css/{filename?}', function ($filename = null) {
+    $content = file_get_contents(__DIR__ .'/../dist/'. $filename);
     return response($content)
         ->header('Content-Type', 'text/css');
 })->name('resolve-css');
 
-Route::get('resolve-js', function () {
-    $content = file_get_contents(__DIR__ .'/../dist/ngeblog.js');
+Route::get('resolve-js/{filename?}', function ($filename = null) {
+    $content = file_get_contents(__DIR__ .'/../dist/'. $filename);
     return response($content)
         ->header('Content-Type', 'text/javascript');
 })->name('resolve-js');
@@ -39,6 +39,8 @@ Route::middleware([AjaxMiddleware::class])
             ->prefix('tags')
             ->name('tags.')
             ->group(function () {
+                Route::get('/dropdown', 'dropdown')->name('dropdown');
+
                 Route::get('/', 'index')->name('index');
                 Route::post('/', 'store')->name('store');
                 Route::get('/{tag}', 'show')->name('show');
