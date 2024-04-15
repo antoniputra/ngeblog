@@ -1,9 +1,7 @@
 <template>
     <div>
         <Container>
-            <h4>I am dashboard</h4>
-            <p>Lorem Ipsum</p>
-            <button class="btn btn-primary">Button</button>
+            <h4>Welcome!</h4>
         </Container>
     </div>
 </template>
