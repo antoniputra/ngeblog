@@ -20,12 +20,12 @@ export default {
         }),
     ],
     build: {
-        assetsDir: "resolve-ngeblog-dist",
+        assetsDir: "ngeblog-admin-assets",
         rollupOptions: {
             input: ["./resources/js/ngeblog.js", "./resources/css/ngeblog.css"],
             output: {
-                assetFileNames: "resolve-ngeblog-dist/[name][extname]",
-                entryFileNames: "resolve-ngeblog-dist/[name].js",
+                assetFileNames: "ngeblog-admin-assets/[name][extname]",
+                entryFileNames: "ngeblog-admin-assets/[name].js",
             },
         },
     },

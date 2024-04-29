@@ -4,6 +4,7 @@ namespace AntoniPutra\Ngeblog;
 
 use AntoniPutra\Ngeblog\Http\Middleware\AdminAuthorization;
 use Illuminate\Contracts\Foundation\CachesRoutes;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,31 +21,21 @@ final class NgeblogServiceProvider extends ServiceProvider
     {
         $this->bootPublishable();
         $this->bootRoutes();
+        $this->bootAdminAssetRoute();
+        $this->bootDefaultAuthorization();
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'ngeblog');
     }
 
-    protected function bootPublishable()
+    protected function bootPublishable(): void
     {
         $this->publishes([
             __DIR__.'/../config/ngeblog.php' => config_path('ngeblog.php'),
         ], 'ngeblog-config');
 
-        $this->publishes([
-            __DIR__.'/../dist' => public_path('/'),
-        ], 'ngeblog-assets');
-
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-
-        // $this->publishesMigrations([
-        //     __DIR__.'/../database/migrations' => database_path('migrations'),
-        // ], 'ngeblog-migrations');
-
-        // $this->publishes([
-        //     __DIR__.'/../database/migrations/001_create_post_tag_table.php' => database_path('migrations'),
-        //     __DIR__.'/../database/migrations/002_create_posts_table.php' => database_path('migrations'),
-        //     __DIR__.'/../database/migrations/003_create_tags_table.php' => database_path('migrations'),
-        // ], 'ngeblog-migrations');
+        $this->publishesMigrations([
+            __DIR__.'/../database/migrations' => database_path('migrations'),
+        ], 'ngeblog-migrations');
     }
 
     /**
@@ -52,24 +43,11 @@ final class NgeblogServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function bootRoutes()
+    protected function bootRoutes(): void
     {
         if ($this->app instanceof CachesRoutes && $this->app->routesAreCached()) {
             return;
         }
-
-        // * Route for admin asset
-        Route::get('resolve-ngeblog-dist/{filename?}', function ($filename = null) {
-
-            $contentType = 'text/css';
-            if (str($filename)->contains('.js')) {
-                $contentType = 'text/javascript';
-            }
-
-            $content = file_get_contents(__DIR__ .'/../dist/resolve-ngeblog-dist/'. $filename);
-            return response($content)
-                ->header('Content-Type', $contentType);
-        })->name('resolve-ngeblog-dist');
 
         Route::group([
             'domain' => config('ngeblog.domain', null),
@@ -80,6 +58,27 @@ final class NgeblogServiceProvider extends ServiceProvider
             ]),
         ], function () {
             $this->loadRoutesFrom(__DIR__.'/../routes/admin.php');
+        });
+    }
+
+    protected function bootAdminAssetRoute(): void
+    {
+        Route::get('ngeblog-admin-assets/{filename?}', function ($filename = null) {
+            $contentType = 'text/css';
+            if (str($filename)->contains('.js')) {
+                $contentType = 'text/javascript';
+            }
+
+            $content = file_get_contents(__DIR__ .'/../dist/ngeblog-admin-assets/'. $filename);
+            return response($content)
+                ->header('Content-Type', $contentType);
+        })->name('ngeblog-admin-assets');
+    }
+
+    protected function bootDefaultAuthorization(): void
+    {
+        Gate::define('accessNgeblogAdmin', function ($user) {
+            return true;
         });
     }
 }

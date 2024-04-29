@@ -36,7 +36,7 @@
                         class="btn btn-ghost !bg-transparent text-xl"
                     >
                         <img
-                            src="https://raw.githubusercontent.com/antoniputra/ngeblog/master/publishable/assets/img/logo.png"
+                            src="https://raw.githubusercontent.com/antoniputra/ngeblog/main/art/logo.png"
                             class="h-8 md:h-10"
                         />
                     </router-link>

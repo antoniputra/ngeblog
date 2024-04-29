@@ -1,20 +1,20 @@
-<p align="center"><a href="https://github.com/antoniputra/ngeblog" target="_blank"><img src="https://raw.githubusercontent.com/antoniputra/ngeblog/master/publishable/assets/img/logo.png" width="300px"></a></p>
+<p align="center"><a href="https://github.com/antoniputra/ngeblog" target="_blank"><img src="https://raw.githubusercontent.com/antoniputra/ngeblog/main/art/logo.png" width="300px"></a></p>
 
 <p align="center">
-	<a href="https://travis-ci.org/antoniputra/ngeblog"><img src="https://travis-ci.org/antoniputra/ngeblog.svg?branch=master" alt="Build Status"></a>
-	<a href="https://packagist.org/packages/antoniputra/ngeblog"><img src="https://poser.pugx.org/antoniputra/ngeblog/v/stable" alt="Latest Stable Version"></a>
+	<!-- <a href="https://travis-ci.org/antoniputra/ngeblog"><img src="https://travis-ci.org/antoniputra/ngeblog.svg?branch=master" alt="Build Status"></a> -->
+	<!-- <a href="https://packagist.org/packages/antoniputra/ngeblog"><img src="https://poser.pugx.org/antoniputra/ngeblog/v/stable" alt="Latest Stable Version"></a> -->
 	<!-- <a href="https://packagist.org/packages/antoniputra/ngeblog"><img src="https://poser.pugx.org/antoniputra/ngeblog/downloads.svg?format=flat" alt="Total Downloads"></a> -->
 	<a href="https://packagist.org/packages/antoniputra/ngeblog"><img src="https://poser.pugx.org/antoniputra/ngeblog/license.svg" alt="License"></a>
 </p>
 
 # Ngeblog
 
-It just quickstart to have simple blogging system for your existing laravel application. It will give you `Blogs` and `Categories` out of the box. **Ngeblog** also provides a simple admin panel using [Bulma](https://bulma.io/).
+It's quickstart to have simple **Blogging System** for your existing laravel application. It will give you `Blogs` and `Tags` out of the box. **Ngeblog** also provides a simple admin panel built with Vue SPA.
 
 ### Screenshot
 <p align="center">
-	<a href="https://raw.githubusercontent.com/antoniputra/ngeblog/master/public/img/screenshot.png" target="_blank">
-		<img src="https://raw.githubusercontent.com/antoniputra/ngeblog/master/publishable/assets/img/screenshot.png" alt="Ngeblog Screenshot">
+	<a href="https://raw.githubusercontent.com/antoniputra/ngeblog/main/art/sample-1.png" target="_blank">
+		<img src="https://raw.githubusercontent.com/antoniputra/ngeblog/main/art/sample-1.png" alt="Ngeblog Screenshot">
 	</a>
 </p>
 
@@ -22,23 +22,23 @@ It just quickstart to have simple blogging system for your existing laravel appl
 ## Installation
 
 1. `composer require antoniputra/ngeblog`
+2. `php artisan vendor:publish`
+3. `php artisan migrate`
+4. You done!
 
-2. `php artisan ngeblog:install`
 
-3. You done!
+## Configuration
 
-
-#### Protect the admin panel
-
-Once this package already installed correctly, by default it will provide admin panel at `/ngeblog` with no protection. You can add your own protection like below:
+Once this package already installed, by default it will provide admin panel at `/ngeblog` with no protection. You can add your own protection like below:
 
 ```php
-// routes/web.php
+// App/Providers/AppServiceProvider.php
 
-Ngeblog::auth(function ($request) {
-    // your protection logic...
-
-    return auth()->check();
+Gate::define('accessNgeblogAdmin', function ($user) {
+	return in_array($user->email, [
+		'akiddcode@gmail.com',
+		// ...
+	]);
 });
 ```
 

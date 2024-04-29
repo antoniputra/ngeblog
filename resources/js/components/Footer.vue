@@ -1,12 +1,12 @@
 <script setup></script>
 
 <template>
-    <footer class="p-4 bg-teal-50 border-t border-teal-100">
-        <div class="footer items-center max-w-7xl mx-auto">
-            <aside class="items-center grid-flow-col">
+    <footer class="border-t border-teal-100 bg-teal-50 p-4">
+        <div class="footer mx-auto max-w-7xl items-center">
+            <aside class="grid-flow-col items-center">
                 <img
-                    src="https://raw.githubusercontent.com/antoniputra/ngeblog/master/publishable/assets/img/logo.png"
-                    class="h-8"
+                    src="https://raw.githubusercontent.com/antoniputra/ngeblog/main/art/logo.png"
+                    class="h-7"
                 />
                 <p>Copyright &copy; 2024 - All right reserved</p>
             </aside>
@@ -25,7 +25,7 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class="w-6 h-6 hover:fill-current"
+                        class="h-6 w-6 hover:fill-current"
                     >
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path
@@ -42,7 +42,7 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class="w-6 h-6 hover:fill-current"
+                        class="h-6 w-6 hover:fill-current"
                     >
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path

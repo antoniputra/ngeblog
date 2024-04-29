@@ -9,12 +9,12 @@
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:300,400,500,600,700" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ route('resolve-ngeblog-dist', 'ngeblog.css') }}">
+    <link rel="stylesheet" href="{{ route('ngeblog-admin-assets', 'ngeblog.css') }}">
 
     <script>
         window.Ngeblog = @json($ngeblogFrontendConfig);
     </script>
-    <script type="module" src="{{ route('resolve-ngeblog-dist', 'ngeblog.js') }}"></script>
+    <script type="module" src="{{ route('ngeblog-admin-assets', 'ngeblog.js') }}"></script>
 </head>
 <body class="font-sans antialiased scroll-smooth">
     <div id="ngeblog-app"></div>
