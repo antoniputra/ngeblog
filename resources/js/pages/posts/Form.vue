@@ -13,6 +13,7 @@ const route = useRoute();
 const router = useRouter();
 const post = useLoadData();
 const tagsDropdown = useLoadData();
+
 document.title = "Add new Post - Ngeblog Administration";
 
 onMounted(() => {

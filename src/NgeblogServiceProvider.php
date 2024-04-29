@@ -30,6 +30,10 @@ final class NgeblogServiceProvider extends ServiceProvider
             __DIR__.'/../config/ngeblog.php' => config_path('ngeblog.php'),
         ], 'ngeblog-config');
 
+        $this->publishes([
+            __DIR__.'/../dist' => public_path('/'),
+        ], 'ngeblog-assets');
+
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         // $this->publishesMigrations([
@@ -53,6 +57,19 @@ final class NgeblogServiceProvider extends ServiceProvider
         if ($this->app instanceof CachesRoutes && $this->app->routesAreCached()) {
             return;
         }
+
+        // * Route for admin asset
+        Route::get('resolve-ngeblog-dist/{filename?}', function ($filename = null) {
+
+            $contentType = 'text/css';
+            if (str($filename)->contains('.js')) {
+                $contentType = 'text/javascript';
+            }
+
+            $content = file_get_contents(__DIR__ .'/../dist/resolve-ngeblog-dist/'. $filename);
+            return response($content)
+                ->header('Content-Type', $contentType);
+        })->name('resolve-ngeblog-dist');
 
         Route::group([
             'domain' => config('ngeblog.domain', null),
