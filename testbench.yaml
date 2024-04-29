@@ -1,0 +1,27 @@
+providers:
+  - AntoniPutra\Ngeblog\NgeblogServiceProvider
+  - Workbench\App\Providers\WorkbenchServiceProvider
+
+migrations:
+  - workbench/database/migrations
+
+seeders:
+  - Workbench\Database\Seeders\DatabaseSeeder
+
+workbench:
+  start: '/'
+  install: true
+  health: false
+  discovers:
+    web: true
+    api: false
+    commands: false
+    components: false
+    views: false
+  build:
+    - create-sqlite-db
+    - db:wipe
+    - migrate:refresh
+    - db:seed
+  assets: []
+  sync: []

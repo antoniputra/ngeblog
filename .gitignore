@@ -1,4 +1,9 @@
-/vendor
-/node_modules
-composer.phar
+.idea
+.phpunit.cache
+build
 composer.lock
+coverage
+docs
+phpstan.neon
+vendor
+node_modules

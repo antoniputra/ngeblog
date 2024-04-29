@@ -1,50 +1,84 @@
 {
     "name": "antoniputra/ngeblog",
-    "description": "Quickstart Blogging for Laravel application.",
-    "keywords": [
-        "laravel",
-        "blog"
-    ],
+    "description": "Quickstart Blogging for your brand-new or existing Laravel App.",
+    "keywords": ["laravel", "blog", "vue", "spa"],
+    "type": "library",
+    "homepage": "https://github.com/antoniputra/ngeblog",
     "license": "MIT",
+    "support": {
+        "issues": "https://github.com/antoniputra/ngeblog/issues",
+        "source": "https://github.com/antoniputra/ngeblog"
+    },
     "authors": [
         {
-            "name": "Antoni Putra",
+            "name": "antoniputra",
             "email": "akiddcode@gmail.com"
         }
     ],
     "require": {
-        "php": ">=7.0.0",
-        "illuminate/support": "~5.5",
-        "laravelcollective/html": "^5.5",
-        "erusev/parsedown": "^1.6"
+        "php": "^8.2",
+        "illuminate/support": "^11.0"
     },
     "require-dev": {
-        "mockery/mockery": "0.9.*",
-        "orchestra/testbench": "~3.5",
-        "orchestra/database": "~3.5",
-        "orchestra/testbench-browser-kit": "~3.5",
-        "phpunit/phpunit": "~6.0",
-        "laravel/browser-kit-testing": "^2.0"
+        "laravel/pint": "^1.15",
+        "orchestra/testbench": "^9.0",
+        "pestphp/pest": "^2.34",
+        "phpstan/phpstan": "^1.10"
     },
     "autoload": {
         "psr-4": {
-            "Antoniputra\\Ngeblog\\": "src/"
+            "AntoniPutra\\Ngeblog\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Antoniputra\\Ngeblog\\Tests\\": "tests/"
+            "AntoniPutra\\Ngeblog\\Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
         }
     },
-    "minimum-stability": "stable",
     "extra": {
         "laravel": {
             "providers": [
-                "Antoniputra\\Ngeblog\\NgeblogServiceProvider"
+                "AntoniPutra\\Ngeblog\\NgeblogServiceProvider"
             ],
             "aliases": {
-                "Ngeblog": "Antoniputra\\Ngeblog\\Facade"
+                "Ngeblog": "AntoniPutra\\Ngeblog\\Facades\\Ngeblog"
             }
         }
+    },
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "npm run build",
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve"
+        ],
+        "lint": [
+            "@php vendor/bin/phpstan analyse"
+        ],
+        "test": [
+            "@php vendor/bin/pest"
+        ],
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint",
+        "analyse": "vendor/bin/phpstan analyse"
     }
 }

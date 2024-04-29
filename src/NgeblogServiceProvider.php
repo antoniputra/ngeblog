@@ -1,106 +1,85 @@
 <?php
 
-namespace Antoniputra\Ngeblog;
+namespace AntoniPutra\Ngeblog;
 
-use Antoniputra\Ngeblog\Ngeblog;
-use Illuminate\Database\Eloquent\Factory as EloquentFactory;
+use AntoniPutra\Ngeblog\Http\Middleware\AdminAuthorization;
+use Illuminate\Contracts\Foundation\CachesRoutes;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
-class NgeblogServiceProvider extends ServiceProvider
+final class NgeblogServiceProvider extends ServiceProvider
 {
-    protected $publishablePath = __DIR__ . '/../publishable';
-
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
+    public function register(): void
     {
-        if (config('ngeblog.enabled')) {
-            $this->loadMigrationsFrom($this->publishablePath . '/database/migrations/');
-            $this->registerPublishes();
-            $this->registerRoutes();
-            $this->registerResources();
-        }
-    }
-
-    public function register()
-    {
-        if (!defined('NGEBLOG_PATH')) {
-            define('NGEBLOG_PATH', realpath(__DIR__ . '/../'));
-        }
-
         $this->mergeConfigFrom(
-            $this->publishablePath . '/config/ngeblog.php', 'ngeblog'
+            __DIR__.'/../config/ngeblog.php', 'ngeblog'
         );
-
-        app(EloquentFactory::class)->load($this->publishablePath . '/database/factories');
-
-        $this->app->bind(Ngeblog::class, Ngeblog::class);
-
-        $this->registerCommands();
     }
 
-    /**
-     * Register the Ngeblog routes.
-     *
-     * @return void
-     */
-    protected function registerRoutes()
+    public function boot(): void
     {
-        Route::group([
-            // 'prefix' => config('ngeblog.admin_prefix'),
-            'namespace' => 'Antoniputra\Ngeblog\Http\Controllers',
-            'middleware' => 'web',
-        ], function () {
-            $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
-        });
+        $this->bootPublishable();
+        $this->bootRoutes();
+
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'ngeblog');
     }
 
-    /**
-     * Register the Ngeblog resources.
-     *
-     * @return void
-     */
-    protected function registerResources()
-    {
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'ngeblog');
-        $this->loadViewsFrom(__DIR__ . '/../resources/views/themes', 'ngeblog_themes');
-    }
-
-    /**
-     * Define the asset publishing configuration.
-     *
-     * @return void
-     */
-    protected function registerPublishes()
+    protected function bootPublishable()
     {
         $this->publishes([
-            $this->publishablePath . '/database/seeds' => base_path('database/seeds'),
-        ], 'ngeblog-seeds');
+            __DIR__.'/../config/ngeblog.php' => config_path('ngeblog.php'),
+        ], 'ngeblog-config');
 
         $this->publishes([
-            $this->publishablePath . '/assets' => public_path('vendor/ngeblog'),
+            __DIR__.'/../dist' => public_path('/'),
         ], 'ngeblog-assets');
 
-        $this->publishes([
-            $this->publishablePath . '/config/ngeblog.php' => config_path('ngeblog.php'),
-        ], 'ngeblog-config');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
+        // $this->publishesMigrations([
+        //     __DIR__.'/../database/migrations' => database_path('migrations'),
+        // ], 'ngeblog-migrations');
+
+        // $this->publishes([
+        //     __DIR__.'/../database/migrations/001_create_post_tag_table.php' => database_path('migrations'),
+        //     __DIR__.'/../database/migrations/002_create_posts_table.php' => database_path('migrations'),
+        //     __DIR__.'/../database/migrations/003_create_tags_table.php' => database_path('migrations'),
+        // ], 'ngeblog-migrations');
     }
 
     /**
-     * Register the Ngeblog Artisan commands.
+     * Register the Ngeblog public routes.
      *
      * @return void
      */
-    protected function registerCommands()
+    protected function bootRoutes()
     {
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                Console\InstallCommand::class,
-            ]);
+        if ($this->app instanceof CachesRoutes && $this->app->routesAreCached()) {
+            return;
         }
+
+        // * Route for admin asset
+        Route::get('resolve-ngeblog-dist/{filename?}', function ($filename = null) {
+
+            $contentType = 'text/css';
+            if (str($filename)->contains('.js')) {
+                $contentType = 'text/javascript';
+            }
+
+            $content = file_get_contents(__DIR__ .'/../dist/resolve-ngeblog-dist/'. $filename);
+            return response($content)
+                ->header('Content-Type', $contentType);
+        })->name('resolve-ngeblog-dist');
+
+        Route::group([
+            'domain' => config('ngeblog.domain', null),
+            'prefix' => config('ngeblog.path'),
+            'middleware' => config('ngeblog.middleware', [
+                'web',
+                AdminAuthorization::class
+            ]),
+        ], function () {
+            $this->loadRoutesFrom(__DIR__.'/../routes/admin.php');
+        });
     }
 }
