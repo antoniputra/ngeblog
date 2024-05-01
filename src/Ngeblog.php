@@ -4,7 +4,7 @@ namespace AntoniPutra\Ngeblog;
 
 class Ngeblog
 {
-    public static function frontendConfig()
+    public static function frontendConfig(): array
     {
         $path = str(config('ngeblog.path', 'ngeblog'))->start('/');
         return [
