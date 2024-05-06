@@ -23,6 +23,13 @@ class WorkbenchServiceProvider extends ServiceProvider
     {
         Model::preventLazyLoading(true);
 
+        /**
+         * For development only.
+         * To make sure when Contributors run `composer serve`
+         * Package tables are set properly.
+         */
+        $this->loadMigrationsFrom(__DIR__ .'/../../../database/migrations');
+
         Gate::define('accessNgeblogAdmin', function ($user) {
             return true;
         });

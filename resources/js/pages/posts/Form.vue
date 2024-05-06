@@ -7,7 +7,7 @@ import FormControl from "@/components/FormControl.vue";
 import { apiBasePath, slugify } from "@/utils";
 import { useForm } from "laravel-precognition-vue";
 import { useLoadData } from "@/composables/loadData";
-import TextEditor from "@/components/TextEditor.vue";
+import ContentEditor from "@/components/ContentEditor.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -211,17 +211,7 @@ const submit = () => {
                     ></textarea>
                 </FormControl>
 
-                <FormControl
-                    as="div"
-                    label="Post Content"
-                    :required="true"
-                    :error-message="postForm.errors['content']"
-                >
-                    <TextEditor
-                        :initial-value="postForm.content"
-                        @on-change="(val) => (postForm.content = val)"
-                    />
-                </FormControl>
+                <ContentEditor v-model="postForm.content" />
 
                 <div
                     class="flex items-center justify-between gap-4 border-t py-4"

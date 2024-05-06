@@ -32,7 +32,9 @@ class Post extends Model
 
     public function tags(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class, 'ngeblog_post_tag')->using(PostTag::class);
+        return $this->belongsToMany(Tag::class, 'ngeblog_post_tag')
+            ->using(PostTag::class)
+            ->withTimestamps();
     }
 
     public function toggleVisibility()
@@ -42,9 +44,7 @@ class Post extends Model
         }
 
         $this->is_visible = ! $this->is_visible;
-        $this->save();
-
-        return $this;
+        return $this->save();
     }
 
     protected function parsedContent(): Attribute

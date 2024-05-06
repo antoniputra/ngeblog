@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
                 'title' => $title,
                 'slug' => Str::slug($title),
                 'is_visible' => fake()->boolean(70),
-                'editor_type' => fake()->randomElement([Post::EDITOR_TYPE_MARKDOWN, Post::EDITOR_TYPE_RICHTEXT]),
+                // 'editor_type' => fake()->randomElement([Post::EDITOR_TYPE_MARKDOWN, Post::EDITOR_TYPE_RICHTEXT]),
                 'excerpt' => fake()->paragraphs(rand(1, 2), true),
                 'content' => fake()->paragraphs(rand(3, 6), true),
             ]);

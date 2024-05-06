@@ -6,18 +6,6 @@ use AntoniPutra\Ngeblog\Http\Controllers\NgeblogController;
 use AntoniPutra\Ngeblog\Http\Middleware\AjaxMiddleware;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('resolve-css/{filename?}', function ($filename = null) {
-//     $content = file_get_contents(__DIR__ .'/../dist/vendor/ngeblog/'. $filename);
-//     return response($content)
-//         ->header('Content-Type', 'text/css');
-// })->name('resolve-css');
-
-// Route::get('resolve-js/{filename?}', function ($filename = null) {
-//     $content = file_get_contents(__DIR__ .'/../dist/vendor/ngeblog/'. $filename);
-//     return response($content)
-//         ->header('Content-Type', 'text/javascript');
-// })->name('resolve-js');
-
 Route::middleware([AjaxMiddleware::class])
     ->prefix('api')
     ->name('api.')
