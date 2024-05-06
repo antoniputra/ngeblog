@@ -275,6 +275,7 @@ onMounted(() => {
             // this.$emit('update:modelValue', editor.getJSON())
         },
     });
+    emits("update:modelValue", editorElement.value.getHTML());
 });
 
 onBeforeUnmount(() => {

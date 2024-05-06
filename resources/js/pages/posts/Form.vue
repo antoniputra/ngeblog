@@ -211,7 +211,15 @@ const submit = () => {
                     ></textarea>
                 </FormControl>
 
-                <ContentEditor v-model="postForm.content" />
+                <div class="flex flex-col gap-4">
+                    <ContentEditor v-model="postForm.content" />
+                    <p
+                        v-if="postForm.errors.content"
+                        class="label-text-alt text-sm text-error"
+                    >
+                        {{ postForm.errors.content }}
+                    </p>
+                </div>
 
                 <div
                     class="flex items-center justify-between gap-4 border-t py-4"
