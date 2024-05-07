@@ -8,8 +8,7 @@ export function useLoadData(defaultUrl = null) {
         fetchData(overrideUrl = null, cb = null) {
             const self = this;
             self.loading = true;
-
-            let url = overrideUrl ? overrideUrl : defaultUrl;
+            const url = overrideUrl ? overrideUrl : defaultUrl;
 
             axios
                 .get(url)
@@ -23,6 +22,11 @@ export function useLoadData(defaultUrl = null) {
                 .finally(() => {
                     self.loading = false;
                 });
+        },
+
+        promise(overrideUrl = null) {
+            const url = overrideUrl ? overrideUrl : defaultUrl;
+            return axios.get(url);
         },
     });
 }

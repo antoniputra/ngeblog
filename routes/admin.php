@@ -15,6 +15,7 @@ Route::middleware([AjaxMiddleware::class])
             ->prefix('posts')
             ->name('posts.')
             ->group(function () {
+                Route::get('/stats', 'stats')->name('stats');
                 Route::get('/', 'index')->name('index');
                 Route::post('/', 'store')->name('store');
                 Route::get('/{post}', 'show')->name('show');
@@ -29,6 +30,7 @@ Route::middleware([AjaxMiddleware::class])
             ->group(function () {
                 Route::get('/dropdown', 'dropdown')->name('dropdown');
 
+                Route::get('/stats', 'stats')->name('stats');
                 Route::get('/', 'index')->name('index');
                 Route::post('/', 'store')->name('store');
                 Route::get('/{tag}', 'show')->name('show');

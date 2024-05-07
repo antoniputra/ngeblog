@@ -15,6 +15,19 @@ class TagController extends Controller
         return TagResource::collection(Tag::query()->latest()->get());
     }
 
+    public function stats()
+    {
+        return response()->json([
+            'total_all_time' => Tag::count(),
+            'total_last_month' => Tag::query()
+                ->whereBetween('created_at', [
+                    now()->subMonth()->startOfMonth(),
+                    now()->subMonth()->endOfMonth(),
+                ])
+                ->count(),
+        ]);
+    }
+
     public function index()
     {
         $result = Tag::query()

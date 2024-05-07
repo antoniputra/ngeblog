@@ -28,6 +28,10 @@ return new class extends Migration
             $table->longText('content');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index('title');
+            $table->index('created_at');
+            $table->index('updated_at');
         });
 
         Schema::create('ngeblog_tags', function (Blueprint $table) {
@@ -37,6 +41,10 @@ return new class extends Migration
             $table->boolean('is_visible')->default(false);
             $table->text('description')->nullable();
             $table->timestamps();
+
+            $table->index('title');
+            $table->index('created_at');
+            $table->index('updated_at');
         });
 
         Schema::create('ngeblog_post_tag', function (Blueprint $table) {

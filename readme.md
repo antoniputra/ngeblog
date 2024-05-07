@@ -36,8 +36,7 @@ Once this package already installed, by default it will provide admin panel at `
 
 Gate::define('accessNgeblogAdmin', function ($user) {
 	return in_array($user->email, [
-		'akiddcode@gmail.com',
-		// ...
+		// list of whitelisted emails...
 	]);
 });
 ```

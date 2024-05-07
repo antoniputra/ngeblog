@@ -11,6 +11,19 @@ use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
+    public function stats()
+    {
+        return response()->json([
+            'total_all_time' => Post::count(),
+            'total_last_month' => Post::query()
+                ->whereBetween('created_at', [
+                    now()->subMonth()->startOfMonth(),
+                    now()->subMonth()->endOfMonth(),
+                ])
+                ->count(),
+        ]);
+    }
+
     public function index()
     {
         $result = Post::query()

@@ -2,6 +2,7 @@
 
 namespace AntoniPutra\Ngeblog\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,9 +14,9 @@ class Post extends Model
 {
     use HasFactory;
 
-    const EDITOR_TYPE_MARKDOWN = 'markdown';
+    const CONTENT_TYPE_MARKDOWN = 'markdown';
     
-    const EDITOR_TYPE_RICHTEXT = 'richtext';
+    const CONTENT_TYPE_RICHTEXT = 'richtext';
 
     protected $table = 'ngeblog_posts';
 
@@ -37,6 +38,44 @@ class Post extends Model
             ->withTimestamps();
     }
 
+    public function scopeSortable(Builder $builder, array $sort = [], callable $defaultSort = null): void
+    {
+        $sortColumn = data_get($sort, 'sort.column');
+        $sortDirection = data_get($sort, 'sort.direction');
+        
+        if ($sortColumn && $sortDirection) {
+            $builder->orderBy($sortColumn, $sortDirection);
+        } else if (!empty($defaultSort)) {
+            $defaultSort($builder);
+        }
+    }
+
+    public function scopeFilterable(Builder $builder, array $params = []): void
+    {
+        $search = data_get($params, 'search');
+        $author = data_get($params, 'author');
+        $tags = data_get($params, 'tags', []);
+
+
+        $builder->when($search, function ($q) use ($search) {
+            $q->where(function ($sub) use ($search) {
+                $sub->where('title', 'LIKE', '%'. $search .'%')
+                    ->orWhere('slug', 'LIKE', '%'. $search .'%')
+                    ->orWhere('excerpt', 'LIKE', '%'. $search .'%');
+            });
+        });
+        
+        $builder->when($author, function ($q) use ($author) {
+            $q->where('author_id', $author);
+        });
+        
+        $builder->when(!empty($tags), function ($q) use ($tags) {
+            $q->whereHas('tags', function ($sub) use ($tags) {
+                $sub->whereIn('tags.id', $tags);
+            });
+        });
+    }
+
     public function toggleVisibility()
     {
         if (! $this->exists) {
@@ -54,17 +93,17 @@ class Post extends Model
                 return null;
             }
 
-            return match ($this->editor_type) {
+            return match ($this->content_type) {
                 null => null,
-                self::EDITOR_TYPE_MARKDOWN => $this->parseMarkdown(),
-                self::EDITOR_TYPE_RICHTEXT => $this->parseRichtext(),
+                self::CONTENT_TYPE_MARKDOWN => $this->parseMarkdown(),
+                self::CONTENT_TYPE_RICHTEXT => $this->parseRichtext(),
             };
         });
     }
 
     protected function parseMarkdown()
     {
-        return 'INI YA'. Str::markdown($this->content);
+        return Str::markdown($this->content);
     }
     
     protected function parseRichtext()

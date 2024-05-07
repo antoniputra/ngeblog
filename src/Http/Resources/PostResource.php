@@ -23,11 +23,11 @@ class PostResource extends JsonResource
             'cover_image_path' => $this->cover_image_path,
             'first_published_at' => $this->first_published_at,
             'schedule_publish_at' => $this->schedule_publish_at,
-            'editor_type' => $this->whenHas('editor_type'),
+            'content_type' => $this->whenHas('content_type'),
             'excerpt' => $this->whenHas('excerpt'),
             'content' => $this->whenHas('content'),
             'parsed_content' => $this->when(
-                $this->editor_type && $this->content,
+                $this->content_type && $this->content,
                 fn () => $this->parsed_content
             ),
             'created_at' => $this->created_at,

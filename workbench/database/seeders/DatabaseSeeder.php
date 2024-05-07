@@ -21,24 +21,30 @@ class DatabaseSeeder extends Seeder
 
         for ($i=0; $i < 10; $i++) {
             $title = fake()->words(rand(2, 3), true);
+            $date = fake()->dateTimeBetween('-1 months');
             Tag::create([
                 'title' => $title,
                 'slug' => Str::slug($title),
                 'is_visible' => fake()->boolean(70),
                 'description' => fake()->paragraph(),
+                'created_at' => $date,
+                'updated_at' => $date,
             ]);
         }
 
         for ($i=0; $i < 20; $i++) { 
             $title = fake()->sentence();
+            $date = fake()->dateTimeBetween('-1 months');
             $post = Post::create([
                 'author_id' => $user->id,
                 'title' => $title,
                 'slug' => Str::slug($title),
                 'is_visible' => fake()->boolean(70),
-                // 'editor_type' => fake()->randomElement([Post::EDITOR_TYPE_MARKDOWN, Post::EDITOR_TYPE_RICHTEXT]),
+                // 'content_type' => fake()->randomElement([Post::CONTENT_TYPE_MARKDOWN, Post::CONTENT_TYPE_RICHTEXT]),
                 'excerpt' => fake()->paragraphs(rand(1, 2), true),
                 'content' => fake()->paragraphs(rand(3, 6), true),
+                'created_at' => $date,
+                'updated_at' => $date,
             ]);
 
             $post->tags()->attach(Tag::query()->inRandomOrder()->take(rand(2,4))->get());
