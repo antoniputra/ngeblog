@@ -9,7 +9,14 @@
 
 # Ngeblog
 
-It's quickstart to have simple **Blogging System** for your existing laravel application. It will give you `Blogs` and `Tags` out of the box. **Ngeblog** also provides a simple admin panel built with Vue SPA.
+It's a quick start to have a simple **Blogging System** for your existing or brand-new Laravel application. Ngeblog provides a simple and elegant admin panel built with Vue and DaisyUI as an SPA App.
+
+### Features
+
+- BlogPost with [Tiptap Editor](https://tiptap.dev).
+- Tagging feature.
+- Dashboard for summary information.
+- and more...
 
 ### Screenshot
 <p align="center">

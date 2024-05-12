@@ -4,8 +4,6 @@ import vue from "@vitejs/plugin-vue";
 export default {
     resolve: {
         alias: {
-            "@toast-ui/editor/dist/toastui-editor.css":
-                "/node_modules/@toast-ui/editor/dist/toastui-editor.css",
             "@": "/resources/js",
         },
     },

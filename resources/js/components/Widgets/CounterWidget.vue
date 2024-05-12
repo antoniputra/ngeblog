@@ -94,7 +94,7 @@ onMounted(() => {
             <span v-else>{{ resource?.data?.total_all_time || "-" }}</span>
         </div>
         <div class="stat-desc">
-            {{ resource?.data.total_last_month }} from last month
+            {{ resource?.data?.total_last_month }} from last month
         </div>
     </div>
 </template>
