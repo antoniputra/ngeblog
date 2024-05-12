@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col">
+    <div class="flex flex-col border pb-8">
         <div
             v-if="editorElement"
             class="sticky top-0 z-10 mb-8 flex flex-wrap gap-1 border-b bg-white p-2"
@@ -47,20 +47,6 @@
                 :class="{ 'is-active': editorElement.isActive('code') }"
             >
                 code
-            </button>
-            <button
-                type="button"
-                class="border px-2 py-1"
-                @click="editorElement.chain().focus().unsetAllMarks().run()"
-            >
-                clear marks
-            </button>
-            <button
-                type="button"
-                class="border px-2 py-1"
-                @click="editorElement.chain().focus().clearNodes().run()"
-            >
-                clear nodes
             </button>
             <button
                 type="button"
@@ -220,25 +206,16 @@
             <button
                 type="button"
                 class="border px-2 py-1"
-                @click="editorElement.chain().focus().setHardBreak().run()"
+                @click="editorElement.chain().focus().unsetAllMarks().run()"
             >
-                hard break
+                clear marks
             </button>
             <button
                 type="button"
                 class="border px-2 py-1"
-                @click="editorElement.chain().focus().undo().run()"
-                :disabled="!editorElement.can().chain().focus().undo().run()"
+                @click="editorElement.chain().focus().clearNodes().run()"
             >
-                undo
-            </button>
-            <button
-                type="button"
-                class="border px-2 py-1"
-                @click="editorElement.chain().focus().redo().run()"
-                :disabled="!editorElement.can().chain().focus().redo().run()"
-            >
-                redo
+                clear nodes
             </button>
         </div>
         <editor-content :editor="editorElement" />
@@ -263,7 +240,7 @@ onMounted(() => {
         extensions: [StarterKit],
         editorProps: {
             attributes: {
-                class: "prose prose-sm sm:prose-lg mx-auto focus:outline-none",
+                class: "prose prose-sm sm:prose-base lg:prose-lg mx-auto focus:outline-none dark:prose-invert",
             },
         },
         content: props.modelValue || defaultContent,
@@ -275,6 +252,7 @@ onMounted(() => {
             // this.$emit('update:modelValue', editor.getJSON())
         },
     });
+
     emits("update:modelValue", editorElement.value.getHTML());
 });
 
@@ -287,7 +265,7 @@ const defaultContent = `
           Hi there,
         </h2>
         <p>
-          this is a <em>basic</em> example of <strong>tiptap</strong>. Sure, there are all kind of basic text styles you'd probably expect from a text editorElement. But wait until you see the lists:
+          This is a <strong>basic example of tiptap</strong>. Sure, there are all kind of basic text styles you'd probably expect from a text editorElement. But wait until you see the lists:
         </p>
         <ul>
           <li>

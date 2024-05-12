@@ -10,9 +10,11 @@ Route::get('/', function () {
 Route::get('/login', function () {
     auth()->login(User::first());
     return redirect()->to(config('ngeblog.path'));
-});
+})->name('login');
 
 Route::get('/logout', function () {
     auth()->logout();
     return to_route('landing');
 });
+
+require __DIR__ . '/ngeblog.php';

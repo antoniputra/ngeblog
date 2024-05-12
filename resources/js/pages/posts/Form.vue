@@ -222,6 +222,38 @@ const submit = () => {
                 </div>
 
                 <div
+                    v-if="Object.keys(postForm.errors).length"
+                    class="self-center"
+                >
+                    <div
+                        role="alert"
+                        class="alert alert-error flex flex-col text-white"
+                    >
+                        <div class="flex items-center gap-2">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-6 w-6 shrink-0 stroke-current"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
+                            <span class="text-lg font-medium">
+                                Whoops! Validation failed.
+                            </span>
+                        </div>
+                        <ul>
+                            <li v-for="err in postForm.errors">{{ err }}</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div
                     class="flex items-center justify-between gap-4 border-t py-4"
                 >
                     <router-link :to="{ name: 'posts-index' }" class="btn px-8">

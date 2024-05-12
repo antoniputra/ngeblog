@@ -3,7 +3,7 @@
 namespace AntoniPutra\Ngeblog;
 
 use AntoniPutra\Ngeblog\Http\Middleware\AdminAuthorization;
-use Illuminate\Contracts\Foundation\CachesRoutes;
+use AntoniPutra\Ngeblog\Models\Post;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -45,9 +45,14 @@ final class NgeblogServiceProvider extends ServiceProvider
      */
     protected function bootRoutes(): void
     {
-        if ($this->app instanceof CachesRoutes && $this->app->routesAreCached()) {
-            return;
-        }
+        Route::bind('ngeblogPost', function (string $value) {
+            return Post::query()
+                ->where(function ($q) use ($value) {
+                    $q->where('id', $value)
+                        ->orWhere('slug', $value);
+                })
+                ->firstOrFail();
+        });
 
         Route::group([
             'domain' => config('ngeblog.domain', null),

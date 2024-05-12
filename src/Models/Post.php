@@ -56,7 +56,6 @@ class Post extends Model
         $author = data_get($params, 'author');
         $tags = data_get($params, 'tags', []);
 
-
         $builder->when($search, function ($q) use ($search) {
             $q->where(function ($sub) use ($search) {
                 $sub->where('title', 'LIKE', '%'. $search .'%')
