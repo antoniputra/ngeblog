@@ -8,6 +8,7 @@ import { apiBasePath, slugify } from "@/utils";
 import { useForm } from "laravel-precognition-vue";
 import { useLoadData } from "@/composables/loadData";
 import ContentEditor from "@/components/ContentEditor.vue";
+import FormMetas from "@/components/FormMetas.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -30,6 +31,7 @@ const postForm = useForm("post", apiBasePath("posts"), {
     is_visible: true,
     excerpt: "",
     content: "",
+    metas: [],
     tags: [],
 });
 
@@ -49,6 +51,7 @@ const populateForm = () => {
             excerpt: data.excerpt,
             content: data.content,
             tags: tagsIds,
+            metas: data.metas,
         });
     });
 };
@@ -134,17 +137,15 @@ const submit = () => {
                     :required="true"
                     :error-message="postForm.errors['title']"
                 >
-                    <div class="flex flex-col gap-2">
-                        <input
-                            type="text"
-                            v-model="postForm.title"
-                            placeholder="e.g: Awesome Technology"
-                            class="input input-bordered"
-                            :class="{
-                                'input-error': postForm.errors['title'],
-                            }"
-                        />
-                    </div>
+                    <input
+                        type="text"
+                        v-model="postForm.title"
+                        placeholder="e.g: Awesome Technology"
+                        class="input input-bordered"
+                        :class="{
+                            'input-error': postForm.errors['title'],
+                        }"
+                    />
                 </FormControl>
 
                 <div class="form-control">
@@ -219,6 +220,10 @@ const submit = () => {
                     >
                         {{ postForm.errors.content }}
                     </p>
+                </div>
+
+                <div class="py-8">
+                    <FormMetas v-model="postForm.metas" />
                 </div>
 
                 <div

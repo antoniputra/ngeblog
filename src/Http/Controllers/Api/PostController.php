@@ -40,6 +40,7 @@ class PostController extends Controller
                 'deleted_at'
             ])
             ->with('tags')
+            ->withCount('metas')
             ->latest()
             ->paginate(10)
             ->withQueryString();
@@ -49,7 +50,7 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
-        $post->load('tags');
+        $post->load('metas', 'tags');
         return PostResource::make($post)->resolve();
     }
 

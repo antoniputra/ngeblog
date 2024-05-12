@@ -1,8 +1,8 @@
 <template>
-    <div class="flex flex-col border pb-8">
+    <div class="flex flex-col rounded border pb-8">
         <div
             v-if="editorElement"
-            class="sticky top-0 z-10 mb-8 flex flex-wrap gap-1 border-b bg-white p-2"
+            class="sticky top-0 z-10 mb-8 flex flex-wrap gap-1 rounded-t border-b bg-white p-2"
         >
             <button
                 type="button"
@@ -240,7 +240,7 @@ onMounted(() => {
         extensions: [StarterKit],
         editorProps: {
             attributes: {
-                class: "prose prose-sm sm:prose-base lg:prose-lg mx-auto focus:outline-none dark:prose-invert",
+                class: "prose prose-sm sm:prose-base lg:prose-lg mx-auto focus:outline-none dark:prose-invert px-2",
             },
         },
         content: props.modelValue || defaultContent,
