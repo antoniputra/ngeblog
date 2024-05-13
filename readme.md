@@ -9,13 +9,14 @@
 
 # Ngeblog
 
-It's a quick start to have a simple **Blogging System** for your existing or brand-new Laravel application. Ngeblog provides a simple and elegant admin panel built with Vue and DaisyUI as an SPA App.
+It helps you to quickly set up a simple **Blogging System** for your existing or brand-new Laravel application. Ngeblog provides a simple and elegant admin panel built with `Vue` and `Daisy UI` as a **Modern SPA App**.
 
 ### Features
 
 - BlogPost with [Tiptap Editor](https://tiptap.dev).
 - Tagging feature.
-- Dashboard for summary information.
+- Dashboard.
+- Starter Page.
 - and more...
 
 ### Screenshot
@@ -28,15 +29,32 @@ It's a quick start to have a simple **Blogging System** for your existing or bra
 
 ## Installation
 
-1. `composer require antoniputra/ngeblog`
-2. `php artisan vendor:publish`
-3. `php artisan migrate`
-4. You done!
+```bash
+composer require antoniputra/ngeblog
+```
+
+Resolve the installation:
+```bash
+php artisan ngeblog:install
+```
 
 
 ## Configuration
 
-Once this package already installed, by default it will provide admin panel at `/ngeblog` with no protection. You can add your own protection like below:
+After installation, by default will provide an admin panel at `https://your-web.test/ngeblog` and only available for authenticated user.
+
+Follow below section to customize as you wish.
+
+### Change Admin Panel URL
+
+Go to your `.env` and put new key value:
+```env
+NGEBLOG_PATH='blog-admin-panel'
+```
+
+### Protect Admin Panel
+
+You can add your own protection logic like below:
 
 ```php
 // App/Providers/AppServiceProvider.php
@@ -56,4 +74,6 @@ Gate::define('accessNgeblogAdmin', function ($user) {
 
 ## License
 
-**Ngeblog** is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+**Ngeblog** is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+
+Built with love by @antoni_putra12 and made better by you.
