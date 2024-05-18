@@ -95,6 +95,7 @@ class PostController extends Controller
             'excerpt' => ['nullable'],
             'content' => ['required'],
             'tags' => ['array'],
+            'tags.*.id' => ['required'],
         ]);
 
         try {
@@ -110,8 +111,9 @@ class PostController extends Controller
             $post->author_id = auth()->user()->id;
             $post->save();
     
-            if (! empty($request->get('tags'))) {
-                $post->tags()->sync($request->get('tags'));
+            $tagIds = collect($request->get('tags'))->pluck('id')->toArray();
+            if (! empty($tagIds)) {
+                $post->tags()->sync($tagIds);
             }
 
             DB::commit();

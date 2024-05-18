@@ -2,6 +2,7 @@
 
 namespace AntoniPutra\Ngeblog\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -33,5 +34,17 @@ class Tag extends Model
 
         $this->is_visible = ! $this->is_visible;
         return $this->save();
+    }
+
+    public function scopeFilterable(Builder $builder, array $params = []): void
+    {
+        $search = data_get($params, 'search');
+        $builder->when($search, function ($q) use ($search) {
+            $q->where(function ($sub) use ($search) {
+                $sub->where('title', 'LIKE', '%'. $search .'%')
+                    ->orWhere('slug', 'LIKE', '%'. $search .'%')
+                    ->orWhere('excerpt', 'LIKE', '%'. $search .'%');
+            });
+        });
     }
 }

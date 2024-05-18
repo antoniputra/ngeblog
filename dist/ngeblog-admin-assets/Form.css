@@ -1,1 +1,7 @@
-.is-active[data-v-1e473e72]{--tw-bg-opacity: 1;background-color:var(--fallback-s,oklch(var(--s)/var(--tw-bg-opacity)));--tw-text-opacity: 1;color:rgb(255 255 255 / var(--tw-text-opacity))}
+
+.is-active[data-v-6ab0bc8b] {
+    --tw-bg-opacity: 1;
+    background-color: var(--fallback-s,oklch(var(--s)/var(--tw-bg-opacity)));
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity))
+}

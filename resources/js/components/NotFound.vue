@@ -1,7 +1,9 @@
 <template>
     <div>
         <Container>
-            <div class="flex items-center gap-2 text-2xl">404 Not Found</div>
+            <div class="flex items-center justify-center gap-2 text-2xl">
+                404 Not Found
+            </div>
         </Container>
     </div>
 </template>

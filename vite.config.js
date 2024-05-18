@@ -18,6 +18,7 @@ export default {
         }),
     ],
     build: {
+        minify: false,
         assetsDir: "ngeblog-admin-assets",
         rollupOptions: {
             input: ["./resources/js/ngeblog.js", "./resources/css/ngeblog.css"],

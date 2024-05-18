@@ -225,13 +225,30 @@
 <script setup>
 import StarterKit from "@tiptap/starter-kit";
 import { Editor, EditorContent } from "@tiptap/vue-3";
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 const props = defineProps({
     modelValue: String,
 });
 
 const emits = defineEmits(["update:modelValue"]);
+
+watch(
+    () => props.modelValue,
+    (value) => {
+        // HTML
+        const isSame = editorElement.value.getHTML() === value;
+
+        // JSON
+        // const isSame = JSON.stringify(editorElement.value.getJSON()) === JSON.stringify(value)
+
+        if (isSame) {
+            return;
+        }
+
+        editorElement.value.commands.setContent(value, false);
+    },
+);
 
 const editorElement = ref();
 
@@ -243,7 +260,7 @@ onMounted(() => {
                 class: "prose prose-sm sm:prose-base lg:prose-lg mx-auto focus:outline-none dark:prose-invert px-2",
             },
         },
-        content: props.modelValue || defaultContent,
+        content: props.modelValue,
         onUpdate: ({ editor }) => {
             // HTML
             emits("update:modelValue", editor.getHTML());
@@ -252,8 +269,6 @@ onMounted(() => {
             // this.$emit('update:modelValue', editor.getJSON())
         },
     });
-
-    emits("update:modelValue", editorElement.value.getHTML());
 });
 
 onBeforeUnmount(() => {

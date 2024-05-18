@@ -1,29 +1,32 @@
 <script setup>
 import Container from "@/components/Container.vue";
 import SkeletonContent from "@/components/SkeletonContent.vue";
-import { onMounted, watch } from "vue";
+import { watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import FormControl from "@/components/FormControl.vue";
 import { apiBasePath, slugify } from "@/utils";
 import { useForm } from "laravel-precognition-vue";
-import { useLoadData } from "@/composables/loadData";
 import ContentEditor from "@/components/ContentEditor.vue";
 import FormMetas from "@/components/FormMetas.vue";
+import ComboboxField from "@/components/Fields/ComboboxField.vue";
+import { useAxiosFetch } from "@/composables/useAxiosFetch";
+import NotFound from "@/components/NotFound.vue";
 
 const route = useRoute();
 const router = useRouter();
-const post = useLoadData();
-const tagsDropdown = useLoadData();
 
 document.title = "Add new Post - Ngeblog Administration";
 
-onMounted(() => {
-    tagsDropdown.fetchData(apiBasePath(`tags/dropdown`));
+const { state: postState, fetchData: fetchPostData } = useAxiosFetch();
+const { state: tagsState, fetchData: fetchTagData } = useAxiosFetch();
 
-    if (route.params.id) {
-        populateForm();
-    }
-});
+const searchableTags = async (q) => {
+    console.log("jancok", { q });
+    const data = await fetchTagData(
+        apiBasePath(`tags/dropdown`) + `?search=${q}`,
+    );
+    return data;
+};
 
 const postForm = useForm("post", apiBasePath("posts"), {
     title: "",
@@ -35,45 +38,6 @@ const postForm = useForm("post", apiBasePath("posts"), {
     tags: [],
 });
 
-const populateForm = () => {
-    post.fetchData(apiBasePath(`posts/${route.params.id}`), (data) => {
-        document.title = `Edit Post ${data.title} - Ngeblog Administration`;
-
-        let tagsIds = [];
-        if (data.tags.length > 0) {
-            tagsIds = data.tags.map((t) => t.id);
-        }
-
-        postForm.setData({
-            title: data.title,
-            slug: data.slug,
-            is_visible: data.is_visible,
-            excerpt: data.excerpt,
-            content: data.content,
-            tags: tagsIds,
-            metas: data.metas,
-        });
-    });
-};
-
-watch(
-    () => route.params.id,
-    (val) => {
-        if (val) {
-            populateForm();
-        } else {
-            postForm.reset();
-        }
-    },
-);
-
-watch(
-    () => postForm.title,
-    (val) => {
-        postForm.slug = slugify(val);
-    },
-);
-
 const submit = () => {
     const handleSuccess = () => {
         return router.push({ name: "posts-index" });
@@ -82,7 +46,7 @@ const submit = () => {
     if (route.params.id) {
         postForm.submit({
             method: "put",
-            url: apiBasePath(`posts/${post.data.id}/update`),
+            url: apiBasePath(`posts/${postState.data.id}/update`),
             onSuccess() {
                 return handleSuccess();
             },
@@ -95,11 +59,51 @@ const submit = () => {
         });
     }
 };
+
+const loadPageData = async () => {
+    if (route.params.id) {
+        await fetchPostData(apiBasePath(`posts/${route.params.id}`));
+
+        if (postState.error) {
+            return;
+        }
+
+        document.title = `Edit Post ${postState.data.title} - Ngeblog Administration`;
+
+        let tagsIds = [];
+        if (postState.data.tags.length > 0) {
+            tagsIds = postState.data.tags;
+        }
+
+        postForm.setData({
+            title: postState.data.title,
+            slug: postState.data.slug,
+            is_visible: postState.data.is_visible,
+            excerpt: postState.data.excerpt,
+            content: postState.data.content,
+            tags: tagsIds,
+            metas: postState.data.metas,
+        });
+    } else {
+        postForm.reset();
+    }
+};
+
+watch(() => route.params.id, loadPageData, { immediate: true });
+
+watch(
+    () => postForm.title,
+    (val) => {
+        postForm.slug = slugify(val);
+    },
+);
 </script>
 
 <template>
     <div>
-        <Container>
+        <NotFound v-if="postState.error?.response?.status === 404" />
+
+        <Container v-else>
             <div class="mb-8">
                 <h1
                     class="flex items-center gap-2 text-2xl font-bold tracking-wide"
@@ -112,20 +116,23 @@ const submit = () => {
                     </router-link>
 
                     <span
-                        v-if="post.loading"
+                        v-if="postState.loading"
                         class="loading loading-bars loading-lg"
                     ></span>
 
                     <template v-else>
-                        <span v-if="$route.params.id && post.data">
-                            Edit Post {{ post.data.title }}
+                        <span v-if="$route.params.id && postState.data">
+                            Edit Post {{ postState.data.title }}
                         </span>
                         <span v-else>Add new Post</span>
                     </template>
                 </h1>
             </div>
 
-            <SkeletonContent v-if="post.loading" class="mx-auto max-w-xl" />
+            <SkeletonContent
+                v-if="postState.loading"
+                class="mx-auto max-w-xl"
+            />
 
             <form
                 v-else
@@ -173,21 +180,29 @@ const submit = () => {
                     </div>
                 </div>
 
-                <FormControl label="Post Tags">
-                    <select
-                        v-if="!tagsDropdown.loading"
+                <FormControl as="div" label="Post Tags">
+                    <ComboboxField
                         v-model="postForm.tags"
-                        placeholder="Select tags"
-                        class="select select-bordered"
-                        style="height: 150px"
+                        placeholder="Select tags..."
+                        :searchable="searchableTags"
+                        :searchable-lazy="false"
+                        :loading="tagsState.loading"
+                        label-attribute="title"
+                        by="id"
                         multiple
                     >
-                        <option
-                            v-for="tag in tagsDropdown?.data?.data"
-                            :value="tag.id"
-                            v-text="tag.title"
-                        />
-                    </select>
+                        <template #selected>
+                            <div class="mb-4 flex flex-wrap items-center gap-2">
+                                <div
+                                    v-for="tag in postForm.tags"
+                                    type="button"
+                                    class="badge"
+                                >
+                                    {{ tag.title }}
+                                </div>
+                            </div>
+                        </template>
+                    </ComboboxField>
                 </FormControl>
 
                 <div>
