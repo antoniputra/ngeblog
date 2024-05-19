@@ -12,7 +12,7 @@ class NgeblogPostController extends Controller
     {
         return view('ngeblog.index', [
             'title' => 'Ngeblog',
-            'posts' => Ngeblog::getPostsAsPaginated()
+            'posts' => Ngeblog::getPublishedPostsAsPaginated()
         ]);
     }
 

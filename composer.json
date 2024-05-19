@@ -23,7 +23,8 @@
         "laravel/pint": "^1.15",
         "orchestra/testbench": "^9.0",
         "pestphp/pest": "^2.34",
-        "phpstan/phpstan": "^1.10"
+        "phpstan/phpstan": "^1.10",
+        "stevebauman/autodoc-facades": "^1.2"
     },
     "autoload": {
         "psr-4": {
@@ -69,6 +70,7 @@
             "npm run build",
             "Composer\\Config::disableProcessTimeout",
             "@build",
+            "@php vendor/bin/testbench autodoc:facades src/Facades/",
             "@php vendor/bin/testbench serve"
         ],
         "lint": [

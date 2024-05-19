@@ -29,12 +29,18 @@ class InstallCommand extends Command
      */
     public function handle()
     {
+        if (file_exists(config_path('ngeblog.php'))) {
+            if (! $this->confirm('It seems this package is already installed. Would you like to proceed with the installation anyway?')) {
+                return;
+            }
+        }
+
         $this->line('');
         $this->call('vendor:publish', ['--provider' => NgeblogServiceProvider::class]);
 
         $this->line('');
         $this->runDatabaseMigrations();
-        
+
         $this->line('');
         $this->installStarterPage();
 
@@ -63,12 +69,10 @@ class InstallCommand extends Command
             return;
         }
 
-        // TODO - Copy Controllers file from stubs.
         copy(__DIR__ .'/../../stubs/Http/Controllers/NgeblogPostController.php', app_path('Http/Controllers/NgeblogPostController.php'));
         
-        // TODO - Copy blade views file from stubs
         (new Filesystem)->copyDirectory(__DIR__ .'/../../stubs/ngeblog', resource_path('views/ngeblog'));
-        
+
         // TODO - Copy routes/ngeblog.php from stubs
         // TODO - and write require inside web.php of consumer.
         copy(__DIR__ .'/../../stubs/routes/ngeblog.php', base_path('routes/ngeblog.php'));
@@ -76,6 +80,12 @@ class InstallCommand extends Command
             base_path('routes/web.php'),
             $this->publicPageRouteDefinition()
         );
+
+        $this->info('√ Controller generated "app/Http/Controllers/NgeblogPostController.php"'. PHP_EOL);
+        $this->info('√ Template generated "resources/views/ngeblog/*"'. PHP_EOL);
+
+        $this->info('√ Route generated "routes/ngeblog.php"'. PHP_EOL);
+        $this->info('√ Route has been included to your "routes/web.php"'. PHP_EOL);
 
         $this->components->info('Ngeblog Default Public Page scaffolding installed successfully.');
     }

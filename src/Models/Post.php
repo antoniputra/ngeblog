@@ -81,6 +81,11 @@ class Post extends Model
         });
     }
 
+    public function scopePublished(Builder $builder): void
+    {
+        $builder->where('is_visible', true);
+    }
+
     public function toggleVisibility()
     {
         if (! $this->exists) {

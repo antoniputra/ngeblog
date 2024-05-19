@@ -83,7 +83,7 @@ class PostController extends Controller
             'title' => [
                 'required',
                 'min:2',
-                'max:50',
+                'max:255',
                 Rule::unique($post->getTable())
                     ->when($post->id, fn ($rule) => $rule->ignore($post->id))
             ],

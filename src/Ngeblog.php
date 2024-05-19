@@ -6,7 +6,7 @@ use AntoniPutra\Ngeblog\Models\Post;
 
 class Ngeblog
 {
-    public static function frontendConfig(): array
+    public static function adminFrontendConfig(): array
     {
         $path = str(config('ngeblog.path', 'ngeblog'))->start('/');
         return [
@@ -15,10 +15,11 @@ class Ngeblog
         ];
     }
 
-    public function getPostsAsPaginated($perPage = 15, array $filters = [], array $sort = [])
+    public function getPublishedPostsAsPaginated($perPage = 15, array $filters = [], array $sort = [])
     {
         return Post::query()
             ->with('tags')
+            ->published()
             ->filterable($filters)
             ->sortable($sort, defaultSort: function ($q) {
                 $q->latest();
