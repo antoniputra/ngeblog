@@ -1,4 +1,4 @@
-import { r as reactive, m as markRaw, d as defineComponent, c as customRef, a as ref, w as watchEffect, n as nextTick, u as unref, o as onBeforeUnmount, h as h$1, T as Teleport, g as getCurrentInstance, _ as _export_sfc, b as watch, e as onMounted, f as openBlock, i as createElementBlock, j as createBaseVNode, k as normalizeClass, l as createCommentVNode, p as createVNode, F as Fragment$1, q as renderList, t as toDisplayString, s as withCtx, v as withDirectives, x as vModelSelect, y as _sfc_main$4, z as vModelText, A as createStaticVNode, B as computed, C as shallowRef, D as triggerRef, E as onScopeDispose, G as onUnmounted, H as inject, I as cloneVNode, J as provide, K as toRaw, L as isRef, M as shallowReadonly, N as getCurrentScope, O as createBlock, P as renderSlot, Q as normalizeStyle, R as Transition, S as mergeProps, U as createTextVNode, V as axios, W as useForm, X as apiBasePath, Y as resolveComponent, Z as Container, $ as SkeletonContent, a0 as withModifiers, a1 as vModelCheckbox, a2 as useRoute, a3 as useRouter, a4 as slugify, a5 as _sfc_main$5 } from "./ngeblog.js";
+import { r as reactive, m as markRaw, d as defineComponent, c as customRef, a as ref, w as watchEffect, n as nextTick, u as unref, o as onBeforeUnmount, h as h$1, T as Teleport, g as getCurrentInstance, _ as _export_sfc, b as watch, e as onMounted, f as openBlock, i as createElementBlock, j as createBaseVNode, k as normalizeClass, l as createCommentVNode, p as createVNode, F as Fragment$1, q as renderList, t as toDisplayString, s as withCtx, v as withDirectives, x as vModelSelect, y as FormControl, z as vModelText, A as createStaticVNode, B as computed, C as shallowRef, D as triggerRef, E as onScopeDispose, G as onUnmounted, H as inject, I as cloneVNode, J as provide, K as toRaw, L as isRef, M as shallowReadonly, N as getCurrentScope, O as createBlock, P as renderSlot, Q as normalizeStyle, R as Transition, S as mergeProps, U as createTextVNode, V as useRoute, W as useRouter, X as useAxiosFetch, Y as useForm, Z as apiBasePath, $ as resolveComponent, a0 as Container, a1 as slugify, a2 as SkeletonContent, a3 as withModifiers, a4 as vModelCheckbox, a5 as NotFound } from "./ngeblog.js";
 function OrderedMap(content) {
   this.content = content;
 }
@@ -15362,6 +15362,65 @@ function markPasteRule(config) {
     }
   });
 }
+const Placeholder = Extension.create({
+  name: "placeholder",
+  addOptions() {
+    return {
+      emptyEditorClass: "is-editor-empty",
+      emptyNodeClass: "is-empty",
+      placeholder: "Write something …",
+      showOnlyWhenEditable: true,
+      considerAnyAsEmpty: false,
+      showOnlyCurrent: true,
+      includeChildren: false
+    };
+  },
+  addProseMirrorPlugins() {
+    return [
+      new Plugin({
+        key: new PluginKey("placeholder"),
+        props: {
+          decorations: ({ doc: doc2, selection }) => {
+            var _a;
+            const active = this.editor.isEditable || !this.options.showOnlyWhenEditable;
+            const { anchor } = selection;
+            const decorations = [];
+            if (!active) {
+              return null;
+            }
+            const { firstChild } = doc2.content;
+            const isLeaf = firstChild && firstChild.type.isLeaf;
+            const isAtom = firstChild && firstChild.isAtom;
+            const isValidNode = this.options.considerAnyAsEmpty ? true : firstChild && firstChild.type.name === ((_a = doc2.type.contentMatch.defaultType) === null || _a === void 0 ? void 0 : _a.name);
+            const isEmptyDoc = doc2.content.childCount <= 1 && firstChild && isValidNode && (firstChild.nodeSize <= 2 && (!isLeaf || !isAtom));
+            doc2.descendants((node, pos) => {
+              const hasAnchor = anchor >= pos && anchor <= pos + node.nodeSize;
+              const isEmpty = !node.isLeaf && !node.childCount;
+              if ((hasAnchor || !this.options.showOnlyCurrent) && isEmpty) {
+                const classes = [this.options.emptyNodeClass];
+                if (isEmptyDoc) {
+                  classes.push(this.options.emptyEditorClass);
+                }
+                const decoration = Decoration.node(pos, pos + node.nodeSize, {
+                  class: classes.join(" "),
+                  "data-placeholder": typeof this.options.placeholder === "function" ? this.options.placeholder({
+                    editor: this.editor,
+                    node,
+                    pos,
+                    hasAnchor
+                  }) : this.options.placeholder
+                });
+                decorations.push(decoration);
+              }
+              return this.options.includeChildren;
+            });
+            return DecorationSet.create(doc2, decorations);
+          }
+        }
+      })
+    ];
+  }
+});
 const inputRegex$4 = /^\s*>\s$/;
 const Blockquote = Node$1.create({
   name: "blockquote",
@@ -17529,7 +17588,20 @@ const _sfc_main$3 = {
     const editorElement = ref();
     onMounted(() => {
       editorElement.value = new Editor2({
-        extensions: [StarterKit],
+        extensions: [
+          StarterKit,
+          Placeholder.configure({
+            // Use a placeholder:
+            placeholder: "Write something amazing 🔥"
+            // Use different placeholders depending on the node type:
+            // placeholder: ({ node }) => {
+            //   if (node.type.name === 'heading') {
+            //     return 'What’s the title?'
+            //   }
+            //   return 'Can you add some further context?'
+            // },
+          })
+        ],
         editorProps: {
           attributes: {
             class: "prose prose-sm sm:prose-base lg:prose-lg mx-auto focus:outline-none dark:prose-invert px-2"
@@ -17571,85 +17643,151 @@ const _sfc_main$3 = {
             onClick: _cache[3] || (_cache[3] = ($event) => editorElement.value.chain().focus().toggleCode().run()),
             disabled: !editorElement.value.can().chain().focus().toggleCode().run()
           }, " code ", 10, _hoisted_6$3),
-          createBaseVNode("button", {
-            type: "button",
-            class: normalizeClass(["border px-2 py-1", { "is-active": editorElement.value.isActive("paragraph") }]),
-            onClick: _cache[4] || (_cache[4] = ($event) => editorElement.value.chain().focus().setParagraph().run())
-          }, " paragraph ", 2),
-          createBaseVNode("button", {
-            type: "button",
-            class: normalizeClass(["border px-2 py-1", {
-              "is-active": editorElement.value.isActive("heading", {
-                level: 1
-              })
-            }]),
-            onClick: _cache[5] || (_cache[5] = ($event) => editorElement.value.chain().focus().toggleHeading({ level: 1 }).run())
-          }, " h1 ", 2),
-          createBaseVNode("button", {
-            type: "button",
-            class: normalizeClass(["border px-2 py-1", {
-              "is-active": editorElement.value.isActive("heading", {
-                level: 2
-              })
-            }]),
-            onClick: _cache[6] || (_cache[6] = ($event) => editorElement.value.chain().focus().toggleHeading({ level: 2 }).run())
-          }, " h2 ", 2),
-          createBaseVNode("button", {
-            type: "button",
-            class: normalizeClass(["border px-2 py-1", {
-              "is-active": editorElement.value.isActive("heading", {
-                level: 3
-              })
-            }]),
-            onClick: _cache[7] || (_cache[7] = ($event) => editorElement.value.chain().focus().toggleHeading({ level: 3 }).run())
-          }, " h3 ", 2),
-          createBaseVNode("button", {
-            type: "button",
-            class: normalizeClass(["border px-2 py-1", {
-              "is-active": editorElement.value.isActive("heading", {
-                level: 4
-              })
-            }]),
-            onClick: _cache[8] || (_cache[8] = ($event) => editorElement.value.chain().focus().toggleHeading({ level: 4 }).run())
-          }, " h4 ", 2),
-          createBaseVNode("button", {
-            type: "button",
-            class: normalizeClass(["border px-2 py-1", {
-              "is-active": editorElement.value.isActive("heading", {
-                level: 5
-              })
-            }]),
-            onClick: _cache[9] || (_cache[9] = ($event) => editorElement.value.chain().focus().toggleHeading({ level: 5 }).run())
-          }, " h5 ", 2),
-          createBaseVNode("button", {
-            type: "button",
-            class: normalizeClass(["border px-2 py-1", {
-              "is-active": editorElement.value.isActive("heading", {
-                level: 6
-              })
-            }]),
-            onClick: _cache[10] || (_cache[10] = ($event) => editorElement.value.chain().focus().toggleHeading({ level: 6 }).run())
-          }, " h6 ", 2),
-          createBaseVNode("button", {
-            type: "button",
-            class: normalizeClass(["border px-2 py-1", { "is-active": editorElement.value.isActive("bulletList") }]),
-            onClick: _cache[11] || (_cache[11] = ($event) => editorElement.value.chain().focus().toggleBulletList().run())
-          }, " bullet list ", 2),
-          createBaseVNode("button", {
-            type: "button",
-            class: normalizeClass(["border px-2 py-1", { "is-active": editorElement.value.isActive("orderedList") }]),
-            onClick: _cache[12] || (_cache[12] = ($event) => editorElement.value.chain().focus().toggleOrderedList().run())
-          }, " ordered list ", 2),
-          createBaseVNode("button", {
-            type: "button",
-            class: normalizeClass(["border px-2 py-1", { "is-active": editorElement.value.isActive("codeBlock") }]),
-            onClick: _cache[13] || (_cache[13] = ($event) => editorElement.value.chain().focus().toggleCodeBlock().run())
-          }, " code block ", 2),
-          createBaseVNode("button", {
-            type: "button",
-            class: normalizeClass(["border px-2 py-1", { "is-active": editorElement.value.isActive("blockquote") }]),
-            onClick: _cache[14] || (_cache[14] = ($event) => editorElement.value.chain().focus().toggleBlockquote().run())
-          }, " blockquote ", 2),
+          createBaseVNode(
+            "button",
+            {
+              type: "button",
+              class: normalizeClass(["border px-2 py-1", { "is-active": editorElement.value.isActive("paragraph") }]),
+              onClick: _cache[4] || (_cache[4] = ($event) => editorElement.value.chain().focus().setParagraph().run())
+            },
+            " paragraph ",
+            2
+            /* CLASS */
+          ),
+          createBaseVNode(
+            "button",
+            {
+              type: "button",
+              class: normalizeClass(["border px-2 py-1", {
+                "is-active": editorElement.value.isActive("heading", {
+                  level: 1
+                })
+              }]),
+              onClick: _cache[5] || (_cache[5] = ($event) => editorElement.value.chain().focus().toggleHeading({ level: 1 }).run())
+            },
+            " h1 ",
+            2
+            /* CLASS */
+          ),
+          createBaseVNode(
+            "button",
+            {
+              type: "button",
+              class: normalizeClass(["border px-2 py-1", {
+                "is-active": editorElement.value.isActive("heading", {
+                  level: 2
+                })
+              }]),
+              onClick: _cache[6] || (_cache[6] = ($event) => editorElement.value.chain().focus().toggleHeading({ level: 2 }).run())
+            },
+            " h2 ",
+            2
+            /* CLASS */
+          ),
+          createBaseVNode(
+            "button",
+            {
+              type: "button",
+              class: normalizeClass(["border px-2 py-1", {
+                "is-active": editorElement.value.isActive("heading", {
+                  level: 3
+                })
+              }]),
+              onClick: _cache[7] || (_cache[7] = ($event) => editorElement.value.chain().focus().toggleHeading({ level: 3 }).run())
+            },
+            " h3 ",
+            2
+            /* CLASS */
+          ),
+          createBaseVNode(
+            "button",
+            {
+              type: "button",
+              class: normalizeClass(["border px-2 py-1", {
+                "is-active": editorElement.value.isActive("heading", {
+                  level: 4
+                })
+              }]),
+              onClick: _cache[8] || (_cache[8] = ($event) => editorElement.value.chain().focus().toggleHeading({ level: 4 }).run())
+            },
+            " h4 ",
+            2
+            /* CLASS */
+          ),
+          createBaseVNode(
+            "button",
+            {
+              type: "button",
+              class: normalizeClass(["border px-2 py-1", {
+                "is-active": editorElement.value.isActive("heading", {
+                  level: 5
+                })
+              }]),
+              onClick: _cache[9] || (_cache[9] = ($event) => editorElement.value.chain().focus().toggleHeading({ level: 5 }).run())
+            },
+            " h5 ",
+            2
+            /* CLASS */
+          ),
+          createBaseVNode(
+            "button",
+            {
+              type: "button",
+              class: normalizeClass(["border px-2 py-1", {
+                "is-active": editorElement.value.isActive("heading", {
+                  level: 6
+                })
+              }]),
+              onClick: _cache[10] || (_cache[10] = ($event) => editorElement.value.chain().focus().toggleHeading({ level: 6 }).run())
+            },
+            " h6 ",
+            2
+            /* CLASS */
+          ),
+          createBaseVNode(
+            "button",
+            {
+              type: "button",
+              class: normalizeClass(["border px-2 py-1", { "is-active": editorElement.value.isActive("bulletList") }]),
+              onClick: _cache[11] || (_cache[11] = ($event) => editorElement.value.chain().focus().toggleBulletList().run())
+            },
+            " bullet list ",
+            2
+            /* CLASS */
+          ),
+          createBaseVNode(
+            "button",
+            {
+              type: "button",
+              class: normalizeClass(["border px-2 py-1", { "is-active": editorElement.value.isActive("orderedList") }]),
+              onClick: _cache[12] || (_cache[12] = ($event) => editorElement.value.chain().focus().toggleOrderedList().run())
+            },
+            " ordered list ",
+            2
+            /* CLASS */
+          ),
+          createBaseVNode(
+            "button",
+            {
+              type: "button",
+              class: normalizeClass(["border px-2 py-1", { "is-active": editorElement.value.isActive("codeBlock") }]),
+              onClick: _cache[13] || (_cache[13] = ($event) => editorElement.value.chain().focus().toggleCodeBlock().run())
+            },
+            " code block ",
+            2
+            /* CLASS */
+          ),
+          createBaseVNode(
+            "button",
+            {
+              type: "button",
+              class: normalizeClass(["border px-2 py-1", { "is-active": editorElement.value.isActive("blockquote") }]),
+              onClick: _cache[14] || (_cache[14] = ($event) => editorElement.value.chain().focus().toggleBlockquote().run())
+            },
+            " blockquote ",
+            2
+            /* CLASS */
+          ),
           createBaseVNode("button", {
             type: "button",
             class: "border px-2 py-1",
@@ -17665,13 +17803,13 @@ const _sfc_main$3 = {
             class: "border px-2 py-1",
             onClick: _cache[17] || (_cache[17] = ($event) => editorElement.value.chain().focus().clearNodes().run())
           }, " clear nodes ")
-        ])) : createCommentVNode("", true),
+        ])) : createCommentVNode("v-if", true),
         createVNode(unref(EditorContent), { editor: editorElement.value }, null, 8, ["editor"])
       ]);
     };
   }
 };
-const ContentEditor = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-6ab0bc8b"]]);
+const ContentEditor = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-5ea4f861"], ["__file", "/Users/antoni/Packages/ngeblog/resources/js/components/ContentEditor.vue"]]);
 const _hoisted_1$2 = {
   class: "collapse rounded border",
   open: ""
@@ -17681,28 +17819,58 @@ const _hoisted_3$2 = { class: "collapse-content p-0" };
 const _hoisted_4$2 = { class: "flex flex-col divide-y" };
 const _hoisted_5$2 = { class: "relative grid grid-cols-3 justify-center gap-2 p-4 pt-8" };
 const _hoisted_6$2 = { class: "absolute left-1 top-1 inline-flex h-8 w-8 items-center justify-center self-start rounded-full border bg-gray-200 p-2" };
-const _hoisted_7$2 = /* @__PURE__ */ createBaseVNode("option", { value: "text" }, "Text", -1);
-const _hoisted_8$2 = /* @__PURE__ */ createBaseVNode("option", { value: "textarea" }, "Textarea", -1);
+const _hoisted_7$2 = /* @__PURE__ */ createBaseVNode(
+  "option",
+  { value: "text" },
+  "Text",
+  -1
+  /* HOISTED */
+);
+const _hoisted_8$2 = /* @__PURE__ */ createBaseVNode(
+  "option",
+  { value: "textarea" },
+  "Textarea",
+  -1
+  /* HOISTED */
+);
 const _hoisted_9$2 = [
   _hoisted_7$2,
   _hoisted_8$2
 ];
-const _hoisted_10$2 = /* @__PURE__ */ createBaseVNode("input", {
-  type: "text",
-  placeholder: "e.g: Co Author",
-  class: "input input-sm input-bordered"
-}, null, -1);
-const _hoisted_11$2 = /* @__PURE__ */ createBaseVNode("input", {
-  type: "text",
-  placeholder: "e.g: Sobirin Rodriguez",
-  class: "input input-sm input-bordered"
-}, null, -1);
-const _hoisted_12$1 = /* @__PURE__ */ createBaseVNode("div", { class: "absolute right-1 top-1 flex" }, [
-  /* @__PURE__ */ createBaseVNode("button", {
-    type: "button",
-    class: "btn btn-outline btn-error btn-sm"
-  }, " Delete ")
-], -1);
+const _hoisted_10$2 = /* @__PURE__ */ createBaseVNode(
+  "input",
+  {
+    type: "text",
+    placeholder: "e.g: Co Author",
+    class: "input input-sm input-bordered"
+  },
+  null,
+  -1
+  /* HOISTED */
+);
+const _hoisted_11$2 = /* @__PURE__ */ createBaseVNode(
+  "input",
+  {
+    type: "text",
+    placeholder: "e.g: Sobirin Rodriguez",
+    class: "input input-sm input-bordered"
+  },
+  null,
+  -1
+  /* HOISTED */
+);
+const _hoisted_12$1 = /* @__PURE__ */ createBaseVNode(
+  "div",
+  { class: "absolute right-1 top-1 flex" },
+  [
+    /* @__PURE__ */ createBaseVNode("button", {
+      type: "button",
+      class: "btn btn-outline btn-error btn-sm"
+    }, " Delete ")
+  ],
+  -1
+  /* HOISTED */
+);
 const _sfc_main$2 = {
   __name: "FormMetas",
   props: {
@@ -17721,70 +17889,100 @@ const _sfc_main$2 = {
         _hoisted_2$2,
         createBaseVNode("div", _hoisted_3$2, [
           createBaseVNode("div", _hoisted_4$2, [
-            (openBlock(), createElementBlock(Fragment$1, null, renderList([1, 2, 3], (i2) => {
-              return createBaseVNode("div", _hoisted_5$2, [
-                createBaseVNode("div", _hoisted_6$2, toDisplayString(i2), 1),
-                createVNode(_sfc_main$4, {
-                  label: "Field Type:",
-                  required: "",
-                  class: ""
-                }, {
-                  default: withCtx(() => [
-                    withDirectives(createBaseVNode("select", {
-                      "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => metaItem.field_type = $event),
-                      class: "select select-bordered select-sm"
-                    }, _hoisted_9$2, 512), [
-                      [vModelSelect, metaItem.field_type]
-                    ])
-                  ]),
-                  _: 1
-                }),
-                createVNode(_sfc_main$4, {
-                  label: "Key:",
-                  required: "",
-                  class: ""
-                }, {
-                  default: withCtx(() => [
-                    withDirectives(createBaseVNode("input", {
-                      type: "text",
-                      "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => metaItem.key = $event),
-                      placeholder: "e.g: co_author",
-                      class: "input input-sm input-bordered"
-                    }, null, 512), [
-                      [vModelText, metaItem.key]
-                    ])
-                  ]),
-                  _: 1
-                }),
-                createVNode(_sfc_main$4, {
-                  label: "Label:",
-                  required: false,
-                  class: ""
-                }, {
-                  default: withCtx(() => [
-                    _hoisted_10$2
-                  ]),
-                  _: 1
-                }),
-                createVNode(_sfc_main$4, {
-                  label: "Value:",
-                  required: "",
-                  class: "col-span-full"
-                }, {
-                  default: withCtx(() => [
-                    _hoisted_11$2
-                  ]),
-                  _: 1
-                }),
-                _hoisted_12$1
-              ]);
-            }), 64))
+            (openBlock(), createElementBlock(
+              Fragment$1,
+              null,
+              renderList([1, 2, 3], (i2) => {
+                return createBaseVNode("div", _hoisted_5$2, [
+                  createBaseVNode(
+                    "div",
+                    _hoisted_6$2,
+                    toDisplayString(i2),
+                    1
+                    /* TEXT */
+                  ),
+                  createVNode(FormControl, {
+                    label: "Field Type:",
+                    required: "",
+                    class: ""
+                  }, {
+                    default: withCtx(() => [
+                      withDirectives(createBaseVNode(
+                        "select",
+                        {
+                          "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => metaItem.field_type = $event),
+                          class: "select select-bordered select-sm"
+                        },
+                        [..._hoisted_9$2],
+                        512
+                        /* NEED_PATCH */
+                      ), [
+                        [vModelSelect, metaItem.field_type]
+                      ])
+                    ]),
+                    _: 1
+                    /* STABLE */
+                  }),
+                  createVNode(FormControl, {
+                    label: "Key:",
+                    required: "",
+                    class: ""
+                  }, {
+                    default: withCtx(() => [
+                      withDirectives(createBaseVNode(
+                        "input",
+                        {
+                          type: "text",
+                          "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => metaItem.key = $event),
+                          placeholder: "e.g: co_author",
+                          class: "input input-sm input-bordered"
+                        },
+                        null,
+                        512
+                        /* NEED_PATCH */
+                      ), [
+                        [vModelText, metaItem.key]
+                      ])
+                    ]),
+                    _: 1
+                    /* STABLE */
+                  }),
+                  createVNode(FormControl, {
+                    label: "Label:",
+                    required: false,
+                    class: ""
+                  }, {
+                    default: withCtx(() => [
+                      _hoisted_10$2
+                    ]),
+                    _: 1
+                    /* STABLE */
+                  }),
+                  createVNode(FormControl, {
+                    label: "Value:",
+                    required: "",
+                    class: "col-span-full"
+                  }, {
+                    default: withCtx(() => [
+                      _hoisted_11$2
+                    ]),
+                    _: 1
+                    /* STABLE */
+                  }),
+                  _hoisted_12$1
+                ]);
+              }),
+              64
+              /* STABLE_FRAGMENT */
+            ))
           ])
-        ])
+        ]),
+        createCommentVNode(' <ModalConfirmation\n            :show="postRemoving.show"\n            @close="postRemoving.close()"\n            @confirm="postRemoving.triggerConfirm()"\n            v-bind="postRemoving.props"\n        /> ')
       ]);
     };
   }
 };
+const FormMetas = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__file", "/Users/antoni/Packages/ngeblog/resources/js/components/FormMetas.vue"]]);
 function memo(getDeps, fn, opts) {
   let deps = opts.initialDeps ?? [];
   let result;
@@ -18009,7 +18207,7 @@ class Virtualizer {
         this.notify(isScrolling);
       },
       {
-        key: false,
+        key: "maybeNotify",
         debug: () => this.options.debug,
         initialDeps: [
           this.isScrolling,
@@ -18146,7 +18344,7 @@ class Virtualizer {
         return measurements;
       },
       {
-        key: false,
+        key: "getMeasurements",
         debug: () => this.options.debug
       }
     );
@@ -18160,7 +18358,7 @@ class Virtualizer {
         }) : null;
       },
       {
-        key: false,
+        key: "calculateRange",
         debug: () => this.options.debug
       }
     );
@@ -18179,7 +18377,7 @@ class Virtualizer {
         });
       },
       {
-        key: false,
+        key: "getIndexes",
         debug: () => this.options.debug
       }
     );
@@ -18221,6 +18419,9 @@ class Virtualizer {
       const delta = size - itemSize;
       if (delta !== 0) {
         if (item.start < this.scrollOffset + this.scrollAdjustments) {
+          if (this.options.debug) {
+            console.info("correction", delta);
+          }
           this._scrollToOffset(this.scrollOffset, {
             adjustments: this.scrollAdjustments += delta,
             behavior: void 0
@@ -18249,7 +18450,7 @@ class Virtualizer {
         return virtualItems;
       },
       {
-        key: false,
+        key: "getIndexes",
         debug: () => this.options.debug
       }
     );
@@ -20654,23 +20855,29 @@ const _hoisted_7$1 = {
   key: 0,
   class: /* @__PURE__ */ normalizeClass([])
 };
-const _hoisted_8$1 = /* @__PURE__ */ createBaseVNode("svg", {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  fill: "none",
-  stroke: "currentColor",
-  "stroke-width": "2",
-  "stroke-linecap": "round",
-  "stroke-linejoin": "round",
-  class: "h-6 w-6 flex-none"
-}, [
-  /* @__PURE__ */ createBaseVNode("path", {
-    stroke: "none",
-    d: "M0 0h24v24H0z",
-    fill: "none"
-  }),
-  /* @__PURE__ */ createBaseVNode("path", { d: "M5 12l5 5l10 -10" })
-], -1);
+const _hoisted_8$1 = /* @__PURE__ */ createBaseVNode(
+  "svg",
+  {
+    xmlns: "http://www.w3.org/2000/svg",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    "stroke-width": "2",
+    "stroke-linecap": "round",
+    "stroke-linejoin": "round",
+    class: "h-6 w-6 flex-none"
+  },
+  [
+    /* @__PURE__ */ createBaseVNode("path", {
+      stroke: "none",
+      d: "M0 0h24v24H0z",
+      fill: "none"
+    }),
+    /* @__PURE__ */ createBaseVNode("path", { d: "M5 12l5 5l10 -10" })
+  ],
+  -1
+  /* HOISTED */
+);
 const _hoisted_9$1 = [
   _hoisted_8$1
 ];
@@ -20829,171 +21036,203 @@ const _sfc_main$1 = {
       }, {
         default: withCtx(({ open }) => [
           renderSlot(_ctx.$slots, "selected"),
-          createVNode(unref(nt), {
-            ref_key: "trigger",
-            ref: trigger,
-            as: "div",
-            role: "button",
-            class: normalizeClass(["relative flex w-full items-center"])
-          }, {
-            default: withCtx(() => [
-              renderSlot(_ctx.$slots, "default", {
-                open,
-                disabled: __props.disabled,
-                loading: __props.loading
-              }, () => [
-                createBaseVNode("button", {
-                  class: normalizeClass([
-                    "w-full rounded border px-4 py-2 text-left shadow"
-                  ]),
-                  disabled: __props.disabled,
-                  type: "button"
-                }, [
-                  renderSlot(_ctx.$slots, "label", {}, () => [
-                    label.value ? (openBlock(), createElementBlock("span", _hoisted_2$1, toDisplayString(label.value), 1)) : (openBlock(), createElementBlock("span", _hoisted_3$1, toDisplayString(__props.placeholder || "Select"), 1))
-                  ])
-                ], 8, _hoisted_1$1),
-                __props.loading ? (openBlock(), createElementBlock("span", _hoisted_4$1)) : createCommentVNode("", true)
-              ])
-            ]),
-            _: 2
-          }, 1536),
-          open ? (openBlock(), createElementBlock("div", {
-            key: 0,
-            ref_key: "floating",
-            ref: floating,
-            style: normalizeStyle(unref(floatingStyles)),
-            class: normalizeClass(["group z-20 w-full bg-white"])
-          }, [
-            createVNode(Transition, mergeProps({ appear: "" }, {
-              leaveActiveClass: "transition ease-in duration-100",
-              leaveFromClass: "opacity-100",
-              leaveToClass: "opacity-0"
-            }), {
+          createVNode(
+            unref(nt),
+            {
+              ref_key: "trigger",
+              ref: trigger,
+              as: "div",
+              role: "button",
+              class: normalizeClass(["relative flex w-full items-center"])
+            },
+            {
               default: withCtx(() => [
-                createVNode(unref(ut), {
-                  static: "",
-                  as: "ul",
-                  class: normalizeClass([
-                    "relative scroll-py-1 overflow-y-auto shadow focus:outline-none",
-                    // uiMenu.base
-                    "ring-1 ring-gray-200 dark:ring-gray-700",
-                    // uiMenu.ring
-                    "max-h-60"
-                    // uiMenu.height
-                  ])
-                }, {
-                  default: withCtx(() => {
-                    var _a, _b;
-                    return [
-                      __props.searchable ? (openBlock(), createBlock(unref(it), {
-                        key: 0,
-                        "display-value": () => query.value,
-                        name: "q",
-                        placeholder: __props.searchablePlaceholder,
-                        autofocus: "",
-                        autocomplete: "off",
-                        class: normalizeClass([
-                          "sticky top-0 z-10 mb-1 block w-full border-0 border-b border-gray-200 bg-white px-3 py-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-transparent dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-500"
-                        ]),
-                        onChange: _cache[0] || (_cache[0] = (event) => query.value = event.target.value)
-                      }, null, 8, ["display-value", "placeholder"])) : createCommentVNode("", true),
-                      (openBlock(true), createElementBlock(Fragment$1, null, renderList(unref(filteredOptions), (option, index) => {
-                        return openBlock(), createBlock(unref(rt), {
-                          as: "template",
-                          key: index,
-                          value: __props.valueAttribute ? option[__props.valueAttribute] : option,
-                          disabled: option.disabled
-                        }, {
-                          default: withCtx(({ active, selected, disabled: optionDisabled }) => [
-                            createBaseVNode("li", {
-                              class: normalizeClass([
-                                "relative flex cursor-default select-none items-center justify-between gap-1 px-3 py-1.5",
-                                // uiMenu.option.base,
-                                active ? "bg-gray-100 dark:bg-gray-900" : "",
-                                selected ? "bg-teal-100 dark:bg-teal-700" : ""
-                              ])
-                            }, [
-                              createBaseVNode("div", _hoisted_5$1, [
-                                renderSlot(_ctx.$slots, "option", {
-                                  option,
-                                  active,
-                                  selected
-                                }, () => [
-                                  createBaseVNode("span", _hoisted_6$1, toDisplayString(["string", "number"].includes(
-                                    typeof option
-                                  ) ? option : option[__props.labelAttribute]), 1)
-                                ])
-                              ]),
-                              selected ? (openBlock(), createElementBlock("span", _hoisted_7$1, _hoisted_9$1)) : createCommentVNode("", true)
-                            ], 2)
-                          ]),
-                          _: 2
-                        }, 1032, ["value", "disabled"]);
-                      }), 128)),
-                      props.createable ? (openBlock(), createBlock(unref(rt), { key: 1 }, {
-                        default: withCtx(() => [
-                          createTextVNode(' Create "' + toDisplayString(query.value) + '"? ', 1)
-                        ]),
-                        _: 1
-                      })) : __props.searchable && query.value && !((_a = unref(filteredOptions)) == null ? void 0 : _a.length) ? (openBlock(), createElementBlock("p", _hoisted_10$1, [
-                        renderSlot(_ctx.$slots, "option-empty", { query: query.value }, () => [
-                          createTextVNode(' No results for "' + toDisplayString(query.value) + '". ', 1)
-                        ])
-                      ])) : !((_b = unref(filteredOptions)) == null ? void 0 : _b.length) ? (openBlock(), createElementBlock("p", _hoisted_11$1, [
-                        renderSlot(_ctx.$slots, "empty", { query: query.value }, () => [
-                          createTextVNode(toDisplayString(props.loading ? "Loading..." : "No options."), 1)
-                        ])
-                      ])) : createCommentVNode("", true)
-                    ];
-                  }),
-                  _: 3
-                })
+                renderSlot(_ctx.$slots, "default", {
+                  open,
+                  disabled: __props.disabled,
+                  loading: __props.loading
+                }, () => [
+                  createBaseVNode("button", {
+                    class: normalizeClass([
+                      "w-full rounded border px-4 py-2 text-left shadow"
+                    ]),
+                    disabled: __props.disabled,
+                    type: "button"
+                  }, [
+                    renderSlot(_ctx.$slots, "label", {}, () => [
+                      label.value ? (openBlock(), createElementBlock(
+                        "span",
+                        _hoisted_2$1,
+                        toDisplayString(label.value),
+                        1
+                        /* TEXT */
+                      )) : (openBlock(), createElementBlock(
+                        "span",
+                        _hoisted_3$1,
+                        toDisplayString(__props.placeholder || "Select"),
+                        1
+                        /* TEXT */
+                      ))
+                    ])
+                  ], 8, _hoisted_1$1),
+                  __props.loading ? (openBlock(), createElementBlock("span", _hoisted_4$1)) : createCommentVNode("v-if", true)
+                ])
               ]),
-              _: 3
-            }, 16)
-          ], 4)) : createCommentVNode("", true)
+              _: 2
+              /* DYNAMIC */
+            },
+            1536
+            /* NEED_PATCH, DYNAMIC_SLOTS */
+          ),
+          open ? (openBlock(), createElementBlock(
+            "div",
+            {
+              key: 0,
+              ref_key: "floating",
+              ref: floating,
+              style: normalizeStyle(unref(floatingStyles)),
+              class: normalizeClass(["group z-20 w-full bg-white"])
+            },
+            [
+              createVNode(
+                Transition,
+                mergeProps({ appear: "" }, {
+                  leaveActiveClass: "transition ease-in duration-100",
+                  leaveFromClass: "opacity-100",
+                  leaveToClass: "opacity-0"
+                }),
+                {
+                  default: withCtx(() => [
+                    createVNode(unref(ut), {
+                      static: "",
+                      as: "ul",
+                      class: normalizeClass([
+                        "relative scroll-py-1 overflow-y-auto shadow focus:outline-none",
+                        // uiMenu.base
+                        "ring-1 ring-gray-200 dark:ring-gray-700",
+                        // uiMenu.ring
+                        "max-h-60"
+                        // uiMenu.height
+                      ])
+                    }, {
+                      default: withCtx(() => {
+                        var _a, _b;
+                        return [
+                          __props.searchable ? (openBlock(), createBlock(unref(it), {
+                            key: 0,
+                            "display-value": () => query.value,
+                            name: "q",
+                            placeholder: __props.searchablePlaceholder,
+                            autofocus: "",
+                            autocomplete: "off",
+                            class: normalizeClass([
+                              "sticky top-0 z-10 mb-1 block w-full border-0 border-b border-gray-200 bg-white px-3 py-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-transparent dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-500"
+                            ]),
+                            onChange: _cache[0] || (_cache[0] = (event) => query.value = event.target.value)
+                          }, null, 8, ["display-value", "placeholder"])) : createCommentVNode("v-if", true),
+                          (openBlock(true), createElementBlock(
+                            Fragment$1,
+                            null,
+                            renderList(unref(filteredOptions), (option, index) => {
+                              return openBlock(), createBlock(unref(rt), {
+                                as: "template",
+                                key: index,
+                                value: __props.valueAttribute ? option[__props.valueAttribute] : option,
+                                disabled: option.disabled
+                              }, {
+                                default: withCtx(({ active, selected, disabled: optionDisabled }) => [
+                                  createBaseVNode(
+                                    "li",
+                                    {
+                                      class: normalizeClass([
+                                        "relative flex cursor-default select-none items-center justify-between gap-1 px-3 py-1.5",
+                                        // uiMenu.option.base,
+                                        active ? "bg-gray-100 dark:bg-gray-900" : "",
+                                        selected ? "bg-teal-100 dark:bg-teal-700" : ""
+                                      ])
+                                    },
+                                    [
+                                      createBaseVNode("div", _hoisted_5$1, [
+                                        renderSlot(_ctx.$slots, "option", {
+                                          option,
+                                          active,
+                                          selected
+                                        }, () => [
+                                          createBaseVNode(
+                                            "span",
+                                            _hoisted_6$1,
+                                            toDisplayString(["string", "number"].includes(
+                                              typeof option
+                                            ) ? option : option[__props.labelAttribute]),
+                                            1
+                                            /* TEXT */
+                                          )
+                                        ])
+                                      ]),
+                                      selected ? (openBlock(), createElementBlock("span", _hoisted_7$1, [..._hoisted_9$1])) : createCommentVNode("v-if", true)
+                                    ],
+                                    2
+                                    /* CLASS */
+                                  )
+                                ]),
+                                _: 2
+                                /* DYNAMIC */
+                              }, 1032, ["value", "disabled"]);
+                            }),
+                            128
+                            /* KEYED_FRAGMENT */
+                          )),
+                          props.createable ? (openBlock(), createBlock(unref(rt), { key: 1 }, {
+                            default: withCtx(() => [
+                              createTextVNode(
+                                ' Create "' + toDisplayString(query.value) + '"? ',
+                                1
+                                /* TEXT */
+                              )
+                            ]),
+                            _: 1
+                            /* STABLE */
+                          })) : __props.searchable && query.value && !((_a = unref(filteredOptions)) == null ? void 0 : _a.length) ? (openBlock(), createElementBlock("p", _hoisted_10$1, [
+                            renderSlot(_ctx.$slots, "option-empty", { query: query.value }, () => [
+                              createTextVNode(
+                                ' No results for "' + toDisplayString(query.value) + '". ',
+                                1
+                                /* TEXT */
+                              )
+                            ])
+                          ])) : !((_b = unref(filteredOptions)) == null ? void 0 : _b.length) ? (openBlock(), createElementBlock("p", _hoisted_11$1, [
+                            renderSlot(_ctx.$slots, "empty", { query: query.value }, () => [
+                              createTextVNode(
+                                toDisplayString(props.loading ? "Loading..." : "No options."),
+                                1
+                                /* TEXT */
+                              )
+                            ])
+                          ])) : createCommentVNode("v-if", true)
+                        ];
+                      }),
+                      _: 3
+                      /* FORWARDED */
+                    })
+                  ]),
+                  _: 3
+                  /* FORWARDED */
+                },
+                16
+                /* FULL_PROPS */
+              )
+            ],
+            4
+            /* STYLE */
+          )) : createCommentVNode("v-if", true)
         ]),
         _: 3
+        /* FORWARDED */
       }, 8, ["model-value", "multiple"]);
     };
   }
 };
-function useAxiosFetch() {
-  const initialState = {
-    data: null,
-    loading: false,
-    error: null,
-    requestHeaders: null,
-    responseHeaders: null
-  };
-  const state = reactive({ ...initialState });
-  const fetchData = async (url, method = "GET", config = {}) => {
-    state.loading = true;
-    state.error = null;
-    state.requestHeaders = config.headers || null;
-    state.responseHeaders = null;
-    try {
-      const response = await axios({ url, method, ...config });
-      state.data = response.data;
-      state.responseHeaders = response.headers;
-    } catch (err) {
-      console.error("Something went wrong: ", err);
-      state.error = err;
-    } finally {
-      state.loading = false;
-    }
-    return state.data;
-  };
-  const reset = () => {
-    Object.assign(state, initialState);
-  };
-  return {
-    state,
-    fetchData,
-    reset
-  };
-}
+const ComboboxField = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__file", "/Users/antoni/Packages/ngeblog/resources/js/components/Fields/ComboboxField.vue"]]);
 const _hoisted_1 = { class: "mb-8" };
 const _hoisted_2 = { class: "flex items-center gap-2 text-2xl font-bold tracking-wide" };
 const _hoisted_3 = {
@@ -21004,7 +21243,13 @@ const _hoisted_4 = { key: 0 };
 const _hoisted_5 = { key: 1 };
 const _hoisted_6 = { class: "form-control" };
 const _hoisted_7 = { class: "input input-bordered flex items-center gap-2" };
-const _hoisted_8 = /* @__PURE__ */ createBaseVNode("span", { class: "-ml-4 flex items-center self-stretch rounded-l-lg bg-gray-100 px-2 text-sm" }, /* @__PURE__ */ toDisplayString("Slug:"), -1);
+const _hoisted_8 = /* @__PURE__ */ createBaseVNode(
+  "span",
+  { class: "-ml-4 flex items-center self-stretch rounded-l-lg bg-gray-100 px-2 text-sm" },
+  /* @__PURE__ */ toDisplayString("Slug:"),
+  -1
+  /* HOISTED */
+);
 const _hoisted_9 = { class: "label flex flex-col items-start md:flex-row" };
 const _hoisted_10 = ["textContent"];
 const _hoisted_11 = { class: "mb-4 flex flex-wrap items-center gap-2" };
@@ -21013,7 +21258,13 @@ const _hoisted_12 = {
   class: "badge"
 };
 const _hoisted_13 = { class: "label inline-flex cursor-pointer gap-4" };
-const _hoisted_14 = /* @__PURE__ */ createBaseVNode("span", { class: "label-text" }, "Visibility", -1);
+const _hoisted_14 = /* @__PURE__ */ createBaseVNode(
+  "span",
+  { class: "label-text" },
+  "Visibility",
+  -1
+  /* HOISTED */
+);
 const _hoisted_15 = { class: "flex flex-col gap-4" };
 const _hoisted_16 = {
   key: 0,
@@ -21028,22 +21279,28 @@ const _hoisted_19 = {
   role: "alert",
   class: "alert alert-error flex flex-col text-white"
 };
-const _hoisted_20 = /* @__PURE__ */ createBaseVNode("div", { class: "flex items-center gap-2" }, [
-  /* @__PURE__ */ createBaseVNode("svg", {
-    xmlns: "http://www.w3.org/2000/svg",
-    class: "h-6 w-6 shrink-0 stroke-current",
-    fill: "none",
-    viewBox: "0 0 24 24"
-  }, [
-    /* @__PURE__ */ createBaseVNode("path", {
-      "stroke-linecap": "round",
-      "stroke-linejoin": "round",
-      "stroke-width": "2",
-      d: "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-    })
-  ]),
-  /* @__PURE__ */ createBaseVNode("span", { class: "text-lg font-medium" }, " Whoops! Validation failed. ")
-], -1);
+const _hoisted_20 = /* @__PURE__ */ createBaseVNode(
+  "div",
+  { class: "flex items-center gap-2" },
+  [
+    /* @__PURE__ */ createBaseVNode("svg", {
+      xmlns: "http://www.w3.org/2000/svg",
+      class: "h-6 w-6 shrink-0 stroke-current",
+      fill: "none",
+      viewBox: "0 0 24 24"
+    }, [
+      /* @__PURE__ */ createBaseVNode("path", {
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round",
+        "stroke-width": "2",
+        d: "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+      })
+    ]),
+    /* @__PURE__ */ createBaseVNode("span", { class: "text-lg font-medium" }, " Whoops! Validation failed. ")
+  ],
+  -1
+  /* HOISTED */
+);
 const _hoisted_21 = { class: "flex items-center justify-between gap-4 border-t py-4" };
 const _hoisted_22 = ["disabled"];
 const _sfc_main = {
@@ -21055,7 +21312,6 @@ const _sfc_main = {
     const { state: postState, fetchData: fetchPostData } = useAxiosFetch();
     const { state: tagsState, fetchData: fetchTagData } = useAxiosFetch();
     const searchableTags = async (q) => {
-      console.log("jancok", { q });
       const data = await fetchTagData(
         apiBasePath(`tags/dropdown`) + `?search=${q}`
       );
@@ -21070,26 +21326,6 @@ const _sfc_main = {
       metas: [],
       tags: []
     });
-    const submit = () => {
-      const handleSuccess = () => {
-        return router.push({ name: "posts-index" });
-      };
-      if (route.params.id) {
-        postForm.submit({
-          method: "put",
-          url: apiBasePath(`posts/${postState.data.id}/update`),
-          onSuccess() {
-            return handleSuccess();
-          }
-        });
-      } else {
-        postForm.submit({
-          onSuccess() {
-            return handleSuccess();
-          }
-        });
-      }
-    };
     const loadPageData = async () => {
       if (route.params.id) {
         await fetchPostData(apiBasePath(`posts/${route.params.id}`));
@@ -21121,11 +21357,31 @@ const _sfc_main = {
         postForm.slug = slugify(val);
       }
     );
+    const submit = () => {
+      const handleSuccess = () => {
+        return router.push({ name: "posts-index" });
+      };
+      if (route.params.id) {
+        postForm.submit({
+          method: "put",
+          url: apiBasePath(`posts/${postState.data.id}/update`),
+          onSuccess() {
+            return handleSuccess();
+          }
+        });
+      } else {
+        postForm.submit({
+          onSuccess() {
+            return handleSuccess();
+          }
+        });
+      }
+    };
     return (_ctx, _cache) => {
       var _a, _b;
       const _component_router_link = resolveComponent("router-link");
       return openBlock(), createElementBlock("div", null, [
-        ((_b = (_a = unref(postState).error) == null ? void 0 : _a.response) == null ? void 0 : _b.status) === 404 ? (openBlock(), createBlock(_sfc_main$5, { key: 0 })) : (openBlock(), createBlock(Container, { key: 1 }, {
+        ((_b = (_a = unref(postState).error) == null ? void 0 : _a.response) == null ? void 0 : _b.status) === 404 ? (openBlock(), createBlock(NotFound, { key: 0 })) : (openBlock(), createBlock(Container, { key: 1 }, {
           default: withCtx(() => [
             createBaseVNode("div", _hoisted_1, [
               createBaseVNode("h1", _hoisted_2, [
@@ -21137,160 +21393,240 @@ const _sfc_main = {
                     createTextVNode(" ← Posts List ")
                   ]),
                   _: 1
+                  /* STABLE */
                 }),
-                unref(postState).loading ? (openBlock(), createElementBlock("span", _hoisted_3)) : (openBlock(), createElementBlock(Fragment$1, { key: 1 }, [
-                  _ctx.$route.params.id && unref(postState).data ? (openBlock(), createElementBlock("span", _hoisted_4, " Edit Post " + toDisplayString(unref(postState).data.title), 1)) : (openBlock(), createElementBlock("span", _hoisted_5, "Add new Post"))
-                ], 64))
+                unref(postState).loading ? (openBlock(), createElementBlock("span", _hoisted_3)) : (openBlock(), createElementBlock(
+                  Fragment$1,
+                  { key: 1 },
+                  [
+                    _ctx.$route.params.id && unref(postState).data ? (openBlock(), createElementBlock(
+                      "span",
+                      _hoisted_4,
+                      " Edit Post " + toDisplayString(unref(postState).data.title),
+                      1
+                      /* TEXT */
+                    )) : (openBlock(), createElementBlock("span", _hoisted_5, "Add new Post"))
+                  ],
+                  64
+                  /* STABLE_FRAGMENT */
+                ))
               ])
             ]),
             unref(postState).loading ? (openBlock(), createBlock(SkeletonContent, {
               key: 0,
               class: "mx-auto max-w-xl"
-            })) : (openBlock(), createElementBlock("form", {
-              key: 1,
-              onSubmit: _cache[7] || (_cache[7] = withModifiers(() => submit(), ["prevent"])),
-              class: "mx-auto flex max-w-5xl flex-col gap-4"
-            }, [
-              createVNode(_sfc_main$4, {
-                label: "Post Title",
-                required: true,
-                "error-message": unref(postForm).errors["title"]
-              }, {
-                default: withCtx(() => [
-                  withDirectives(createBaseVNode("input", {
-                    type: "text",
-                    "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(postForm).title = $event),
-                    placeholder: "e.g: Awesome Technology",
-                    class: normalizeClass(["input input-bordered", {
-                      "input-error": unref(postForm).errors["title"]
-                    }])
-                  }, null, 2), [
-                    [vModelText, unref(postForm).title]
-                  ])
-                ]),
-                _: 1
-              }, 8, ["error-message"]),
-              createBaseVNode("div", _hoisted_6, [
-                createBaseVNode("label", _hoisted_7, [
-                  _hoisted_8,
-                  withDirectives(createBaseVNode("input", {
-                    type: "text",
-                    "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(postForm).slug = $event),
-                    class: "w-full",
-                    placeholder: "e.g: awesome-technology"
-                  }, null, 512), [
-                    [vModelText, unref(postForm).slug]
-                  ])
-                ]),
-                createBaseVNode("div", _hoisted_9, [
-                  unref(postForm).errors["slug"] ? (openBlock(), createElementBlock("p", {
-                    key: 0,
-                    textContent: toDisplayString(unref(postForm).errors["slug"]),
-                    class: "text-error"
-                  }, null, 8, _hoisted_10)) : createCommentVNode("", true)
-                ])
-              ]),
-              createVNode(_sfc_main$4, {
-                as: "div",
-                label: "Post Tags"
-              }, {
-                default: withCtx(() => [
-                  createVNode(_sfc_main$1, {
-                    modelValue: unref(postForm).tags,
-                    "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => unref(postForm).tags = $event),
-                    placeholder: "Select tags...",
-                    searchable: searchableTags,
-                    "searchable-lazy": false,
-                    loading: unref(tagsState).loading,
-                    "label-attribute": "title",
-                    by: "id",
-                    multiple: ""
-                  }, {
-                    selected: withCtx(() => [
-                      createBaseVNode("div", _hoisted_11, [
-                        (openBlock(true), createElementBlock(Fragment$1, null, renderList(unref(postForm).tags, (tag) => {
-                          return openBlock(), createElementBlock("div", _hoisted_12, toDisplayString(tag.title), 1);
-                        }), 256))
-                      ])
-                    ]),
-                    _: 1
-                  }, 8, ["modelValue", "loading"])
-                ]),
-                _: 1
-              }),
-              createBaseVNode("div", null, [
-                createBaseVNode("label", _hoisted_13, [
-                  _hoisted_14,
-                  withDirectives(createBaseVNode("input", {
-                    type: "checkbox",
-                    class: "toggle",
-                    "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => unref(postForm).is_visible = $event)
-                  }, null, 512), [
-                    [vModelCheckbox, unref(postForm).is_visible]
-                  ])
-                ])
-              ]),
-              createVNode(_sfc_main$4, { label: "Post Excerpt" }, {
-                default: withCtx(() => [
-                  withDirectives(createBaseVNode("textarea", {
-                    "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(postForm).excerpt = $event),
-                    class: normalizeClass(["textarea textarea-bordered h-24", {
-                      "input-error": unref(postForm).errors["excerpt"]
-                    }]),
-                    placeholder: "Describe the post introduction."
-                  }, null, 2), [
-                    [vModelText, unref(postForm).excerpt]
-                  ])
-                ]),
-                _: 1
-              }),
-              createBaseVNode("div", _hoisted_15, [
-                createVNode(ContentEditor, {
-                  modelValue: unref(postForm).content,
-                  "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => unref(postForm).content = $event)
-                }, null, 8, ["modelValue"]),
-                unref(postForm).errors.content ? (openBlock(), createElementBlock("p", _hoisted_16, toDisplayString(unref(postForm).errors.content), 1)) : createCommentVNode("", true)
-              ]),
-              createBaseVNode("div", _hoisted_17, [
-                createVNode(_sfc_main$2, {
-                  modelValue: unref(postForm).metas,
-                  "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => unref(postForm).metas = $event)
-                }, null, 8, ["modelValue"])
-              ]),
-              Object.keys(unref(postForm).errors).length ? (openBlock(), createElementBlock("div", _hoisted_18, [
-                createBaseVNode("div", _hoisted_19, [
-                  _hoisted_20,
-                  createBaseVNode("ul", null, [
-                    (openBlock(true), createElementBlock(Fragment$1, null, renderList(unref(postForm).errors, (err) => {
-                      return openBlock(), createElementBlock("li", null, toDisplayString(err), 1);
-                    }), 256))
-                  ])
-                ])
-              ])) : createCommentVNode("", true),
-              createBaseVNode("div", _hoisted_21, [
-                createVNode(_component_router_link, {
-                  to: { name: "posts-index" },
-                  class: "btn px-8"
+            })) : (openBlock(), createElementBlock(
+              "form",
+              {
+                key: 1,
+                onSubmit: _cache[7] || (_cache[7] = withModifiers(() => submit(), ["prevent"])),
+                class: "mx-auto flex max-w-5xl flex-col gap-4"
+              },
+              [
+                createVNode(FormControl, {
+                  label: "Post Title",
+                  required: true,
+                  "error-message": unref(postForm).errors["title"]
                 }, {
                   default: withCtx(() => [
-                    createTextVNode(" ← Cancel ")
+                    withDirectives(createBaseVNode(
+                      "input",
+                      {
+                        type: "text",
+                        "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(postForm).title = $event),
+                        placeholder: "e.g: Awesome Technology",
+                        class: normalizeClass(["input input-bordered", {
+                          "input-error": unref(postForm).errors["title"]
+                        }])
+                      },
+                      null,
+                      2
+                      /* CLASS */
+                    ), [
+                      [vModelText, unref(postForm).title]
+                    ])
                   ]),
                   _: 1
+                  /* STABLE */
+                }, 8, ["error-message"]),
+                createBaseVNode("div", _hoisted_6, [
+                  createBaseVNode("label", _hoisted_7, [
+                    _hoisted_8,
+                    withDirectives(createBaseVNode(
+                      "input",
+                      {
+                        type: "text",
+                        "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(postForm).slug = $event),
+                        class: "w-full",
+                        placeholder: "e.g: awesome-technology"
+                      },
+                      null,
+                      512
+                      /* NEED_PATCH */
+                    ), [
+                      [vModelText, unref(postForm).slug]
+                    ])
+                  ]),
+                  createBaseVNode("div", _hoisted_9, [
+                    unref(postForm).errors["slug"] ? (openBlock(), createElementBlock("p", {
+                      key: 0,
+                      textContent: toDisplayString(unref(postForm).errors["slug"]),
+                      class: "text-error"
+                    }, null, 8, _hoisted_10)) : createCommentVNode("v-if", true)
+                  ])
+                ]),
+                createVNode(FormControl, {
+                  as: "div",
+                  label: "Post Tags"
+                }, {
+                  default: withCtx(() => [
+                    createVNode(ComboboxField, {
+                      modelValue: unref(postForm).tags,
+                      "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => unref(postForm).tags = $event),
+                      placeholder: "Select tags...",
+                      searchable: searchableTags,
+                      "searchable-lazy": false,
+                      loading: unref(tagsState).loading,
+                      "label-attribute": "title",
+                      by: "id",
+                      multiple: ""
+                    }, {
+                      selected: withCtx(() => [
+                        createBaseVNode("div", _hoisted_11, [
+                          (openBlock(true), createElementBlock(
+                            Fragment$1,
+                            null,
+                            renderList(unref(postForm).tags, (tag) => {
+                              return openBlock(), createElementBlock(
+                                "div",
+                                _hoisted_12,
+                                toDisplayString(tag.title),
+                                1
+                                /* TEXT */
+                              );
+                            }),
+                            256
+                            /* UNKEYED_FRAGMENT */
+                          ))
+                        ])
+                      ]),
+                      _: 1
+                      /* STABLE */
+                    }, 8, ["modelValue", "loading"])
+                  ]),
+                  _: 1
+                  /* STABLE */
                 }),
-                createBaseVNode("button", {
-                  type: "submit",
-                  class: "btn btn-primary px-8",
-                  disabled: unref(postForm).processing
-                }, toDisplayString(unref(postForm).processing ? "Saving..." : "Save"), 9, _hoisted_22)
-              ])
-            ], 32))
+                createBaseVNode("div", null, [
+                  createBaseVNode("label", _hoisted_13, [
+                    _hoisted_14,
+                    withDirectives(createBaseVNode(
+                      "input",
+                      {
+                        type: "checkbox",
+                        class: "toggle",
+                        "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => unref(postForm).is_visible = $event)
+                      },
+                      null,
+                      512
+                      /* NEED_PATCH */
+                    ), [
+                      [vModelCheckbox, unref(postForm).is_visible]
+                    ])
+                  ])
+                ]),
+                createVNode(FormControl, { label: "Post Excerpt" }, {
+                  default: withCtx(() => [
+                    withDirectives(createBaseVNode(
+                      "textarea",
+                      {
+                        "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(postForm).excerpt = $event),
+                        class: normalizeClass(["textarea textarea-bordered h-24", {
+                          "input-error": unref(postForm).errors["excerpt"]
+                        }]),
+                        placeholder: "Describe the post introduction."
+                      },
+                      null,
+                      2
+                      /* CLASS */
+                    ), [
+                      [vModelText, unref(postForm).excerpt]
+                    ])
+                  ]),
+                  _: 1
+                  /* STABLE */
+                }),
+                createBaseVNode("div", _hoisted_15, [
+                  createVNode(ContentEditor, {
+                    modelValue: unref(postForm).content,
+                    "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => unref(postForm).content = $event)
+                  }, null, 8, ["modelValue"]),
+                  unref(postForm).errors.content ? (openBlock(), createElementBlock(
+                    "p",
+                    _hoisted_16,
+                    toDisplayString(unref(postForm).errors.content),
+                    1
+                    /* TEXT */
+                  )) : createCommentVNode("v-if", true)
+                ]),
+                createBaseVNode("div", _hoisted_17, [
+                  createVNode(FormMetas, {
+                    modelValue: unref(postForm).metas,
+                    "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => unref(postForm).metas = $event)
+                  }, null, 8, ["modelValue"])
+                ]),
+                Object.keys(unref(postForm).errors).length ? (openBlock(), createElementBlock("div", _hoisted_18, [
+                  createBaseVNode("div", _hoisted_19, [
+                    _hoisted_20,
+                    createBaseVNode("ul", null, [
+                      (openBlock(true), createElementBlock(
+                        Fragment$1,
+                        null,
+                        renderList(unref(postForm).errors, (err) => {
+                          return openBlock(), createElementBlock(
+                            "li",
+                            null,
+                            toDisplayString(err),
+                            1
+                            /* TEXT */
+                          );
+                        }),
+                        256
+                        /* UNKEYED_FRAGMENT */
+                      ))
+                    ])
+                  ])
+                ])) : createCommentVNode("v-if", true),
+                createBaseVNode("div", _hoisted_21, [
+                  createVNode(_component_router_link, {
+                    to: { name: "posts-index" },
+                    class: "btn px-8"
+                  }, {
+                    default: withCtx(() => [
+                      createTextVNode(" ← Cancel ")
+                    ]),
+                    _: 1
+                    /* STABLE */
+                  }),
+                  createBaseVNode("button", {
+                    type: "submit",
+                    class: "btn btn-primary px-8",
+                    disabled: unref(postForm).processing
+                  }, toDisplayString(unref(postForm).processing ? "Saving..." : "Save"), 9, _hoisted_22)
+                ])
+              ],
+              32
+              /* NEED_HYDRATION */
+            ))
           ]),
           _: 1
+          /* STABLE */
         }))
       ]);
     };
   }
 };
+const Form = /* @__PURE__ */ _export_sfc(_sfc_main, [["__file", "/Users/antoni/Packages/ngeblog/resources/js/pages/posts/Form.vue"]]);
 export {
-  _sfc_main as default
+  Form as default
 };

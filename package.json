@@ -2,14 +2,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
     "build": "vite build",
-    "watch": "vite build --watch"
+    "watch": "NODE_ENV=development vite build --watch"
   },
   "devDependencies": {
     "@floating-ui/vue": "^1.0.6",
     "@headlessui/vue": "^1.7.22",
     "@tailwindcss/typography": "^0.5.13",
+    "@tiptap/extension-placeholder": "^2.4.0",
     "@tiptap/pm": "^2.4.0",
     "@tiptap/starter-kit": "^2.4.0",
     "@tiptap/vue-3": "^2.4.0",

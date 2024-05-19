@@ -1,14 +1,17 @@
 <script setup>
 import Container from "@/components/Container.vue";
 import Pagination from "@/components/Pagination.vue";
-import { onMounted } from "vue";
 import { apiBasePath, formatDate } from "@/utils";
-import { useLoadData } from "@/composables/loadData";
-import { useConfirmable } from "@/composables/confirmable";
+import { useConfirmable } from "@/composables/useConfirmable";
 import ModalConfirmation from "@/components/ModalConfirmation.vue";
 import axios from "axios";
+import { useAxiosFetch } from "@/composables/useAxiosFetch";
+import { useToastable } from "@/composables/useToastable";
 
-const posts = useLoadData(apiBasePath("posts"));
+document.title = "Posts - Ngeblog Administration";
+const { state: posts, fetchData: fetchPosts } = useAxiosFetch();
+
+fetchPosts(apiBasePath("posts"));
 
 const postRemoving = useConfirmable({
     setTitle(data) {
@@ -16,20 +19,24 @@ const postRemoving = useConfirmable({
     },
     confirm(data, instance) {
         axios.delete(apiBasePath(`posts/${data.id}/destroy`)).then(() => {
-            posts.fetchData();
+            fetchPosts(apiBasePath("posts"));
             instance.close();
         });
     },
 });
 
-const toggleVisibility = (tag) => {
-    axios.patch(apiBasePath(`posts/${tag.id}/toggle-visibility`));
-};
+const { addToast } = useToastable();
+const toggleVisibility = async (post) => {
+    const { data } = await axios.patch(
+        apiBasePath(`posts/${post.id}/toggle-visibility`),
+    );
 
-onMounted(() => {
-    document.title = "Posts - Ngeblog Administration";
-    posts.fetchData();
-});
+    let message = data.is_visible
+        ? "The post has been mark as visible."
+        : "The post has been mark as hidden.";
+
+    addToast(message);
+};
 </script>
 
 <template>
@@ -214,7 +221,7 @@ onMounted(() => {
             <div class="mt-4 flex justify-center py-4">
                 <Pagination
                     :links="posts.data?.meta?.links"
-                    @handle-click="(url) => posts.fetchData(url)"
+                    @handle-click="(url) => fetchPosts(url)"
                 />
             </div>
         </Container>

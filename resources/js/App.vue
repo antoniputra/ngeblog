@@ -15,6 +15,8 @@
             </router-view>
         </div>
 
+        <Toast />
+
         <Footer />
     </div>
 </template>
@@ -22,4 +24,5 @@
 <script setup>
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
+import Toast from "./components/Toast.vue";
 </script>

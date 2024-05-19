@@ -223,6 +223,7 @@
 </template>
 
 <script setup>
+import Placeholder from "@tiptap/extension-placeholder";
 import StarterKit from "@tiptap/starter-kit";
 import { Editor, EditorContent } from "@tiptap/vue-3";
 import { onBeforeUnmount, onMounted, ref, watch } from "vue";
@@ -254,7 +255,21 @@ const editorElement = ref();
 
 onMounted(() => {
     editorElement.value = new Editor({
-        extensions: [StarterKit],
+        extensions: [
+            StarterKit,
+            Placeholder.configure({
+                // Use a placeholder:
+                placeholder: "Write something amazing 🔥",
+                // Use different placeholders depending on the node type:
+                // placeholder: ({ node }) => {
+                //   if (node.type.name === 'heading') {
+                //     return 'What’s the title?'
+                //   }
+
+                //   return 'Can you add some further context?'
+                // },
+            }),
+        ],
         editorProps: {
             attributes: {
                 class: "prose prose-sm sm:prose-base lg:prose-lg mx-auto focus:outline-none dark:prose-invert px-2",

@@ -1,23 +1,17 @@
 <script setup>
 import Container from "@/components/Container.vue";
 import SkeletonContent from "@/components/SkeletonContent.vue";
-import { onMounted, watch } from "vue";
+import { watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import FormControl from "@/components/FormControl.vue";
 import { apiBasePath, slugify } from "@/utils";
 import { useForm } from "laravel-precognition-vue";
-import { useLoadData } from "@/composables/loadData";
+import NotFound from "@/components/NotFound.vue";
+import { useAxiosFetch } from "@/composables/useAxiosFetch";
 
 const route = useRoute();
 const router = useRouter();
-const tag = useLoadData();
 document.title = "Add new Tag - Ngeblog Administration";
-
-onMounted(() => {
-    if (route.params.id) {
-        populateForm();
-    }
-});
 
 const tagForm = useForm("post", apiBasePath("tags"), {
     title: "",
@@ -26,29 +20,29 @@ const tagForm = useForm("post", apiBasePath("tags"), {
     description: "",
 });
 
-const populateForm = () => {
-    tag.fetchData(apiBasePath(`tags/${route.params.id}`), (data) => {
-        document.title = `Edit Tag ${data.title} - Ngeblog Administration`;
+const { state: tagState, fetchData: fetchTagsData } = useAxiosFetch();
+
+const loadPageData = async () => {
+    if (route.params.id) {
+        await fetchTagsData(apiBasePath(`tags/${route.params.id}`));
+
+        if (tagState.error) {
+            return;
+        }
+        document.title = `Edit Tag ${tagState.data.title} - Ngeblog Administration`;
 
         tagForm.setData({
-            title: data.title,
-            slug: data.slug,
-            is_visible: data.is_visible,
-            description: data.description,
+            title: tagState.data.title,
+            slug: tagState.data.slug,
+            is_visible: tagState.data.is_visible,
+            description: tagState.data.description,
         });
-    });
+    } else {
+        tagForm.reset();
+    }
 };
 
-watch(
-    () => route.params.id,
-    (val) => {
-        if (val) {
-            populateForm();
-        } else {
-            tagForm.reset();
-        }
-    },
-);
+watch(() => route.params.id, loadPageData, { immediate: true });
 
 watch(
     () => tagForm.title,
@@ -65,7 +59,7 @@ const submit = () => {
     if (route.params.id) {
         tagForm.submit({
             method: "put",
-            url: apiBasePath(`tags/${tag.data.id}/update`),
+            url: apiBasePath(`tags/${tagState.data.id}/update`),
             onSuccess() {
                 return handleSuccess();
             },
@@ -82,7 +76,8 @@ const submit = () => {
 
 <template>
     <div>
-        <Container>
+        <NotFound v-if="tagState.error?.response?.status === 404" />
+        <Container v-else>
             <div class="mb-8">
                 <h1
                     class="flex items-center gap-2 text-2xl font-bold tracking-wide"
@@ -95,20 +90,20 @@ const submit = () => {
                     </router-link>
 
                     <span
-                        v-if="tag.loading"
+                        v-if="tagState.loading"
                         class="loading loading-bars loading-lg"
                     ></span>
 
                     <template v-else>
-                        <span v-if="$route.params.id && tag.data">
-                            Edit Tag {{ tag.data.title }}
+                        <span v-if="$route.params.id && tagState.data">
+                            Edit Tag {{ tagState.data.title }}
                         </span>
                         <span v-else>Add new Tag</span>
                     </template>
                 </h1>
             </div>
 
-            <SkeletonContent v-if="tag.loading" class="mx-auto max-w-xl" />
+            <SkeletonContent v-if="tagState.loading" class="mx-auto max-w-xl" />
 
             <form
                 v-else

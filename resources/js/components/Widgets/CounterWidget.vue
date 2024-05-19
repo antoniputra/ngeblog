@@ -1,7 +1,6 @@
 <script setup>
-import { useLoadData } from "@/composables/loadData";
+import { useAxiosFetch } from "@/composables/useAxiosFetch";
 import { apiBasePath } from "@/utils";
-import { onMounted } from "vue";
 
 const props = defineProps({
     type: String,
@@ -14,11 +13,8 @@ const endpointsByType = {
     tag: apiBasePath("tags/stats"),
 };
 
-const resource = useLoadData(endpointsByType[props.type]);
-
-onMounted(() => {
-    resource.fetchData();
-});
+const { state, fetchData } = useAxiosFetch();
+fetchData(endpointsByType[props.type]);
 </script>
 
 <template>
@@ -88,13 +84,13 @@ onMounted(() => {
 
         <div class="stat-value text-primary">
             <span
-                v-if="resource.loading"
+                v-if="state.loading"
                 class="loading loading-bars loading-md"
             ></span>
-            <span v-else>{{ resource?.data?.total_all_time || "-" }}</span>
+            <span v-else>{{ state?.data?.total_all_time || "-" }}</span>
         </div>
         <div class="stat-desc">
-            {{ resource?.data?.total_last_month }} from last month
+            {{ state?.data?.total_last_month }} from last month
         </div>
     </div>
 </template>

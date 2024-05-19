@@ -12,7 +12,6 @@ class TagController extends Controller
 {
     public function dropdown()
     {
-        sleep(1);
         return TagResource::collection(
             Tag::query()
                 ->filterable(request()->only('search'))

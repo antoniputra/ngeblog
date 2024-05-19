@@ -21,7 +21,6 @@ const { state: postState, fetchData: fetchPostData } = useAxiosFetch();
 const { state: tagsState, fetchData: fetchTagData } = useAxiosFetch();
 
 const searchableTags = async (q) => {
-    console.log("jancok", { q });
     const data = await fetchTagData(
         apiBasePath(`tags/dropdown`) + `?search=${q}`,
     );
@@ -37,28 +36,6 @@ const postForm = useForm("post", apiBasePath("posts"), {
     metas: [],
     tags: [],
 });
-
-const submit = () => {
-    const handleSuccess = () => {
-        return router.push({ name: "posts-index" });
-    };
-
-    if (route.params.id) {
-        postForm.submit({
-            method: "put",
-            url: apiBasePath(`posts/${postState.data.id}/update`),
-            onSuccess() {
-                return handleSuccess();
-            },
-        });
-    } else {
-        postForm.submit({
-            onSuccess() {
-                return handleSuccess();
-            },
-        });
-    }
-};
 
 const loadPageData = async () => {
     if (route.params.id) {
@@ -97,12 +74,33 @@ watch(
         postForm.slug = slugify(val);
     },
 );
+
+const submit = () => {
+    const handleSuccess = () => {
+        return router.push({ name: "posts-index" });
+    };
+
+    if (route.params.id) {
+        postForm.submit({
+            method: "put",
+            url: apiBasePath(`posts/${postState.data.id}/update`),
+            onSuccess() {
+                return handleSuccess();
+            },
+        });
+    } else {
+        postForm.submit({
+            onSuccess() {
+                return handleSuccess();
+            },
+        });
+    }
+};
 </script>
 
 <template>
     <div>
         <NotFound v-if="postState.error?.response?.status === 404" />
-
         <Container v-else>
             <div class="mb-8">
                 <h1

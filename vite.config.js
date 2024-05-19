@@ -18,7 +18,7 @@ export default {
         }),
     ],
     build: {
-        minify: false,
+        minify: process.env.NODE_ENV === "production",
         assetsDir: "ngeblog-admin-assets",
         rollupOptions: {
             input: ["./resources/js/ngeblog.js", "./resources/css/ngeblog.css"],
