@@ -1,6 +1,7 @@
 <?php
 
 use AntoniPutra\Ngeblog\Models\Post;
+use AntoniPutra\Ngeblog\Models\Postmeta;
 use AntoniPutra\Ngeblog\Models\Tag;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -46,6 +47,18 @@ class DatabaseSeeder extends Seeder
                 'created_at' => $date,
                 'updated_at' => $date,
             ]);
+
+            // * Randomly put meta on post
+            if (rand(0, 1)) {
+                $post->metas()->create([
+                    'field_type' => Postmeta::FIELD_TYPE_TEXT,
+                    'key' => 'co_author',
+                    'label' => 'Co Author',
+                    'value' => fake()->name(),
+                    'created_at' => $date,
+                    'updated_at' => $date,
+                ]);
+            }
 
             $post->tags()->attach(Tag::query()->inRandomOrder()->take(rand(2,4))->get());
         }

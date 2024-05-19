@@ -2,6 +2,7 @@
 
 namespace AntoniPutra\Ngeblog;
 
+use AntoniPutra\Ngeblog\Console\InstallCommand;
 use AntoniPutra\Ngeblog\Http\Middleware\AdminAuthorization;
 use AntoniPutra\Ngeblog\Models\Post;
 use Illuminate\Support\Facades\Gate;
@@ -23,6 +24,7 @@ final class NgeblogServiceProvider extends ServiceProvider
         $this->bootRoutes();
         $this->bootAdminAssetRoute();
         $this->bootDefaultAuthorization();
+        $this->configureCommands();
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'ngeblog');
     }
@@ -86,4 +88,16 @@ final class NgeblogServiceProvider extends ServiceProvider
             return true;
         });
     }
+
+    protected function configureCommands()
+    {
+        if (! $this->app->runningInConsole()) {
+            return;
+        }
+
+        $this->commands([
+            InstallCommand::class,
+        ]);
+    }
+
 }

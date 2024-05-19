@@ -24,6 +24,6 @@
 
 <script setup>
 import Container from "@/components/Container.vue";
-import PostsByAuthorWidget from "@/components/Widgets/PostsByAuthorWidget.vue";
 import CounterWidget from "@/components/Widgets/CounterWidget.vue";
+// import PostsByAuthorWidget from "@/components/Widgets/PostsByAuthorWidget.vue";
 </script>

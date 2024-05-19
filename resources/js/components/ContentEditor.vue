@@ -1,8 +1,8 @@
 <template>
-    <div class="flex flex-col border pb-8">
+    <div class="flex flex-col rounded border pb-8">
         <div
             v-if="editorElement"
-            class="sticky top-0 z-10 mb-8 flex flex-wrap gap-1 border-b bg-white p-2"
+            class="sticky top-0 z-10 mb-8 flex flex-wrap gap-1 rounded-t border-b bg-white p-2"
         >
             <button
                 type="button"
@@ -223,9 +223,10 @@
 </template>
 
 <script setup>
+import Placeholder from "@tiptap/extension-placeholder";
 import StarterKit from "@tiptap/starter-kit";
 import { Editor, EditorContent } from "@tiptap/vue-3";
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 const props = defineProps({
     modelValue: String,
@@ -233,17 +234,48 @@ const props = defineProps({
 
 const emits = defineEmits(["update:modelValue"]);
 
+watch(
+    () => props.modelValue,
+    (value) => {
+        // HTML
+        const isSame = editorElement.value.getHTML() === value;
+
+        // JSON
+        // const isSame = JSON.stringify(editorElement.value.getJSON()) === JSON.stringify(value)
+
+        if (isSame) {
+            return;
+        }
+
+        editorElement.value.commands.setContent(value, false);
+    },
+);
+
 const editorElement = ref();
 
 onMounted(() => {
     editorElement.value = new Editor({
-        extensions: [StarterKit],
+        extensions: [
+            StarterKit,
+            Placeholder.configure({
+                // Use a placeholder:
+                placeholder: "Write something amazing 🔥",
+                // Use different placeholders depending on the node type:
+                // placeholder: ({ node }) => {
+                //   if (node.type.name === 'heading') {
+                //     return 'What’s the title?'
+                //   }
+
+                //   return 'Can you add some further context?'
+                // },
+            }),
+        ],
         editorProps: {
             attributes: {
-                class: "prose prose-sm sm:prose-base lg:prose-lg mx-auto focus:outline-none dark:prose-invert",
+                class: "prose prose-sm sm:prose-base lg:prose-lg mx-auto focus:outline-none dark:prose-invert px-2",
             },
         },
-        content: props.modelValue || defaultContent,
+        content: props.modelValue,
         onUpdate: ({ editor }) => {
             // HTML
             emits("update:modelValue", editor.getHTML());
@@ -252,8 +284,6 @@ onMounted(() => {
             // this.$emit('update:modelValue', editor.getJSON())
         },
     });
-
-    emits("update:modelValue", editorElement.value.getHTML());
 });
 
 onBeforeUnmount(() => {

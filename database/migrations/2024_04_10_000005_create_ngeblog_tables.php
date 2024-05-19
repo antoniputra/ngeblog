@@ -55,6 +55,20 @@ return new class extends Migration
 
             $table->unique(['post_id', 'tag_id']);
         });
+
+        Schema::create('ngeblog_postmetas', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('post_id')->constrained('ngeblog_posts')->cascadeOnDelete();
+            $table->string('field_type');
+            $table->tinyInteger('order')->default(0);
+            $table->string('key');
+            $table->string('label')->nullable();
+            $table->longText('value');
+            $table->timestamps();
+
+            $table->index('key');
+            $table->index('order');
+        });
     }
 
     /**
@@ -65,5 +79,6 @@ return new class extends Migration
         Schema::dropIfExists('ngeblog_posts');
         Schema::dropIfExists('ngeblog_tags');
         Schema::dropIfExists('ngeblog_post_tag');
+        Schema::dropIfExists('ngeblog_postmetas');
     }
 };

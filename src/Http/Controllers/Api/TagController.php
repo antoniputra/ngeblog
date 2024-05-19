@@ -12,7 +12,13 @@ class TagController extends Controller
 {
     public function dropdown()
     {
-        return TagResource::collection(Tag::query()->latest()->get());
+        return TagResource::collection(
+            Tag::query()
+                ->filterable(request()->only('search'))
+                ->latest()
+                ->limit(5)
+                ->get()
+        )->resolve();
     }
 
     public function stats()

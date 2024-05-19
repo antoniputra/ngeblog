@@ -26,15 +26,21 @@ class PostResource extends JsonResource
             'content_type' => $this->whenHas('content_type'),
             'excerpt' => $this->whenHas('excerpt'),
             'content' => $this->whenHas('content'),
-            'parsed_content' => $this->when(
-                $this->content_type && $this->content,
-                fn () => $this->parsed_content
-            ),
+
+            // * upcoming later
+            // 'parsed_content' => $this->when(
+            //     $this->content_type && $this->content,
+            //     fn () => $this->parsed_content
+            // ),
+
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'deleted_at' => $this->deleted_at,
 
+            'metas_count' => $this->whenCounted('metas'),
+            
             'author' => $this->whenLoaded('author'),
+            'metas' => $this->whenLoaded('metas'),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
         ];
     }

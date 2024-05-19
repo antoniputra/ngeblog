@@ -9,7 +9,7 @@ import { resolveRouterBasePath } from "./utils";
 const routes = [
     {
         path: "/:pathMatch(.*)*",
-        name: "NotFound",
+        name: "not-found",
         component: NotFound,
     },
     {

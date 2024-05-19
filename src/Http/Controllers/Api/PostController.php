@@ -40,6 +40,7 @@ class PostController extends Controller
                 'deleted_at'
             ])
             ->with('tags')
+            ->withCount('metas')
             ->latest()
             ->paginate(10)
             ->withQueryString();
@@ -49,7 +50,7 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
-        $post->load('tags');
+        $post->load('metas', 'tags');
         return PostResource::make($post)->resolve();
     }
 
@@ -94,6 +95,7 @@ class PostController extends Controller
             'excerpt' => ['nullable'],
             'content' => ['required'],
             'tags' => ['array'],
+            'tags.*.id' => ['required'],
         ]);
 
         try {
@@ -109,8 +111,9 @@ class PostController extends Controller
             $post->author_id = auth()->user()->id;
             $post->save();
     
-            if (! empty($request->get('tags'))) {
-                $post->tags()->sync($request->get('tags'));
+            $tagIds = collect($request->get('tags'))->pluck('id')->toArray();
+            if (! empty($tagIds)) {
+                $post->tags()->sync($tagIds);
             }
 
             DB::commit();

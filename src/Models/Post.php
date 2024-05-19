@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Post extends Model
@@ -29,6 +30,11 @@ class Post extends Model
     public function author(): BelongsTo
     {
         return $this->belongsTo('App\\Models\\User', 'author_id');
+    }
+
+    public function metas(): HasMany
+    {
+        return $this->hasMany(Postmeta::class, 'post_id');
     }
 
     public function tags(): BelongsToMany
@@ -85,28 +91,28 @@ class Post extends Model
         return $this->save();
     }
 
-    protected function parsedContent(): Attribute
-    {
-        return Attribute::get(function () {
-            if (! $this->exists) {
-                return null;
-            }
+    // protected function parsedContent(): Attribute
+    // {
+    //     return Attribute::get(function () {
+    //         if (! $this->exists) {
+    //             return null;
+    //         }
 
-            return match ($this->content_type) {
-                null => null,
-                self::CONTENT_TYPE_MARKDOWN => $this->parseMarkdown(),
-                self::CONTENT_TYPE_RICHTEXT => $this->parseRichtext(),
-            };
-        });
-    }
+    //         return match ($this->content_type) {
+    //             null => null,
+    //             self::CONTENT_TYPE_MARKDOWN => $this->parseMarkdown(),
+    //             self::CONTENT_TYPE_RICHTEXT => $this->parseRichtext(),
+    //         };
+    //     });
+    // }
 
-    protected function parseMarkdown()
-    {
-        return Str::markdown($this->content);
-    }
+    // protected function parseMarkdown()
+    // {
+    //     return Str::markdown($this->content);
+    // }
     
-    protected function parseRichtext()
-    {
-        return $this->content;
-    }
+    // protected function parseRichtext()
+    // {
+    //     return $this->content;
+    // }
 }
