@@ -1,4 +1,4 @@
-const __vite__fileDeps=["ngeblog-admin-assets/Form-Cz729KU0.js","ngeblog-admin-assets/Form.css"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
+const __vite__fileDeps=["ngeblog-admin-assets/Form-Dok1pYvh.js","ngeblog-admin-assets/Form.css"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
 /**
 * @vue/shared v3.4.27
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
@@ -9000,72 +9000,6 @@ function setChecked(el, { value, oldValue }, vnode) {
     el.checked = looseEqual(value, getCheckboxValue(el, true));
   }
 }
-const vModelSelect = {
-  // <select multiple> value need to be deep traversed
-  deep: true,
-  created(el, { value, modifiers: { number } }, vnode) {
-    const isSetModel = isSet$1(value);
-    addEventListener(el, "change", () => {
-      const selectedVal = Array.prototype.filter.call(el.options, (o) => o.selected).map(
-        (o) => number ? looseToNumber(getValue$1(o)) : getValue$1(o)
-      );
-      el[assignKey](
-        el.multiple ? isSetModel ? new Set(selectedVal) : selectedVal : selectedVal[0]
-      );
-      el._assigning = true;
-      nextTick(() => {
-        el._assigning = false;
-      });
-    });
-    el[assignKey] = getModelAssigner(vnode);
-  },
-  // set value in mounted & updated because <select> relies on its children
-  // <option>s.
-  mounted(el, { value, modifiers: { number } }) {
-    setSelected(el, value);
-  },
-  beforeUpdate(el, _binding, vnode) {
-    el[assignKey] = getModelAssigner(vnode);
-  },
-  updated(el, { value, modifiers: { number } }) {
-    if (!el._assigning) {
-      setSelected(el, value);
-    }
-  }
-};
-function setSelected(el, value, number) {
-  const isMultiple = el.multiple;
-  const isArrayValue = isArray$3(value);
-  if (isMultiple && !isArrayValue && !isSet$1(value)) {
-    warn$2(
-      `<select multiple v-model> expects an Array or Set value for its binding, but got ${Object.prototype.toString.call(value).slice(8, -1)}.`
-    );
-    return;
-  }
-  for (let i = 0, l = el.options.length; i < l; i++) {
-    const option = el.options[i];
-    const optionValue = getValue$1(option);
-    if (isMultiple) {
-      if (isArrayValue) {
-        const optionType = typeof optionValue;
-        if (optionType === "string" || optionType === "number") {
-          option.selected = value.some((v) => String(v) === String(optionValue));
-        } else {
-          option.selected = looseIndexOf(value, optionValue) > -1;
-        }
-      } else {
-        option.selected = value.has(optionValue);
-      }
-    } else if (looseEqual(getValue$1(option), value)) {
-      if (el.selectedIndex !== i)
-        el.selectedIndex = i;
-      return;
-    }
-  }
-  if (!isMultiple && el.selectedIndex !== -1) {
-    el.selectedIndex = -1;
-  }
-}
 function getValue$1(el) {
   return "_value" in el ? el._value : el.value;
 }
@@ -17895,12 +17829,12 @@ const routes = [
   {
     path: "/posts/create",
     name: "posts-create",
-    component: () => __vitePreload(() => import("./Form-Cz729KU0.js"), true ? __vite__mapDeps([0,1]) : void 0)
+    component: () => __vitePreload(() => import("./Form-Dok1pYvh.js"), true ? __vite__mapDeps([0,1]) : void 0)
   },
   {
     path: "/posts/:id/edit",
     name: "posts-edit",
-    component: () => __vitePreload(() => import("./Form-Cz729KU0.js"), true ? __vite__mapDeps([0,1]) : void 0)
+    component: () => __vitePreload(() => import("./Form-Dok1pYvh.js"), true ? __vite__mapDeps([0,1]) : void 0)
   },
   {
     path: "/tags",
@@ -17929,41 +17863,39 @@ if (token) {
 }
 createApp(App).use(router).mount("#ngeblog-app");
 export {
-  resolveComponent as $,
-  createStaticVNode as A,
-  computed as B,
-  shallowRef as C,
-  triggerRef as D,
-  onScopeDispose as E,
+  withDirectives as $,
+  provide as A,
+  toRaw as B,
+  isRef as C,
+  shallowReadonly as D,
+  getCurrentScope as E,
   Fragment as F,
-  onUnmounted as G,
-  inject as H,
-  cloneVNode as I,
-  provide as J,
-  toRaw as K,
-  isRef as L,
-  shallowReadonly as M,
-  getCurrentScope as N,
-  createBlock as O,
-  renderSlot as P,
-  normalizeStyle as Q,
-  Transition as R,
-  mergeProps as S,
+  createBlock as G,
+  withCtx as H,
+  renderSlot as I,
+  toDisplayString as J,
+  normalizeStyle as K,
+  Transition as L,
+  mergeProps as M,
+  renderList as N,
+  createTextVNode as O,
+  useRoute as P,
+  useRouter as Q,
+  useAxiosFetch as R,
+  useForm as S,
   Teleport as T,
-  createTextVNode as U,
-  useRoute as V,
-  useRouter as W,
-  useAxiosFetch as X,
-  useForm as Y,
-  apiBasePath as Z,
+  apiBasePath as U,
+  resolveComponent as V,
+  Container as W,
+  slugify as X,
+  SkeletonContent as Y,
+  withModifiers as Z,
   _export_sfc as _,
   ref as a,
-  Container as a0,
-  slugify as a1,
-  SkeletonContent as a2,
-  withModifiers as a3,
-  vModelCheckbox as a4,
-  NotFound as a5,
+  vModelText as a0,
+  FormControl as a1,
+  vModelCheckbox as a2,
+  NotFound as a3,
   watch as b,
   customRef as c,
   defineComponent as d,
@@ -17979,14 +17911,14 @@ export {
   nextTick as n,
   onBeforeUnmount as o,
   createVNode as p,
-  renderList as q,
+  computed as q,
   reactive as r,
-  withCtx as s,
-  toDisplayString as t,
+  shallowRef as s,
+  triggerRef as t,
   unref as u,
-  withDirectives as v,
+  onScopeDispose as v,
   watchEffect as w,
-  vModelSelect as x,
-  FormControl as y,
-  vModelText as z
+  onUnmounted as x,
+  inject as y,
+  cloneVNode as z
 };

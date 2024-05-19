@@ -1,4 +1,4 @@
-import { r as reactive, m as markRaw, d as defineComponent, c as customRef, a as ref, w as watchEffect, n as nextTick, u as unref, o as onBeforeUnmount, h as h$1, T as Teleport, g as getCurrentInstance, _ as _export_sfc, b as watch, e as onMounted, f as openBlock, i as createElementBlock, j as createBaseVNode, k as normalizeClass, l as createCommentVNode, p as createVNode, F as Fragment$1, q as renderList, t as toDisplayString, s as withCtx, v as withDirectives, x as vModelSelect, y as FormControl, z as vModelText, A as createStaticVNode, B as computed, C as shallowRef, D as triggerRef, E as onScopeDispose, G as onUnmounted, H as inject, I as cloneVNode, J as provide, K as toRaw, L as isRef, M as shallowReadonly, N as getCurrentScope, O as createBlock, P as renderSlot, Q as normalizeStyle, R as Transition, S as mergeProps, U as createTextVNode, V as useRoute, W as useRouter, X as useAxiosFetch, Y as useForm, Z as apiBasePath, $ as resolveComponent, a0 as Container, a1 as slugify, a2 as SkeletonContent, a3 as withModifiers, a4 as vModelCheckbox, a5 as NotFound } from "./ngeblog.js";
+import { r as reactive, m as markRaw, d as defineComponent, c as customRef, a as ref, w as watchEffect, n as nextTick, u as unref, o as onBeforeUnmount, h as h$1, T as Teleport, g as getCurrentInstance, _ as _export_sfc, b as watch, e as onMounted, f as openBlock, i as createElementBlock, j as createBaseVNode, k as normalizeClass, l as createCommentVNode, p as createVNode, q as computed, s as shallowRef, t as triggerRef, v as onScopeDispose, x as onUnmounted, y as inject, z as cloneVNode, F as Fragment$1, A as provide, B as toRaw, C as isRef, D as shallowReadonly, E as getCurrentScope, G as createBlock, H as withCtx, I as renderSlot, J as toDisplayString, K as normalizeStyle, L as Transition, M as mergeProps, N as renderList, O as createTextVNode, P as useRoute, Q as useRouter, R as useAxiosFetch, S as useForm, U as apiBasePath, V as resolveComponent, W as Container, X as slugify, Y as SkeletonContent, Z as withModifiers, $ as withDirectives, a0 as vModelText, a1 as FormControl, a2 as vModelCheckbox, a3 as NotFound } from "./ngeblog.js";
 function OrderedMap(content) {
   this.content = content;
 }
@@ -17557,16 +17557,16 @@ const EditorContent = defineComponent({
     }, ...vueRenderers);
   }
 });
-const _hoisted_1$3 = { class: "flex flex-col rounded border pb-8" };
-const _hoisted_2$3 = {
+const _hoisted_1$2 = { class: "flex flex-col rounded border pb-8" };
+const _hoisted_2$2 = {
   key: 0,
   class: "sticky top-0 z-10 mb-8 flex flex-wrap gap-1 rounded-t border-b bg-white p-2"
 };
-const _hoisted_3$3 = ["disabled"];
-const _hoisted_4$3 = ["disabled"];
-const _hoisted_5$3 = ["disabled"];
-const _hoisted_6$3 = ["disabled"];
-const _sfc_main$3 = {
+const _hoisted_3$2 = ["disabled"];
+const _hoisted_4$2 = ["disabled"];
+const _hoisted_5$2 = ["disabled"];
+const _hoisted_6$2 = ["disabled"];
+const _sfc_main$2 = {
   __name: "ContentEditor",
   props: {
     modelValue: String
@@ -17617,32 +17617,32 @@ const _sfc_main$3 = {
       editorElement.value.destroy();
     });
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("div", _hoisted_1$3, [
-        editorElement.value ? (openBlock(), createElementBlock("div", _hoisted_2$3, [
+      return openBlock(), createElementBlock("div", _hoisted_1$2, [
+        editorElement.value ? (openBlock(), createElementBlock("div", _hoisted_2$2, [
           createBaseVNode("button", {
             type: "button",
             class: normalizeClass(["border px-2 py-1", { "is-active": editorElement.value.isActive("bold") }]),
             onClick: _cache[0] || (_cache[0] = ($event) => editorElement.value.chain().focus().toggleBold().run()),
             disabled: !editorElement.value.can().chain().focus().toggleBold().run()
-          }, " bold ", 10, _hoisted_3$3),
+          }, " bold ", 10, _hoisted_3$2),
           createBaseVNode("button", {
             type: "button",
             class: normalizeClass(["border px-2 py-1", { "is-active": editorElement.value.isActive("italic") }]),
             onClick: _cache[1] || (_cache[1] = ($event) => editorElement.value.chain().focus().toggleItalic().run()),
             disabled: !editorElement.value.can().chain().focus().toggleItalic().run()
-          }, " italic ", 10, _hoisted_4$3),
+          }, " italic ", 10, _hoisted_4$2),
           createBaseVNode("button", {
             type: "button",
             class: normalizeClass(["border px-2 py-1", { "is-active": editorElement.value.isActive("strike") }]),
             onClick: _cache[2] || (_cache[2] = ($event) => editorElement.value.chain().focus().toggleStrike().run()),
             disabled: !editorElement.value.can().chain().focus().toggleStrike().run()
-          }, " strike ", 10, _hoisted_5$3),
+          }, " strike ", 10, _hoisted_5$2),
           createBaseVNode("button", {
             type: "button",
             class: normalizeClass(["border px-2 py-1", { "is-active": editorElement.value.isActive("code") }]),
             onClick: _cache[3] || (_cache[3] = ($event) => editorElement.value.chain().focus().toggleCode().run()),
             disabled: !editorElement.value.can().chain().focus().toggleCode().run()
-          }, " code ", 10, _hoisted_6$3),
+          }, " code ", 10, _hoisted_6$2),
           createBaseVNode(
             "button",
             {
@@ -17809,180 +17809,7 @@ const _sfc_main$3 = {
     };
   }
 };
-const ContentEditor = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-5ea4f861"], ["__file", "/Users/antoni/Packages/ngeblog/resources/js/components/ContentEditor.vue"]]);
-const _hoisted_1$2 = {
-  class: "collapse rounded border",
-  open: ""
-};
-const _hoisted_2$2 = /* @__PURE__ */ createStaticVNode('<summary class="collapse-title p-0"><div class="flex items-center justify-between bg-gray-100 px-4 py-2 text-lg font-medium hover:bg-gray-200"><p><span class="underline underline-offset-2">Meta Data</span><span class="ml-2 text-sm italic">(optional)</span></p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 flex-none"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M6 9l6 6l6 -6"></path></svg></div></summary>', 1);
-const _hoisted_3$2 = { class: "collapse-content p-0" };
-const _hoisted_4$2 = { class: "flex flex-col divide-y" };
-const _hoisted_5$2 = { class: "relative grid grid-cols-3 justify-center gap-2 p-4 pt-8" };
-const _hoisted_6$2 = { class: "absolute left-1 top-1 inline-flex h-8 w-8 items-center justify-center self-start rounded-full border bg-gray-200 p-2" };
-const _hoisted_7$2 = /* @__PURE__ */ createBaseVNode(
-  "option",
-  { value: "text" },
-  "Text",
-  -1
-  /* HOISTED */
-);
-const _hoisted_8$2 = /* @__PURE__ */ createBaseVNode(
-  "option",
-  { value: "textarea" },
-  "Textarea",
-  -1
-  /* HOISTED */
-);
-const _hoisted_9$2 = [
-  _hoisted_7$2,
-  _hoisted_8$2
-];
-const _hoisted_10$2 = /* @__PURE__ */ createBaseVNode(
-  "input",
-  {
-    type: "text",
-    placeholder: "e.g: Co Author",
-    class: "input input-sm input-bordered"
-  },
-  null,
-  -1
-  /* HOISTED */
-);
-const _hoisted_11$2 = /* @__PURE__ */ createBaseVNode(
-  "input",
-  {
-    type: "text",
-    placeholder: "e.g: Sobirin Rodriguez",
-    class: "input input-sm input-bordered"
-  },
-  null,
-  -1
-  /* HOISTED */
-);
-const _hoisted_12$1 = /* @__PURE__ */ createBaseVNode(
-  "div",
-  { class: "absolute right-1 top-1 flex" },
-  [
-    /* @__PURE__ */ createBaseVNode("button", {
-      type: "button",
-      class: "btn btn-outline btn-error btn-sm"
-    }, " Delete ")
-  ],
-  -1
-  /* HOISTED */
-);
-const _sfc_main$2 = {
-  __name: "FormMetas",
-  props: {
-    modelValue: Array
-  },
-  emits: ["update:modelValue"],
-  setup(__props, { emit: __emit }) {
-    const metaItem = reactive({
-      field_type: "text",
-      key: "",
-      label: "",
-      value: ""
-    });
-    return (_ctx, _cache) => {
-      return openBlock(), createElementBlock("details", _hoisted_1$2, [
-        _hoisted_2$2,
-        createBaseVNode("div", _hoisted_3$2, [
-          createBaseVNode("div", _hoisted_4$2, [
-            (openBlock(), createElementBlock(
-              Fragment$1,
-              null,
-              renderList([1, 2, 3], (i2) => {
-                return createBaseVNode("div", _hoisted_5$2, [
-                  createBaseVNode(
-                    "div",
-                    _hoisted_6$2,
-                    toDisplayString(i2),
-                    1
-                    /* TEXT */
-                  ),
-                  createVNode(FormControl, {
-                    label: "Field Type:",
-                    required: "",
-                    class: ""
-                  }, {
-                    default: withCtx(() => [
-                      withDirectives(createBaseVNode(
-                        "select",
-                        {
-                          "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => metaItem.field_type = $event),
-                          class: "select select-bordered select-sm"
-                        },
-                        [..._hoisted_9$2],
-                        512
-                        /* NEED_PATCH */
-                      ), [
-                        [vModelSelect, metaItem.field_type]
-                      ])
-                    ]),
-                    _: 1
-                    /* STABLE */
-                  }),
-                  createVNode(FormControl, {
-                    label: "Key:",
-                    required: "",
-                    class: ""
-                  }, {
-                    default: withCtx(() => [
-                      withDirectives(createBaseVNode(
-                        "input",
-                        {
-                          type: "text",
-                          "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => metaItem.key = $event),
-                          placeholder: "e.g: co_author",
-                          class: "input input-sm input-bordered"
-                        },
-                        null,
-                        512
-                        /* NEED_PATCH */
-                      ), [
-                        [vModelText, metaItem.key]
-                      ])
-                    ]),
-                    _: 1
-                    /* STABLE */
-                  }),
-                  createVNode(FormControl, {
-                    label: "Label:",
-                    required: false,
-                    class: ""
-                  }, {
-                    default: withCtx(() => [
-                      _hoisted_10$2
-                    ]),
-                    _: 1
-                    /* STABLE */
-                  }),
-                  createVNode(FormControl, {
-                    label: "Value:",
-                    required: "",
-                    class: "col-span-full"
-                  }, {
-                    default: withCtx(() => [
-                      _hoisted_11$2
-                    ]),
-                    _: 1
-                    /* STABLE */
-                  }),
-                  _hoisted_12$1
-                ]);
-              }),
-              64
-              /* STABLE_FRAGMENT */
-            ))
-          ])
-        ]),
-        createCommentVNode(' <ModalConfirmation\n            :show="postRemoving.show"\n            @close="postRemoving.close()"\n            @confirm="postRemoving.triggerConfirm()"\n            v-bind="postRemoving.props"\n        /> ')
-      ]);
-    };
-  }
-};
-const FormMetas = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__file", "/Users/antoni/Packages/ngeblog/resources/js/components/FormMetas.vue"]]);
+const ContentEditor = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-5ea4f861"], ["__file", "/Users/antoni/Packages/ngeblog/resources/js/components/ContentEditor.vue"]]);
 function memo(getDeps, fn, opts) {
   let deps = opts.initialDeps ?? [];
   let result;
@@ -21270,16 +21097,15 @@ const _hoisted_16 = {
   key: 0,
   class: "label-text-alt text-sm text-error"
 };
-const _hoisted_17 = { class: "py-8" };
-const _hoisted_18 = {
+const _hoisted_17 = {
   key: 0,
   class: "self-center"
 };
-const _hoisted_19 = {
+const _hoisted_18 = {
   role: "alert",
   class: "alert alert-error flex flex-col text-white"
 };
-const _hoisted_20 = /* @__PURE__ */ createBaseVNode(
+const _hoisted_19 = /* @__PURE__ */ createBaseVNode(
   "div",
   { class: "flex items-center gap-2" },
   [
@@ -21301,8 +21127,8 @@ const _hoisted_20 = /* @__PURE__ */ createBaseVNode(
   -1
   /* HOISTED */
 );
-const _hoisted_21 = { class: "flex items-center justify-between gap-4 border-t py-4" };
-const _hoisted_22 = ["disabled"];
+const _hoisted_20 = { class: "flex items-center justify-between gap-4 border-t py-4" };
+const _hoisted_21 = ["disabled"];
 const _sfc_main = {
   __name: "Form",
   setup(__props) {
@@ -21419,7 +21245,7 @@ const _sfc_main = {
               "form",
               {
                 key: 1,
-                onSubmit: _cache[7] || (_cache[7] = withModifiers(() => submit(), ["prevent"])),
+                onSubmit: _cache[6] || (_cache[6] = withModifiers(() => submit(), ["prevent"])),
                 class: "mx-auto flex max-w-5xl flex-col gap-4"
               },
               [
@@ -21569,15 +21395,10 @@ const _sfc_main = {
                     /* TEXT */
                   )) : createCommentVNode("v-if", true)
                 ]),
-                createBaseVNode("div", _hoisted_17, [
-                  createVNode(FormMetas, {
-                    modelValue: unref(postForm).metas,
-                    "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => unref(postForm).metas = $event)
-                  }, null, 8, ["modelValue"])
-                ]),
-                Object.keys(unref(postForm).errors).length ? (openBlock(), createElementBlock("div", _hoisted_18, [
-                  createBaseVNode("div", _hoisted_19, [
-                    _hoisted_20,
+                createCommentVNode(' <div class="py-8">\n                    <FormMetas v-model="postForm.metas" />\n                </div> '),
+                Object.keys(unref(postForm).errors).length ? (openBlock(), createElementBlock("div", _hoisted_17, [
+                  createBaseVNode("div", _hoisted_18, [
+                    _hoisted_19,
                     createBaseVNode("ul", null, [
                       (openBlock(true), createElementBlock(
                         Fragment$1,
@@ -21597,7 +21418,7 @@ const _sfc_main = {
                     ])
                   ])
                 ])) : createCommentVNode("v-if", true),
-                createBaseVNode("div", _hoisted_21, [
+                createBaseVNode("div", _hoisted_20, [
                   createVNode(_component_router_link, {
                     to: { name: "posts-index" },
                     class: "btn px-8"
@@ -21612,7 +21433,7 @@ const _sfc_main = {
                     type: "submit",
                     class: "btn btn-primary px-8",
                     disabled: unref(postForm).processing
-                  }, toDisplayString(unref(postForm).processing ? "Saving..." : "Save"), 9, _hoisted_22)
+                  }, toDisplayString(unref(postForm).processing ? "Saving..." : "Save"), 9, _hoisted_21)
                 ])
               ],
               32

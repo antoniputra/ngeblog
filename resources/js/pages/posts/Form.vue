@@ -7,7 +7,7 @@ import FormControl from "@/components/FormControl.vue";
 import { apiBasePath, slugify } from "@/utils";
 import { useForm } from "laravel-precognition-vue";
 import ContentEditor from "@/components/ContentEditor.vue";
-import FormMetas from "@/components/FormMetas.vue";
+// import FormMetas from "@/components/FormMetas.vue";
 import ComboboxField from "@/components/Fields/ComboboxField.vue";
 import { useAxiosFetch } from "@/composables/useAxiosFetch";
 import NotFound from "@/components/NotFound.vue";
@@ -235,9 +235,9 @@ const submit = () => {
                     </p>
                 </div>
 
-                <div class="py-8">
+                <!-- <div class="py-8">
                     <FormMetas v-model="postForm.metas" />
-                </div>
+                </div> -->
 
                 <div
                     v-if="Object.keys(postForm.errors).length"
