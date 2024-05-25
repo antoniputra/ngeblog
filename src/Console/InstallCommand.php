@@ -5,6 +5,7 @@ namespace AntoniPutra\Ngeblog\Console;
 use AntoniPutra\Ngeblog\NgeblogServiceProvider;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Schema;
 
 use function Laravel\Prompts\confirm;
 
@@ -29,7 +30,7 @@ class InstallCommand extends Command
      */
     public function handle()
     {
-        if (file_exists(config_path('ngeblog.php'))) {
+        if (Schema::hasTable('ngeblog_posts') && file_exists(config_path('ngeblog.php'))) {
             if (! $this->confirm('It seems this package is already installed. Would you like to proceed with the installation anyway?')) {
                 return;
             }
@@ -58,11 +59,11 @@ class InstallCommand extends Command
     protected function installStarterPage()
     {
         $confirmed = confirm(
-            label: 'Do you want to install Starter Page scaffolding?',
-            default: false,
+            label: 'Do you want to install Starter Page?',
+            default: true,
             yes: 'Yep, Please!',
             no: 'Nope.',
-            // hint: ''
+            hint: 'It will give you "'. config('app.url') .'/blogs" with default basic layout written in blade syntax.'
         );
 
         if (! $confirmed) {
@@ -81,13 +82,12 @@ class InstallCommand extends Command
             $this->publicPageRouteDefinition()
         );
 
-        $this->info('√ Controller generated "app/Http/Controllers/NgeblogPostController.php"'. PHP_EOL);
-        $this->info('√ Template generated "resources/views/ngeblog/*"'. PHP_EOL);
+        $this->info('√ [StarterPage] Controller generated "app/Http/Controllers/NgeblogPostController.php"'. PHP_EOL);
+        $this->info('√ [StarterPage] View generated "resources/views/ngeblog/*"'. PHP_EOL);
 
-        $this->info('√ Route generated "routes/ngeblog.php"'. PHP_EOL);
-        $this->info('√ Route has been included to your "routes/web.php"'. PHP_EOL);
+        $this->info('√ [StarterPage] Route generated "routes/ngeblog.php" and included to your "routes/web.php"'. PHP_EOL);
 
-        $this->components->info('Ngeblog Default Public Page scaffolding installed successfully.');
+        $this->components->info('Ngeblog Starter Page generated successfully.');
     }
 
     protected function publicPageRouteDefinition()
