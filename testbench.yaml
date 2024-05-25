@@ -6,7 +6,7 @@ migrations:
   - workbench/database/migrations
 
 seeders:
-  - Workbench\Database\Seeders\DatabaseSeeder
+  - Workbench\Database\Seeders\DummyDataSeeder
 
 workbench:
   start: '/'
@@ -22,6 +22,5 @@ workbench:
     - create-sqlite-db
     - db:wipe
     - migrate:refresh
-    - db:seed
   assets: []
   sync: []

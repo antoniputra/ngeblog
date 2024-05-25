@@ -1,5 +1,7 @@
 <?php
 
+namespace Workbench\Database\Seeders;
+
 use AntoniPutra\Ngeblog\Models\Post;
 use AntoniPutra\Ngeblog\Models\Postmeta;
 use AntoniPutra\Ngeblog\Models\Tag;
@@ -7,7 +9,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use Workbench\App\Models\User;
 
-class DatabaseSeeder extends Seeder
+class DummyDataSeeder extends Seeder
 {
     /**
      * Run the database seeds.

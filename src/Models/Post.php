@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Str;
 
 class Post extends Model
 {
@@ -95,29 +94,4 @@ class Post extends Model
         $this->is_visible = ! $this->is_visible;
         return $this->save();
     }
-
-    // protected function parsedContent(): Attribute
-    // {
-    //     return Attribute::get(function () {
-    //         if (! $this->exists) {
-    //             return null;
-    //         }
-
-    //         return match ($this->content_type) {
-    //             null => null,
-    //             self::CONTENT_TYPE_MARKDOWN => $this->parseMarkdown(),
-    //             self::CONTENT_TYPE_RICHTEXT => $this->parseRichtext(),
-    //         };
-    //     });
-    // }
-
-    // protected function parseMarkdown()
-    // {
-    //     return Str::markdown($this->content);
-    // }
-    
-    // protected function parseRichtext()
-    // {
-    //     return $this->content;
-    // }
 }

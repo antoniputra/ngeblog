@@ -15,6 +15,7 @@
         </include>
     </source>
     <php>
+        <env name="APP_KEY" value="base64:asdf1RtFO57QGzbZX1kRYX9hIRB50+QzqFeg9zbFJlY="/>
         <env name="DB_CONNECTION" value="testing"/>
         <env name="DB_DATABASE" value=":memory:"/>
     </php>
