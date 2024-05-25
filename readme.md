@@ -20,9 +20,19 @@ It helps you to quickly set up a simple **Blogging System** for your existing or
 - and more...
 
 ### Screenshot
+
+#### Preview of Dashboard page.
 <p align="center">
-	<a href="https://raw.githubusercontent.com/antoniputra/ngeblog/main/art/sample-1.png" target="_blank">
-		<img src="https://raw.githubusercontent.com/antoniputra/ngeblog/main/art/sample-1.png" alt="Ngeblog Screenshot">
+	<a href="https://raw.githubusercontent.com/antoniputra/ngeblog/main/art/preview-dashboard.png" target="_blank">
+		<img src="https://raw.githubusercontent.com/antoniputra/ngeblog/main/art/preview-dashboard.png" alt="Ngeblog Screenshot">
+	</a>
+</p>
+
+
+#### Preview of Starter page.
+<p align="center">
+	<a href="https://raw.githubusercontent.com/antoniputra/ngeblog/main/art/preview-starter-page.png" target="_blank">
+		<img src="https://raw.githubusercontent.com/antoniputra/ngeblog/main/art/preview-starter-page.png" alt="Ngeblog Screenshot">
 	</a>
 </p>
 
@@ -67,9 +77,39 @@ Gate::define('accessNgeblogAdmin', function ($user) {
 ```
 
 
+## Contributing Guide
+
+I glad to see you here on this section. Whether you're a seasoned developer or new to open source, your participation is valuable. Let's collaborate and learn together! 🚀
+
+Follow the steps below to get started.
+
+### Back-end Dependencies:
+- Laravel 11
+- Pest, Testbench
+
+### Front-end Dependencies:
+- Vue 3 & VueRouter (script-setup)
+- Tailwind & DaisyUI.
+- Tiptap Editor, HeadlessUI, VueUse, FloatingUI.
+
+### Steps to Contribute:
+1. Fork and clone the repo, then navigate to the project folder.
+2. Install dependencies: `composer install` & `npm install`.
+3. Run the app: `composer serve`.
+
+### Asset Building:
+- For development (rebuilds on save):
+  ```bash
+  npm run watch
+  ```
+- Before pushing code (minified version):
+  ```bash
+  npm run build
+  ```
+
 ## Credits
 
-- Thanks to [@arryanggaputra](https://github.com/arryanggaputra) for the _nice looking logo_.
+- Thanks to [@arryanggaputra](https://github.com/arryanggaputra) for the nice looking logo.
 
 
 ## License

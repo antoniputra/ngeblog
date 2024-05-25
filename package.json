@@ -16,7 +16,7 @@
     "@vitejs/plugin-vue": "^5.0.4",
     "@vueuse/core": "^10.9.0",
     "autoprefixer": "^10.4.19",
-    "axios": "^1.6.8",
+    "axios": "^1.7.2",
     "daisyui": "^4.11.1",
     "laravel-precognition-vue": "^0.5.4",
     "postcss": "^8.4.38",

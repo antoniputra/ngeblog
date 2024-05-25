@@ -23,7 +23,7 @@ class DummyDataSeeder extends Seeder
         ]);
 
         for ($i=0; $i < 10; $i++) {
-            $title = fake()->words(rand(2, 3), true);
+            $title = fake()->randomLetter() . fake()->words(rand(2, 3), true);
             $date = fake()->dateTimeBetween('-1 months');
             Tag::create([
                 'title' => $title,
@@ -36,7 +36,7 @@ class DummyDataSeeder extends Seeder
         }
 
         for ($i=0; $i < 20; $i++) { 
-            $title = fake()->sentence();
+            $title = fake()->randomLetter() . fake()->sentence();
             $date = fake()->dateTimeBetween('-1 months');
             $post = Post::create([
                 'author_id' => $user->id,
